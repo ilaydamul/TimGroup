@@ -84,7 +84,7 @@ export default function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
     }
 
     return (
-        <View style={[styles.container, styles.bgBlue]}>
+        <View style={[styles.container, styles.bgBlack]}>
             <View style={styles.formContainer}>
                 <Text style={[globalS.textCenter, styles.mainTitle]}>{isLogin ? "Giriş Yap" : "Kayıt Ol"}</Text>
                 <View>
@@ -113,7 +113,7 @@ const styles = StyleSheet.create({
         height: Dimensions.get('window').height,
     },
     bgBlue: {
-        backgroundColor: Colors.primary700
+        backgroundColor: Colors.black
     },
     formContainer: {
         padding: 26,

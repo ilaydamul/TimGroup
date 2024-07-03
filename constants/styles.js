@@ -11,6 +11,9 @@ export const globalS = StyleSheet.create({
     textCenter: {
         textAlign: "center"
     },
+    mAuto: {
+        margin: "auto",
+    },
     textRight: {
         textAlign: "right"
     },
@@ -50,27 +53,9 @@ export const globalS = StyleSheet.create({
     bgLightBlue: {
         backgroundColor: Colors.blue100
     },
-    banner: {
-        paddingBottom: 24,
-        borderBottomLeftRadius: 24,
-        borderBottomRightRadius: 24,
-        paddingTop: 100
-    },
-    lightBanner: {
-        paddingBottom: 0,
-        paddingTop: 90,
-        borderBottomLeftRadius: 24,
-        borderBottomRightRadius: 24,
-    },
+
     pb0: {
         paddingBottom: 0
-    },
-    mainTitle: {
-        color: Colors.white,
-        textAlign: "center",
-        fontSize: 24,
-        marginBottom: 24,
-        fontWeight: "600"
     },
     h2: {
         fontSize: 18,
@@ -80,59 +65,17 @@ export const globalS = StyleSheet.create({
     overflowHidden: {
         overflow: "hidden"
     },
-    logoTitle: {
-        color: Colors.white,
-        fontSize: 36,
-        fontWeight: "800",
-        fontStyle: "italic",
-    },
     itemContainer: {
         flexDirection: "row",
         justifyContent: "space-between",
         flexWrap: "wrap",
         gap: 14,
-        marginVertical: 20,
-        marginHorizontal: 20,
-    },
-    searchInputIcon: {
-        position: "absolute", top: 11, left: "90%", color: "#FFF"
-    },
-    titleColor: {
-        color: Colors.blue600
+        marginBottom: 20,
+        marginHorizontal: 28,
     },
     my12: {
         marginVertical: 12
     },
-    eventTitle: {
-        fontWeight: "600",
-        fontSize: 16,
-        marginBottom: 4
-    },
-    eventTitle2: {
-        fontSize: 20,
-    },
-    eventTeam: {
-        color: Colors.blue600,
-        fontWeight: "500",
-        fontSize: 12
-    },
-    eventDate: {
-        fontSize: 10
-    },
-    socialContainer: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        gap: 16,
-        flexWrap: "wrap"
-    },
-    contactItem: {
-        flexDirection: 'row',
-        alignItems: 'center',
-        marginVertical: 4,
-    },
-    contactText: {
-        marginLeft: 8,
-        fontSize: 16,
-        color: 'black',
-    }
+
+
 })

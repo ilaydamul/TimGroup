@@ -16,6 +16,8 @@ import { globalS } from './constants/styles';
 import { Colors } from './constants/colors';
 import Loader from './components/Layout/Loader';
 import LoadingOverlay from './components/UI/LoadingOverlay';
+import Profile from './screens/Profile';
+import Home from './screens/Home';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -51,13 +53,11 @@ function CustomDrawer(props) {
 
 function AuthenticatedStack() {
   return (
-    <Drawer.Navigator screenOptions={{ headerShown: false }} drawerContent={(props) => <CustomDrawer {...props} />}>
-     
-      <Drawer.Screen name='Profile' component={Profile} options={{
-        title: "Profil",
-        drawerIcon: ({ color, size }) => (<View style={style.icon}><FontAwesome5 name="user-alt" size={size} color={color} /></View>)
-      }} />
-    </Drawer.Navigator>
+    // <Stack.Navigator screenOptions={{ headerShown: false }} drawerContent={(props) => <CustomDrawer {...props} />}>
+    <Stack.Navigator screenOptions={{ headerShown: false }}>
+      <Stack.Screen name='Home' component={Home} options={{title: "Profil",}} />
+      <Stack.Screen name='Profile' component={Profile} options={{title: "Profil",}} />
+    </Stack.Navigator>
   )
 }
 
@@ -95,7 +95,7 @@ function Root() {
 
   return (
     <NavigationContainer>
-      <StatusBar style="inverted" />
+      <StatusBar style="auto" />
       {authCtx.isAuthenticated ? <AuthenticatedStack /> : <AuthStack />}
     </NavigationContainer>
   );

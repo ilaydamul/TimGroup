@@ -1,22 +1,26 @@
 import { Pressable, Text, StyleSheet } from "react-native";
 import { Colors } from "../../constants/colors";
+import { LinearGradient } from "expo-linear-gradient";
+import { globalS } from "../../constants/styles";
 
 export default function Button({ children, onPress, style }) {
   return (
     <Pressable
-      style={({ pressed }) => [styles.button, style, pressed && styles.pressed]}
-      onPress={onPress} 
+      style={({ pressed }) => [pressed && styles.pressed]}
+      onPress={onPress}
     >
-      <Text style={styles.text}>{children}</Text>
+      <LinearGradient colors={["#D92126", "#6D1113"]} style={[styles.button, style]}>
+        <Text style={styles.text}>{children}</Text>
+      </LinearGradient>
+
     </Pressable>
   );
 }
 
 const styles = StyleSheet.create({
   button: {
-    paddingHorizontal: 12,
-    paddingVertical: 12,
-    backgroundColor: Colors.blue,
+    paddingHorizontal: 24,
+    paddingVertical: 16,
     shadowRadius: 2,
     borderRadius: 4,
   },
@@ -25,7 +29,7 @@ const styles = StyleSheet.create({
   },
   text: {
     textAlign: "center",
-    fontSize: 16,
-    color: Colors.primary50,
+    fontSize: 17,
+    color: Colors.white,
   },
 });
