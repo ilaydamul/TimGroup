@@ -12,7 +12,7 @@ export const globalS = StyleSheet.create({
         textAlign: "center"
     },
     mAuto: {
-        margin: "auto",
+        marginHorizontal: "auto",
     },
     textRight: {
         textAlign: "right"
@@ -66,16 +66,19 @@ export const globalS = StyleSheet.create({
         overflow: "hidden"
     },
     itemContainer: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        flexWrap: "wrap",
-        gap: 14,
+        // flexDirection: "row",
+        // justifyContent: "space-between",
+        // flexWrap: "wrap",
+        // gap: 14,
         marginBottom: 20,
         marginHorizontal: 28,
+        // height:"auto"
+        // height: 3000
     },
     my12: {
         marginVertical: 12
     },
+
 
 
 })

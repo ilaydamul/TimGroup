@@ -18,6 +18,7 @@ import Loader from './components/Layout/Loader';
 import LoadingOverlay from './components/UI/LoadingOverlay';
 import Profile from './screens/Profile';
 import Home from './screens/Home';
+import Audit from './screens/Audit';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -55,8 +56,9 @@ function AuthenticatedStack() {
   return (
     // <Stack.Navigator screenOptions={{ headerShown: false }} drawerContent={(props) => <CustomDrawer {...props} />}>
     <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name='Home' component={Home} options={{title: "Profil",}} />
-      <Stack.Screen name='Profile' component={Profile} options={{title: "Profil",}} />
+      <Stack.Screen name='Home' component={Home}/>
+      <Stack.Screen name='Audit' component={Audit}/>
+      <Stack.Screen name='Profile' component={Profile} />
     </Stack.Navigator>
   )
 }
