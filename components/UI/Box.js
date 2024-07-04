@@ -21,7 +21,8 @@ const styles = StyleSheet.create({
         width: "100%"
     },
     boxContent: {
-        paddingVertical: 4,
+        // paddingVertical: 4,
+        paddingVertical: 16,
         paddingHorizontal: 18
     },
     boxTitleGroup: {
