@@ -10,6 +10,9 @@ import ListItem from '../components/UI/ListItem';
 import Input from '../components/UI/Input';
 import * as ImagePicker from 'expo-image-picker';
 import { useCameraPermissions, PermissionStatus } from 'expo-camera';
+import * as ImageManipulator from 'expo-image-manipulator';
+import { SelectList } from 'react-native-dropdown-select-list';
+import { FontAwesome } from '@expo/vector-icons';
 
 const organizations = [{ id: 0, title: "Güvenlik" }, { id: 1, title: "Tesis" }, { id: 2, title: "Temizlik" }];
 const organizationProjects = [
@@ -36,11 +39,23 @@ const projectInfo = {
     address: "İçmeler Mah. Çağdaş Sok. 2C/1 Tuzla/İst",
 };
 
+const comboBox = [
+    { key: '1', value: 'Jammu & Kashmir' },
+    { key: '2', value: 'Gujrat' },
+    { key: '3', value: 'Maharashtra' },
+    { key: '4', value: 'Goa' },
+];
+
 export default function Audit() {
-    const [step, setStep] = useState(4);
-    const [projects, setProjects] = useState(organizations);
+    const [step, setStep] = useState(6);
+    // const [organization, setOrganization] = useState(organizations);
+    const [projects, setProjects] = useState();
+    const [orgProjects, setOrgProjects] = useState();
+    // const [projectInfos, setProjectInfos] = useState(projectInfo);
     const [image, setImage] = useState(null);
     const [permission, requestPermission] = useCameraPermissions();
+    const [selected, setSelected] = useState("");
+
 
     async function verifyPermissions() {
         if (permission.status === PermissionStatus.UNDETERMINED) {
@@ -62,12 +77,17 @@ export default function Audit() {
     const handleNextStep = (item) => {
         if (step === 1) {
             setProjects(organizationProjects[item].projects);
-        } else if (step === 2) {
-            setProjects(projectInfo);
         }
+        // else if (step === 2) {
+        //     setProjects(projectInfo);
+        // }
 
         setStep(prevStep => prevStep + 1);
     };
+
+    const handlePrevStep = (item) => {
+        setStep(prevStep => prevStep - 1);
+    }
 
     const takePhoto = async () => {
         const hasPermission = await verifyPermissions();
@@ -80,6 +100,7 @@ export default function Audit() {
             allowsEditing: true,
             aspect: [4, 3],
             quality: 1,
+            // exif: true,
         });
 
         if (!result.canceled) {
@@ -107,19 +128,28 @@ export default function Audit() {
                         {projects.map((item, id) => {
                             return <ListButton onPress={() => handleNextStep(item.id)} key={id}>{item.title}</ListButton>;
                         })}
+                        <View style={style.btnGroup}>
+                            <Button style={[globalS.btnGray, style.btnHalf]} textColor={Colors.black} solidBg onPress={handlePrevStep}>Geri</Button>
+
+                        </View>
                     </Box>
                 )}
                 {step === 3 && (
                     <>
-                        <Box title={projects.project}>
-                            <ListItem title="Müşteri" content={projects.customer} />
-                            <ListItem title="Proje" content={projects.project} />
-                            <ListItem title="Loc" content={projects.location} />
-                            <ListItem title="Müşteri Temsilcisi" content={projects.customerRepresentative} />
-                            <ListItem title="Telefon" content={projects.phone} />
-                            <ListItem title="E-Posta" content={projects.email} />
-                            <ListItem title="Adres" content={projects.address} noBorder contentStyle={style.mw50} />
-                            <View style={[globalS.my12]}>
+                        <Box title={projectInfo.project}>
+                            <ListItem title="Müşteri" content={projectInfo.customer} />
+                            <ListItem title="Proje" content={projectInfo.project} />
+                            <ListItem title="Loc" content={projectInfo.location} />
+                            <ListItem title="Müşteri Temsilcisi" content={projectInfo.customerRepresentative} />
+                            <ListItem title="Telefon" content={projectInfo.phone} />
+                            <ListItem title="E-Posta" content={projectInfo.email} />
+                            <ListItem title="Adres" content={projectInfo.address} noBorder contentStyle={style.mw50} />
+                            {/* <View style={[globalS.my12]}>
+                                
+                            </View> */}
+
+                            <View style={style.btnGroup}>
+                                <Button style={[globalS.btnGray, style.btnHalf]} textColor={Colors.black} solidBg onPress={handlePrevStep}>Geri</Button>
                                 <Button onPress={handleNextStep}>Denetime Başla</Button>
                             </View>
                         </Box>
@@ -129,10 +159,53 @@ export default function Audit() {
                     <>
                         <Box title={"Fotoğraf Alım"}>
                             {imagePreview}
+                            <Button onPress={takePhoto} style={globalS.mt16}>Resim Çek</Button>
                             <Text style={style.txt}>Fotoğrafı Yorumla</Text>
                             <Input textarea />
-                            <Button onPress={takePhoto} style={globalS.mt16}>Resim Çek</Button>
+                            <View style={style.btnGroup}>
+                                <Button style={[globalS.btnGray, style.btnHalf]} textColor={Colors.black} solidBg onPress={handlePrevStep}>Geri</Button>
+                                <Button style={style.btnHalf} onPress={handleNextStep}>Devam</Button>
+                            </View>
                         </Box>
+
+                    </>
+                )}
+                {step === 5 && (
+                    <>
+                        <Box title={"Değerlendirme"}>
+                            <ListItem title={"Güvenlik personeli nöbet kulübesi veya devriye yapması gereken alanda mı?"} isRadio />
+                            <ListItem title={"Güvenlik personelinin kimliği takılı mı?"} isRadio />
+                            <ListItem title={"Proje personel kadro sayısı tam mı?"} isRadio noBorder />
+                            <Text style={style.textBox}>Toplam Değerlendirme Puanı: 40</Text>
+                            <View style={style.btnGroup}>
+                                <Button style={[globalS.btnGray, style.btnHalf]} textColor={Colors.black} solidBg onPress={handlePrevStep}>Geri</Button>
+                                <Button style={style.btnHalf} onPress={handleNextStep}>Devam</Button>
+                            </View>
+                        </Box>
+
+                    </>
+                )}
+                {step === 6 && (
+                    <>
+                        <Box title={"Değerlendirme"}>
+                            <Text style={style.title}>Müşteri Görüşleri</Text>
+                            <Input textarea mb={12} />
+                            <Text style={style.title}>Notlarınız</Text>
+                            <Input textarea mb={12} />
+                            <Text style={style.title}>Uyarılar</Text>
+                            <View style={[globalS.dFlexCenterBetween]}>
+                                <Text>Görevli Personel</Text>
+                                <SelectList onSelect={() => alert(selected)}
+                                    setSelected={setSelected}
+                                    data={comboBox}
+                                    arrowicon={<FontAwesome name="chevron-down" size={12} color={'black'} />}
+                                    searchicon={<FontAwesome name="search" size={12} color={'black'} />}
+                                    search={false}
+                                    boxStyles={{ borderRadius: 0 }} //override default styles
+                                    defaultOption={{ key: '1', value: 'Jammu & Kashmir' }} />
+                            </View>
+                        </Box>
+
                     </>
                 )}
             </View>
@@ -141,6 +214,10 @@ export default function Audit() {
 }
 
 const style = StyleSheet.create({
+    title: {
+        fontSize: 20,
+        marginBottom: 12
+    },
     container: {
         flex: 1,
     },
@@ -158,4 +235,23 @@ const style = StyleSheet.create({
         marginVertical: 14,
         fontSize: 16,
     },
+    btnGroup: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        gap: 12,
+        marginTop: 16,
+    },
+    btnHalf: {
+        // flex: 1,
+        minWidth: 120
+    },
+    textBox: {
+        borderRadius: 6,
+        backgroundColor: Colors.gray400,
+        paddingVertical: 12,
+        textAlign: "center",
+        overflow: "hidden",
+        marginTop: 12,
+        fontSize: 16
+    }
 });

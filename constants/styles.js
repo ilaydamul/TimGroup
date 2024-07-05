@@ -78,6 +78,9 @@ export const globalS = StyleSheet.create({
     my12: {
         marginVertical: 12
     },
+    btnGray: {
+        backgroundColor: Colors.gray400
+    }
 
 
 
