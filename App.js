@@ -19,6 +19,7 @@ import LoadingOverlay from './components/UI/LoadingOverlay';
 import Profile from './screens/Profile';
 import Home from './screens/Home';
 import Audit from './screens/Audit';
+import QR from './screens/QR';
 
 const Stack = createNativeStackNavigator();
 const Drawer = createDrawerNavigator();
@@ -61,6 +62,7 @@ function AuthenticatedStack() {
     <>
       <StatusBar style="auto" />
       <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name='QR' component={QR} />
         <Stack.Screen name='Home' component={Home} />
         <Stack.Screen name='Audit' component={Audit} />
         <Stack.Screen name='Profile' component={Profile} />
