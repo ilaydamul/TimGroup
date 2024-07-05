@@ -36,9 +36,12 @@ const Drawer = createDrawerNavigator();
 
 function AuthStack() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen name='Login' component={Login} options={{ headerShown: false }} />
-    </Stack.Navigator>
+    <>
+      <StatusBar style="light" />
+      <Stack.Navigator>
+        <Stack.Screen name='Login' component={Login} options={{ headerShown: false }} />
+      </Stack.Navigator>
+    </>
   )
 }
 
@@ -55,11 +58,14 @@ function CustomDrawer(props) {
 function AuthenticatedStack() {
   return (
     // <Stack.Navigator screenOptions={{ headerShown: false }} drawerContent={(props) => <CustomDrawer {...props} />}>
-    <Stack.Navigator screenOptions={{ headerShown: false }}>
-      <Stack.Screen name='Home' component={Home}/>
-      <Stack.Screen name='Audit' component={Audit}/>
-      <Stack.Screen name='Profile' component={Profile} />
-    </Stack.Navigator>
+    <>
+      <StatusBar style="auto" />
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name='Home' component={Home} />
+        <Stack.Screen name='Audit' component={Audit} />
+        <Stack.Screen name='Profile' component={Profile} />
+      </Stack.Navigator>
+    </>
   )
 }
 
@@ -97,7 +103,6 @@ function Root() {
 
   return (
     <NavigationContainer>
-      <StatusBar style="auto" />
       {authCtx.isAuthenticated ? <AuthenticatedStack /> : <AuthStack />}
     </NavigationContainer>
   );

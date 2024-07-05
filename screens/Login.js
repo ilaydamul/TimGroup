@@ -12,11 +12,11 @@ export default function Login() {
         authCtx.loginControl(false, "");
     }, [])
 
-    async function loginHandler({ email, password }) {
+    async function loginHandler({ username, password }) {
         setIsAuthenticating(true);
      
         try {
-            const token = await login(email, password);
+            const token = await login(username, password);
             authCtx.authenticate(token);
 
         } catch (error) {
@@ -37,6 +37,6 @@ export default function Login() {
     }
 
     return (
-        <AuthContent isLogin onAuthenticate={loginHandler} />
+        <AuthContent onAuthenticate={loginHandler} />
     )
 }

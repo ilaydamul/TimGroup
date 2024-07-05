@@ -1,17 +1,24 @@
-import { Pressable, Text, StyleSheet } from "react-native";
+import { Pressable, Text, StyleSheet, View } from "react-native";
 import { Colors } from "../../constants/colors";
 import { LinearGradient } from "expo-linear-gradient";
 import { globalS } from "../../constants/styles";
 
-export default function Button({ children, onPress, style }) {
+export default function Button({ children, onPress, style, solidBg }) {
   return (
     <Pressable
       style={({ pressed }) => [pressed && styles.pressed]}
       onPress={onPress}
     >
-      <LinearGradient colors={["#D92126", "#6D1113"]} style={[styles.button, style]}>
-        <Text style={styles.text}>{children}</Text>
-      </LinearGradient>
+
+      {solidBg ?
+        <View style={[styles.button, style]}>
+          <Text style={styles.text}>{children}</Text>
+        </View>
+        :
+        <LinearGradient colors={["#D92126", "#6D1113"]} style={[styles.button, style]}>
+          <Text style={styles.text}>{children}</Text>
+        </LinearGradient>}
+
 
     </Pressable>
   );

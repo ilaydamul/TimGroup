@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, Keyboard, Dimensions } from "react-native"
+import { View, Text, StyleSheet, Keyboard, Dimensions, Image, ScrollView, Platform } from "react-native"
 import { globalS } from "../../constants/styles";
 import Button from "../UI/Button";
 import Input from "../UI/Input";
@@ -7,13 +7,12 @@ import { useNavigation } from "@react-navigation/native";
 import { Colors } from "../../constants/colors";
 import { Entypo } from "@expo/vector-icons";
 import { AuthContext } from "../../store/auth-context";
+import { LinearGradient } from "expo-linear-gradient";
+import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 
 
-export default function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
-    const navigation = useNavigation();
-    const [enteredName, setEnteredName] = useState('');
-    const [enteredEmail, setEnteredEmail] = useState('');
-    const [enteredPhone, setEnteredPhone] = useState('');
+export default function AuthForm({ onSubmit }) {
+    const [enteredUsername, setEnteredUsername] = useState('');
     const [enteredPassword, setEnteredPassword] = useState('');
 
     const authCtx = useContext(AuthContext);
@@ -21,29 +20,15 @@ export default function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
     const [hasError, setHasError] = useState(authCtx.error);
     const [errorText, setErrorText] = useState(authCtx.errorText);
 
-
     useEffect(() => {
         setHasError(authCtx.error);
         setErrorText(authCtx.errorText);
     }, [authCtx.error, authCtx.errorText]);
 
-    const {
-        name: nameIsInvalid,
-        email: emailIsInvalid,
-        // phone: phoneIsInvalid,
-        password: passwordIsInvalid,
-    } = credentialsInvalid;
-
     function updateInputValue(inputType, enteredValue) {
         switch (inputType) {
-            case 'name':
-                setEnteredName(enteredValue);
-                break;
-            case 'email':
-                setEnteredEmail(enteredValue);
-                break;
-            case 'phone':
-                setEnteredPhone(enteredValue);
+            case 'username':
+                setEnteredUsername(enteredValue);
                 break;
             case 'password':
                 setEnteredPassword(enteredValue);
@@ -52,77 +37,88 @@ export default function AuthForm({ isLogin, onSubmit, credentialsInvalid }) {
     }
 
     function submitHandler() {
-        if ((!isLogin && (!enteredName || !enteredEmail || !enteredPhone || !enteredPassword)) ||
-            (isLogin && (!enteredEmail || !enteredPassword))) {
+        if (!enteredUsername || !enteredPassword) {
             authCtx.loginControl(true, "Boş alan bırakmayın!");
             return;
         }
 
         authCtx.loginControl(false, "");
         Keyboard.dismiss();
-
         onSubmit({
-            name: enteredName,
-            email: enteredEmail,
-            phone: enteredPhone,
+            username: enteredUsername,
             password: enteredPassword,
         });
 
     }
 
-    // function goToForgetPass() {
-
-    // }
-
-    function redirectLink() {
-        if (isLogin) {
-            navigation.navigate("Register");
-        }
-        else {
-            navigation.navigate("Login");
-        }
-    }
-
     return (
-        <View style={[styles.container, styles.bgBlack]}>
-            <View style={styles.formContainer}>
-                <Text style={[globalS.textCenter, styles.mainTitle]}>{isLogin ? "Giriş Yap" : "Kayıt Ol"}</Text>
-                <View>
-                    {!isLogin && (<Input placeholderText="Ad Soyad" mb={12} onUpdateValue={updateInputValue.bind(this, "name")} value={enteredName} isInvalid={nameIsInvalid} invalidText={"Adınızı doğru giriniz."} />)}
-                    <Input placeholderText="E-Mail" mb={12} onUpdateValue={updateInputValue.bind(this, "email")} value={enteredEmail} isInvalid={emailIsInvalid} invalidText={"E-mailinizi doğru formatta giriniz."} />
-                    {!isLogin && (<Input placeholderText="Telefon No" mb={12} onUpdateValue={updateInputValue.bind(this, "phone")} value={enteredPhone} type={"phone-pad"} />)}
-                    <Input placeholderText="Şifre" mb={12} onUpdateValue={updateInputValue.bind(this, "password")} value={enteredPassword} isInvalid={passwordIsInvalid} password invalidText={"Güçlü bir parola giriniz."} />
-                    {hasError && (<Text style={{ marginBottom: 12, color: Colors.red }}>{errorText}</Text>)}
-                    {/* {isLogin && (
-                        <View style={{ marginBottom: 8 }}>
-                            <Text style={globalS.textRight} onPress={goToForgetPass()}>Şifreni mi unuttun?</Text>
+        <View style={[styles.container]}>
+            <KeyboardAwareScrollView contentContainerStyle={{ flex: 1 }}
+                behavior={Platform.OS === "ios" ? "padding" : "height"}>
+                <ScrollView contentContainerStyle={styles.scrollContainer}>
+                    <Image source={require("../../assets/images/logo.png")} style={styles.logo} />
+                    <LinearGradient colors={["#D82026", "#721011"]} style={styles.formContainer}>
+                        <View>
+                            <Input label="Kullanıcı Adı" mb={12} onUpdateValue={updateInputValue.bind(this, "username")} value={enteredUsername} />
+                            <Input label="Şifre" mb={12} onUpdateValue={updateInputValue.bind(this, "password")} value={enteredPassword} password />
+                            {hasError && (<Text style={{ marginBottom: 12, color: Colors.white }}>{errorText}</Text>)}
+                            <Button onPress={submitHandler} style={styles.btn} solidBg>Giriş Yap</Button>
                         </View>
-                    )} */}
-                    <Button onPress={submitHandler}>{isLogin ? "Giriş Yap" : "Kayıt Ol"}</Button>
-                </View>
-            </View>
+                    </LinearGradient>
+                    <Image source={require("../../assets/images/stars.png")} style={styles.bgStar} />
+                </ScrollView>
+            </KeyboardAwareScrollView>
         </View >
     )
 }
 
 const styles = StyleSheet.create({
-    container: {
+    scrollContainer: {
         flex: 1,
         justifyContent: 'center',
-        padding: 20,
+    },
+    container: {
+        flex: 1,
+        // justifyContent: 'center',
+        paddingHorizontal: 26,
         height: Dimensions.get('window').height,
+        backgroundColor: "#1A1A1A",
+        // justifyContent: "center",
     },
     bgBlue: {
         backgroundColor: Colors.black
     },
     formContainer: {
         padding: 26,
-        backgroundColor: Colors.white,
-        borderRadius: 30
+        borderRadius: 16
     },
     mainTitle: {
         fontSize: 24,
         fontWeight: "bold",
         marginBottom: 26
     },
+    starContainer: {
+        // height: "100%",
+    },
+    bgStar: {
+        position: "absolute",
+        bottom: 0,
+        zIndex: -1,
+        width: "100%",
+        objectFit: "contain",
+        opacity: 0.2
+    },
+    btn: {
+        backgroundColor: Colors.black
+    },
+    logo: {
+        width: 250,
+        height: 150,
+        objectFit: "contain",
+        marginHorizontal: "auto",
+        position: "absolute",
+        top: 75,
+        left: "13%",
+        // transform:"-50%"
+    }
 });
