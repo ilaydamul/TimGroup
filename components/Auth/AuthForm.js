@@ -16,6 +16,7 @@ export default function AuthForm({ onSubmit }) {
     const [enteredPassword, setEnteredPassword] = useState('');
 
     const authCtx = useContext(AuthContext);
+    const navigation = useNavigation();
 
     const [hasError, setHasError] = useState(authCtx.error);
     const [errorText, setErrorText] = useState(authCtx.errorText);
@@ -51,6 +52,10 @@ export default function AuthForm({ onSubmit }) {
 
     }
 
+    function goMenu() {
+        navigation.navigate("Menu");
+    }
+
     return (
         <View style={[styles.container]}>
             <KeyboardAwareScrollView contentContainerStyle={{ flex: 1 }}
@@ -63,6 +68,7 @@ export default function AuthForm({ onSubmit }) {
                             <Input label="Şifre" mb={12} onUpdateValue={updateInputValue.bind(this, "password")} value={enteredPassword} password />
                             {hasError && (<Text style={{ marginBottom: 12, color: Colors.white }}>{errorText}</Text>)}
                             <Button onPress={submitHandler} style={styles.btn} solidBg>Giriş Yap</Button>
+                            <Text style={globalS.linkText} onPress={goMenu}>Seçim ekranına geri dön</Text>
                         </View>
                     </LinearGradient>
                     <Image source={require("../../assets/images/stars.png")} style={styles.bgStar} />
@@ -79,11 +85,9 @@ const styles = StyleSheet.create({
     },
     container: {
         flex: 1,
-        // justifyContent: 'center',
         paddingHorizontal: 26,
         height: Dimensions.get('window').height,
         backgroundColor: "#1A1A1A",
-        // justifyContent: "center",
     },
     bgBlue: {
         backgroundColor: Colors.black

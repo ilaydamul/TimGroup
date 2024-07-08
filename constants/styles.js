@@ -26,6 +26,10 @@ export const globalS = StyleSheet.create({
     link: {
         color: Colors.blue
     },
+    linkText: {
+        color: Colors.white,
+        marginTop: 12
+    },
     errorText: {
         color: Colors.red
     },

@@ -1,17 +1,19 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
-import { Camera } from 'expo-camera';
+import React, { useState, useEffect } from "react";
+import { Text, View, StyleSheet, Button } from "react-native";
+import { CameraView, Camera } from "expo-camera";
 
 export default function QR() {
   const [hasPermission, setHasPermission] = useState(null);
   const [scanned, setScanned] = useState(false);
-  const [cameraRef, setCameraRef] = useState(null);
 
   useEffect(() => {
-    (async () => {
-      const { status } = await Camera.requestPermissionsAsync();
-      setHasPermission(status === 'granted');
-    })();
+    const getCameraPermissions = async () => {
+      const { status } = await Camera.requestCameraPermissionsAsync();
+      console.log(status);
+      setHasPermission(status === "granted");
+    };
+
+    getCameraPermissions();
   }, []);
 
   const handleBarCodeScanned = ({ type, data }) => {
@@ -19,42 +21,25 @@ export default function QR() {
     alert(`Bar code with type ${type} and data ${data} has been scanned!`);
   };
 
-  const renderCamera = () => {
-    return (
-      <View style={styles.cameraContainer}>
-        <Camera
-          ref={ref => setCameraRef(ref)}
-          onBarCodeScanned={scanned ? undefined : handleBarCodeScanned}
-          style={styles.camera}
-        />
-      </View>
-    );
-  };
-
   if (hasPermission === null) {
-    return <View />;
+    return <Text>Requesting for camera permission</Text>;
   }
-
   if (hasPermission === false) {
-    return (
-      <View style={styles.container}>
-        <Text style={styles.text}>Camera permission not granted</Text>
-      </View>
-    );
+    return <Text>No access to camera</Text>;
   }
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Welcome to the Barcode Scanner App!</Text>
-      <Text style={styles.paragraph}>Scan a barcode to start your job.</Text>
-      {renderCamera()}
-      <TouchableOpacity
-        style={styles.button}
-        onPress={() => setScanned(false)}
-        disabled={!scanned}
-      >
-        <Text style={styles.buttonText}>Scan QR to Start your job</Text>
-      </TouchableOpacity>
+      <CameraView
+        onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
+        barcodeScannerSettings={{
+          barcodeTypes: ["qr", "pdf417"],
+        }}
+        style={StyleSheet.absoluteFillObject}
+      />
+      {scanned && (
+        <Button title={"Tap to Scan Again"} onPress={() => setScanned(false)} />
+      )}
     </View>
   );
 }
@@ -62,37 +47,7 @@ export default function QR() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  title: {
-    fontSize: 24,
-    fontWeight: 'bold',
-    marginBottom: 20,
-  },
-  paragraph: {
-    fontSize: 16,
-    marginBottom: 40,
-  },
-  cameraContainer: {
-    width: '80%',
-    aspectRatio: 1,
-    overflow: 'hidden',
-    borderRadius: 10,
-    marginBottom: 40,
-  },
-  camera: {
-    flex: 1,
-  },
-  button: {
-    backgroundColor: 'blue',
-    paddingHorizontal: 20,
-    paddingVertical: 10,
-    borderRadius: 5,
-  },
-  buttonText: {
-    color: 'white',
-    fontSize: 16,
-    fontWeight: 'bold',
+    flexDirection: "column",
+    justifyContent: "center",
   },
 });

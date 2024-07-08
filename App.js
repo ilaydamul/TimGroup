@@ -1,64 +1,37 @@
 import 'react-native-gesture-handler';
 import React, { useContext, useEffect, useState } from 'react';
-import { NavigationContainer, useNavigation } from '@react-navigation/native';
+import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { createDrawerNavigator, DrawerContentScrollView, DrawerItemList } from '@react-navigation/drawer';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, Text } from 'react-native';
-import FontAwesome5 from '@expo/vector-icons/FontAwesome5';
-import AppLoading from 'expo-app-loading';
 import AsyncStorage from '@react-native-async-storage/async-storage';
-
-import Login from './screens/Login';
-
 import AuthContextProvider, { AuthContext } from './store/auth-context';
-import { globalS } from './constants/styles';
-import { Colors } from './constants/colors';
-import Loader from './components/Layout/Loader';
 import LoadingOverlay from './components/UI/LoadingOverlay';
+
+//SCREENS
+import Login from './screens/Login';
 import Profile from './screens/Profile';
 import Home from './screens/Home';
 import Audit from './screens/Audit';
 import QR from './screens/QR';
+import Menu from './screens/Menu';
 
 const Stack = createNativeStackNavigator();
-const Drawer = createDrawerNavigator();
-
-
-// function AdvertsStack() {
-//   return (
-//     <Stack.Navigator>
-//       <Stack.Screen name='Adverts' component={Adverts} options={{ headerShown: false }} />
-//       <Stack.Screen name='AdvertDetail' component={AdvertDetail} options={{ headerShown: false }} />
-//     </Stack.Navigator>
-//   )
-// }
-
 
 function AuthStack() {
   return (
     <>
       <StatusBar style="light" />
       <Stack.Navigator>
+        <Stack.Screen name='Menu' component={Menu} options={{ headerShown: false }} />
         <Stack.Screen name='Login' component={Login} options={{ headerShown: false }} />
       </Stack.Navigator>
     </>
   )
 }
 
-function CustomDrawer(props) {
-  return (
-    <DrawerContentScrollView {...props}>
-      <Text style={[globalS.logoTitle, { color: Colors.blue, marginBottom: 24, marginHorizontal: 16 }]}>FRC Hub</Text>
-      <DrawerItemList {...props} />
-    </DrawerContentScrollView>
-  )
-}
-
 
 function AuthenticatedStack() {
   return (
-    // <Stack.Navigator screenOptions={{ headerShown: false }} drawerContent={(props) => <CustomDrawer {...props} />}>
     <>
       <StatusBar style="auto" />
       <Stack.Navigator screenOptions={{ headerShown: false }}>
@@ -71,12 +44,6 @@ function AuthenticatedStack() {
   )
 }
 
-const style = StyleSheet.create({
-  icon: {
-    width: 30,
-    alignItems: 'center',
-  },
-});
 
 function Root() {
   const [loading, setLoading] = useState(true);
