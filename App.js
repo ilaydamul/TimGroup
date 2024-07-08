@@ -78,7 +78,7 @@ function Root() {
 }
 
 
-export default function App() {
+export default () => {
   return (
     <AuthContextProvider>
       <Root />
