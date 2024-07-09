@@ -2,7 +2,7 @@ import { StyleSheet, View, Text } from "react-native";
 import { Colors } from "../../constants/colors";
 import { globalS } from "../../constants/styles";
 
-export default function Box({ children, title, style }) {
+export default function Box({ children, title, style, isScroll }) {
     return (
         <View style={[styles.box, style]}>
             <View style={styles.boxTitleGroup}><Text style={styles.boxTitle}>{title}</Text></View>

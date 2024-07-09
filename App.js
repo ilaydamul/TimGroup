@@ -14,6 +14,7 @@ import Home from './screens/Home';
 import Audit from './screens/Audit';
 import QR from './screens/QR';
 import Menu from './screens/Menu';
+import Documents from './screens/Documents';
 
 const Stack = createNativeStackNavigator();
 
@@ -35,10 +36,11 @@ function AuthenticatedStack() {
     <>
       <StatusBar style="auto" />
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name='QR' component={QR} />
         <Stack.Screen name='Home' component={Home} />
         <Stack.Screen name='Audit' component={Audit} />
         <Stack.Screen name='Profile' component={Profile} />
+        <Stack.Screen name='Documents' component={Documents} />
+        <Stack.Screen name='QR' component={QR} />
       </Stack.Navigator>
     </>
   )

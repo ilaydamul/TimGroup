@@ -2,70 +2,134 @@ import React, { useContext } from "react";
 import { Text, View, TouchableOpacity, Image, StyleSheet, Dimensions } from "react-native";
 import Layout from "../components/Layout/Layout";
 import { globalS } from "../constants/styles";
-import { FontAwesome5, Octicons, SimpleLineIcons } from "@expo/vector-icons";
+import { FontAwesome5, FontAwesome6, MaterialCommunityIcons, Octicons, SimpleLineIcons } from "@expo/vector-icons";
 import { Colors } from "../constants/colors";
 import Button from "../components/UI/Button";
 import { AuthContext } from "../store/auth-context";
 import { useNavigation } from "@react-navigation/native";
 
-const data = {
-    title: "Ad Soyad",
-    logo: "./../assets/images/caracal.png",
-    aboutText: "Türkiye’nin ilk yazılım lisesi öğrencileri olarak 2023 yılında kurduğumuz Caracal Robotics, 2023-2024 Crescendo sezonunda Rookie olarak yarışacaktır. Takımımız; alanında bilgili, deneyimli mentörler ve daha önce FRC tecrübeleri bulunan üyelerimizden oluşmaktadır. Takım üyeleri olarak; öğrenmek, eğlenmek, değişmek, dönüşmek ve tüm bu süreci diğer arkadaşlarımızla da paylaşmak, STEM kültürünü yaymak için bir araya geldik.",
-    team: {
-        title: "Caracal Robotics",
-        code: "#2345"
-    },
-    contactInfos: {
-        email: "info@caracalrobotics.com",
-        phone: "0541 566 9664",
-        address: "İstanbul"
-    },
-};
 
 
 export default function Profile() {
     const authCtx = useContext(AuthContext);
+    const navigation = useNavigation();
 
     function logoutHandler() {
         authCtx.logout();
     }
 
+    const goToLink = (link) => {
+        navigation.navigate(link);
+    }
+
     return (
         <Layout isBack={true} title={"Profil"}>
             <View style={[globalS.itemContainer]}>
-
-                <View style={globalS.w100}>
-                    <Button onPress={logoutHandler}>Çıkış Yap</Button>
+                <View style={[globalS.dFlexCenterBetween, globalS.mb12, style.profileContainer]}>
+                    <View style={style.profile}>
+                        <FontAwesome6 name="user-large" size={24} color="#C62027" />
+                        <Text style={style.profileText}>Ad Soyad</Text>
+                    </View>
+                    <View style={style.profile} onPress={logoutHandler}>
+                        <Text style={style.logoutText}>Çıkış Yap</Text>
+                        <MaterialCommunityIcons name="logout" size={24} color="black" />
+                    </View>
                 </View>
 
+                <Text style={globalS.title}>Ne Yapmak İstersin?</Text>
+                <View style={style.menu}>
+                    <View style={style.menuItem}>
+                        <MaterialCommunityIcons name="login" size={24} color="white" />
+                        <Text style={style.menuTitle}>Giriş</Text>
+                    </View>
+                    <View style={style.menuItem}>
+                        <MaterialCommunityIcons name="logout" size={24} color="white" />
+                        <Text style={style.menuTitle}>Çıkış</Text>
+                    </View>
+                    <View style={style.menuItem}>
+                        <MaterialCommunityIcons name="security" size={24} color="white" />
+                        <Text style={style.menuTitle}>Devriye</Text>
+                    </View>
+                </View>
 
+                <Text style={globalS.title}>Evrakları İncele</Text>
+                <View style={style.doc}>
+                    <Image style={style.docImg} source={require("../assets/images/doc.png")} />
+                    <View style={style.docContent}>
+                        <Text style={style.docText}>Özlük Evrakları</Text>
+                        <Button style={style.docBtn} textStyle={style.docBtnText} onPress={() => goToLink("Documents")}>İncelemeye Başla</Button>
+                    </View>
+                </View>
             </View>
         </Layout>
     );
 }
 
 const style = StyleSheet.create({
-    image: {
-        width: 100,
-        height: 100,
-        marginRight: 16
+    profileContainer: {
+        position: "relative",
+        top: -70
     },
-    title: {
-        fontSize: 20,
-        fontWeight: "700"
+
+    profile:
+    {
+        flexDirection: "row",
+        alignItems: "center",
+        gap: 8,
+        justifyContent: "center",
     },
-    teamTitle: {
-        color: Colors.blue600,
-        marginTop: 12,
+    profileText: {
+        fontWeight: "600",
+        fontSize: 18,
+
     },
-    flex: {
-        flexDirection: 'row',
-        alignItems: 'center',
+    logoutText: {
+        fontSize: 15,
+        fontWeight: "600",
     },
-    penIcon: {
-        position: "absolute",
-        top: 12,
-        right: 12
+    menu: {
+
+        flexDirection: "row",
+        justifyContent: "space-between",
+        gap: 12,
+        marginBottom: 30
     },
+    menuItem: {
+        backgroundColor: Colors.softBlack,
+        justifyContent: "center",
+        alignItems: "center",
+        width: 95,
+        height: 90,
+        borderRadius: 12
+    },
+    menuTitle: {
+        color: Colors.white
+    },
+    doc: {
+        backgroundColor: Colors.softBlack,
+        flexDirection: "row",
+        borderRadius: 8,
+        overflow: "hidden"
+    },
+    docImg: {
+        width: 160,
+        objectFit: "cover"
+    },
+    docText: {
+        color: Colors.white,
+        fontSize: 16,
+        marginBottom: 12
+    },
+    docContent: {
+        padding: 12,
+        justifyContent: "center"
+    },
+    docBtn: {
+        paddingHorizontal: 12,
+        paddingVertical: 8,
+        borderRadius: 16
+    },
+    docBtnText: {
+        fontSize: 15
+    }
 })

@@ -128,8 +128,8 @@ export default function Audit() {
                         {projects.map((item, id) => {
                             return <ListButton onPress={() => handleNextStep(item.id)} key={id}>{item.title}</ListButton>;
                         })}
-                        <View style={style.btnGroup}>
-                            <Button style={[globalS.btnGray, style.btnHalf]} textColor={Colors.black} solidBg onPress={handlePrevStep}>Geri</Button>
+                        <View style={globalS.btnGroup}>
+                            <Button style={[globalS.btnGray, globalS.btnHalf]} textColor={Colors.black} solidBg onPress={handlePrevStep}>Geri</Button>
 
                         </View>
                     </Box>
@@ -148,8 +148,8 @@ export default function Audit() {
                                 
                             </View> */}
 
-                            <View style={style.btnGroup}>
-                                <Button style={[globalS.btnGray, style.btnHalf]} textColor={Colors.black} solidBg onPress={handlePrevStep}>Geri</Button>
+                            <View style={globalS.btnGroup}>
+                                <Button style={[globalS.btnGray, globalS.btnHalf]} textColor={Colors.black} solidBg onPress={handlePrevStep}>Geri</Button>
                                 <Button onPress={handleNextStep}>Denetime Başla</Button>
                             </View>
                         </Box>
@@ -162,9 +162,9 @@ export default function Audit() {
                             <Button onPress={takePhoto} style={globalS.mt16}>Resim Çek</Button>
                             <Text style={style.txt}>Fotoğrafı Yorumla</Text>
                             <Input textarea />
-                            <View style={style.btnGroup}>
-                                <Button style={[globalS.btnGray, style.btnHalf]} textColor={Colors.black} solidBg onPress={handlePrevStep}>Geri</Button>
-                                <Button style={style.btnHalf} onPress={handleNextStep}>Devam</Button>
+                            <View style={globalS.btnGroup}>
+                                <Button style={[globalS.btnGray, globalS.btnHalf]} textColor={Colors.black} solidBg onPress={handlePrevStep}>Geri</Button>
+                                <Button style={globalS.btnHalf} onPress={handleNextStep}>Devam</Button>
                             </View>
                         </Box>
 
@@ -177,9 +177,9 @@ export default function Audit() {
                             <ListItem title={"Güvenlik personelinin kimliği takılı mı?"} isRadio />
                             <ListItem title={"Proje personel kadro sayısı tam mı?"} isRadio noBorder />
                             <Text style={style.textBox}>Toplam Değerlendirme Puanı: 40</Text>
-                            <View style={style.btnGroup}>
-                                <Button style={[globalS.btnGray, style.btnHalf]} textColor={Colors.black} solidBg onPress={handlePrevStep}>Geri</Button>
-                                <Button style={style.btnHalf} onPress={handleNextStep}>Devam</Button>
+                            <View style={globalS.btnGroup}>
+                                <Button style={[globalS.btnGray, globalS.btnHalf]} textColor={Colors.black} solidBg onPress={handlePrevStep}>Geri</Button>
+                                <Button style={globalS.btnHalf} onPress={handleNextStep}>Devam</Button>
                             </View>
                         </Box>
 
@@ -235,16 +235,8 @@ const style = StyleSheet.create({
         marginVertical: 14,
         fontSize: 16,
     },
-    btnGroup: {
-        flexDirection: "row",
-        justifyContent: "space-between",
-        gap: 12,
-        marginTop: 16,
-    },
-    btnHalf: {
-        // flex: 1,
-        minWidth: 120
-    },
+   
+   
     textBox: {
         borderRadius: 6,
         backgroundColor: Colors.gray400,

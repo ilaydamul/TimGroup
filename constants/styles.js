@@ -87,8 +87,25 @@ export const globalS = StyleSheet.create({
     },
     btnGray: {
         backgroundColor: Colors.gray400
+    },
+    btnGroup: {
+        flexDirection: "row",
+        justifyContent: "space-between",
+        gap: 12,
+        marginTop: 16,
+    },
+    btnHalf: {
+        minWidth: 120
+    },
+    title: {
+        fontSize: 20,
+        fontWeight: "700",
+        textAlign: "center",
+        marginBottom: 16
+    },
+    scrollBox: {
+        maxHeight: 110,
+        overflow: "scroll"
     }
-
-
 
 })
