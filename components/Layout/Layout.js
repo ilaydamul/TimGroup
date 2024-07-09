@@ -31,8 +31,8 @@ const style = StyleSheet.create({
     // contentContainerStyle={style.scrollViewContent}
     scrollViewContent: {
         // flexGrow: 1,
-        // height:"100%"
-        minHeight: "70%",
+        // height:"100%",
+        minHeight: "80%",
         justifyContent: "center",
         // alignItems: "center",
         // paddingBottom: 150

@@ -25,6 +25,7 @@
     "expo-linear-gradient": "~13.0.2",
     "expo-media-library": "~16.0.4",
     "expo-modules-core": "^1.12.14",
+    "expo-network": "^6.0.1",
     "expo-splash-screen": "~0.27.5",
     "expo-status-bar": "~1.12.1",
     "npm": "^10.8.1",

@@ -17,6 +17,9 @@ export const globalS = StyleSheet.create({
     textRight: {
         textAlign: "right"
     },
+    textBold: {
+        fontWeight: "700"
+    },
     dFlexCenterBetween: {
         flexDirection: 'row',
         alignItems: 'center',
