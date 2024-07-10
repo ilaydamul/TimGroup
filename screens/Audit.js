@@ -4,7 +4,7 @@ import { globalS } from '../constants/styles';
 import Box from '../components/UI/Box';
 import { Colors } from '../constants/colors';
 import ListButton from '../components/UI/ListButton';
-import { useState } from 'react';
+import { useRef, useState } from 'react';
 import Button from '../components/UI/Button';
 import ListItem from '../components/UI/ListItem';
 import Input from '../components/UI/Input';
@@ -13,6 +13,7 @@ import { useCameraPermissions, PermissionStatus } from 'expo-camera';
 import * as ImageManipulator from 'expo-image-manipulator';
 import { SelectList } from 'react-native-dropdown-select-list';
 import { FontAwesome } from '@expo/vector-icons';
+import { Picker } from '@react-native-picker/picker';
 
 const organizations = [{ id: 0, title: "Güvenlik" }, { id: 1, title: "Tesis" }, { id: 2, title: "Temizlik" }];
 const organizationProjects = [
@@ -38,7 +39,6 @@ const projectInfo = {
     email: "gorkem@17yonetim.com",
     address: "İçmeler Mah. Çağdaş Sok. 2C/1 Tuzla/İst",
 };
-
 const comboBox = [
     { key: '1', value: 'Jammu & Kashmir' },
     { key: '2', value: 'Gujrat' },
@@ -47,15 +47,14 @@ const comboBox = [
 ];
 
 export default function Audit() {
-    const [step, setStep] = useState(6);
-    // const [organization, setOrganization] = useState(organizations);
+    const [step, setStep] = useState(1);
     const [projects, setProjects] = useState();
-    const [orgProjects, setOrgProjects] = useState();
-    // const [projectInfos, setProjectInfos] = useState(projectInfo);
     const [image, setImage] = useState(null);
+    const [selected, setSelected] = useState();
     const [permission, requestPermission] = useCameraPermissions();
-    const [selected, setSelected] = useState("");
 
+    const [selectedStaff, setSelectedStaff] = useState("Seç");
+    const pickerRef = useRef();
 
     async function verifyPermissions() {
         if (permission.status === PermissionStatus.UNDETERMINED) {
@@ -78,9 +77,6 @@ export default function Audit() {
         if (step === 1) {
             setProjects(organizationProjects[item].projects);
         }
-        // else if (step === 2) {
-        //     setProjects(projectInfo);
-        // }
 
         setStep(prevStep => prevStep + 1);
     };
@@ -111,6 +107,9 @@ export default function Audit() {
     let imagePreview = <Image source={require("../assets/images/noImg.png")} style={style.img} />;
     if (image) {
         imagePreview = <Image source={{ uri: image }} style={style.img} />;
+    }
+
+    function onPressHandler() {
     }
 
     return (
@@ -188,23 +187,82 @@ export default function Audit() {
                 {step === 6 && (
                     <>
                         <Box title={"Değerlendirme"}>
-                            <Text style={style.title}>Müşteri Görüşleri</Text>
+                            <Text style={globalS.leftTitle}>Müşteri Görüşleri</Text>
                             <Input textarea mb={12} />
-                            <Text style={style.title}>Notlarınız</Text>
+                            <Text style={globalS.leftTitle}>Notlarınız</Text>
                             <Input textarea mb={12} />
-                            <Text style={style.title}>Uyarılar</Text>
+                            <Text style={globalS.leftTitle}>Uyarılar</Text>
+                            <View style={[globalS.dFlexCenterBetween, globalS.mb12]}>
+                                <Text style={style.selectText}>Görevli Personel</Text>
+                                <Picker selectedValue={selectedStaff}
+                                    onValueChange={(itemValue, i) => {
+                                        setSelectedStaff(itemValue)
+                                    }}
+                                    ref={pickerRef}
+                                    style={style.picker}
+                                    itemStyle={style.pickerText}
+                                >
+                                    <Picker.Item label='Seç' value="0" />
+                                    <Picker.Item label='Personel' value="personel" />
+                                    <Picker.Item label='Personel 2' value="personel2" />
+                                    <Picker.Item label='Personel 3' value="personel3" />
+                                    <Picker.Item label='Personel 4' value="personel4" />
+                                </Picker>
+                            </View>
+                            <View style={[globalS.dFlexCenterBetween, globalS.mb12]}>
+                                <Text style={globalS.selectText}>İşlem</Text>
+                                <Picker selectedValue={selectedStaff}
+                                    onValueChange={(itemValue, i) => {
+                                        setSelectedStaff(itemValue)
+                                    }}
+                                    ref={pickerRef}
+                                    style={style.picker}
+                                    itemStyle={style.pickerText}
+                                >
+                                    <Picker.Item label='Sözlü Uyarı' value="0" />
+                                    <Picker.Item label='Sözlü Uyarı 2' value="personel2" />
+                                    <Picker.Item label='Sözlü Uyarı 3' value="personel3" />
+                                    <Picker.Item label='Sözlü Uyarı 4' value="personel4" />
+                                </Picker>
+                            </View>
+                            <Text style={[globalS.selectText, globalS.mb12]}>Açıklama</Text>
+                            <Input textarea mb={12} />
+                            <View style={[style.flexRight, globalS.mb12]}>
+                                <Button style={style.smallBtn}>Ekle</Button>
+                            </View>
+                            <Text style={globalS.leftTitle}>Depo Talimatları</Text>
+                            <View style={[globalS.dFlexCenterBetween, globalS.mb12]}>
+                                <Text style={style.selectText}>Görevli Personel</Text>
+                                <Picker selectedValue={selectedStaff}
+                                    onValueChange={(itemValue, i) => {
+                                        setSelectedStaff(itemValue)
+                                    }}
+                                    ref={pickerRef}
+                                    style={style.picker}
+                                    itemStyle={style.pickerText}
+                                >
+                                    <Picker.Item label='Seç' value="0" />
+                                    <Picker.Item label='Personel' value="personel" />
+                                    <Picker.Item label='Personel 2' value="personel2" />
+                                    <Picker.Item label='Personel 3' value="personel3" />
+                                    <Picker.Item label='Personel 4' value="personel4" />
+                                </Picker>
+                            </View>
+                            <Text style={globalS.leftTitle}>Talimatlar</Text>
+                            <View style={[globalS.flexStart, globalS.mb12]}>
+                                <Text style={globalS.textStyle}>Talimat Ver</Text>
+                            </View>
+                            <Text style={globalS.leftTitle}>Müşteri Temsilcisi</Text>
                             <View style={[globalS.dFlexCenterBetween]}>
-                                <Text>Görevli Personel</Text>
-                                <SelectList onSelect={() => alert(selected)}
-                                    setSelected={setSelected}
-                                    data={comboBox}
-                                    arrowicon={<FontAwesome name="chevron-down" size={12} color={'black'} />}
-                                    searchicon={<FontAwesome name="search" size={12} color={'black'} />}
-                                    search={false}
-                                    boxStyles={{ borderRadius: 0 }} //override default styles
-                                    defaultOption={{ key: '1', value: 'Jammu & Kashmir' }} />
+                                <Input placeholderText={"Şifre Girin"} style={style.inputBg} />
+                                {/* <Text style={globalS.textStyle}>Talimat Ver</Text> */}
+                                <Button style={style.smallBtn}>Doğrula</Button>
                             </View>
                         </Box>
+
+                        <View style={[globalS.mAuto, globalS.mt16]}>
+                            <Button onPress={onPressHandler}>Kayıt</Button>
+                        </View>
 
                     </>
                 )}
@@ -214,10 +272,6 @@ export default function Audit() {
 }
 
 const style = StyleSheet.create({
-    title: {
-        fontSize: 20,
-        marginBottom: 12
-    },
     container: {
         flex: 1,
     },
@@ -235,8 +289,6 @@ const style = StyleSheet.create({
         marginVertical: 14,
         fontSize: 16,
     },
-   
-   
     textBox: {
         borderRadius: 6,
         backgroundColor: Colors.gray400,
@@ -245,5 +297,26 @@ const style = StyleSheet.create({
         overflow: "hidden",
         marginTop: 12,
         fontSize: 16
+    },
+    picker: {
+        width: 150,
+        backgroundColor: Colors.gray400,
+    },
+    pickerText: {
+
+    },
+    selectText: {
+        fontSize: 15
+    },
+    flexRight: {
+        alignItems: "flex-end"
+    },
+    smallBtn: {
+        width: 120
+    },
+   
+    inputBg: {
+        backgroundColor: Colors.gray400,
+        width: 150
     }
 });

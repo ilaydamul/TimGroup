@@ -11,6 +11,12 @@ export const globalS = StyleSheet.create({
     textCenter: {
         textAlign: "center"
     },
+    textStyle: {
+        backgroundColor: Colors.gray400,
+        paddingVertical: 12,
+        paddingHorizontal: 26,
+        borderRadius: 4
+    },
     mAuto: {
         marginHorizontal: "auto",
     },
@@ -26,6 +32,9 @@ export const globalS = StyleSheet.create({
         justifyContent: 'space-between',
         width: '100%',
     },
+    alignStart: {
+        alignItems: "flex-start",
+    },
     link: {
         color: Colors.blue
     },
@@ -35,6 +44,9 @@ export const globalS = StyleSheet.create({
     },
     errorText: {
         color: Colors.red
+    },
+    flexStart: {
+        alignSelf: "flex-start"
     },
     contentContainer: {
         padding: 16
@@ -103,8 +115,12 @@ export const globalS = StyleSheet.create({
         textAlign: "center",
         marginBottom: 16
     },
+    leftTitle: {
+        fontSize: 20,
+        marginBottom: 12
+    },
     scrollBox: {
-        maxHeight: 110,
+        maxHeight: 250,
         overflow: "scroll"
     }
 

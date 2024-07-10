@@ -1,5 +1,5 @@
-import React, { useContext } from "react";
-import { Text, View, TouchableOpacity, Image, StyleSheet, Dimensions } from "react-native";
+import React, { useContext, useEffect, useState } from "react";
+import { Text, View, TouchableOpacity, Image, StyleSheet, Dimensions, Pressable } from "react-native";
 import Layout from "../components/Layout/Layout";
 import { globalS } from "../constants/styles";
 import { FontAwesome5, FontAwesome6, MaterialCommunityIcons, Octicons, SimpleLineIcons } from "@expo/vector-icons";
@@ -13,6 +13,12 @@ import { useNavigation } from "@react-navigation/native";
 export default function Profile() {
     const authCtx = useContext(AuthContext);
     const navigation = useNavigation();
+    const [isSecurity, setIsSecurity] = useState();
+
+    useEffect(() => {
+        setIsSecurity(authCtx.isSecurity);
+        console.log(isSecurity);
+    }, [authCtx])
 
     function logoutHandler() {
         authCtx.logout();
@@ -30,36 +36,42 @@ export default function Profile() {
                         <FontAwesome6 name="user-large" size={24} color="#C62027" />
                         <Text style={style.profileText}>Ad Soyad</Text>
                     </View>
-                    <View style={style.profile} onPress={logoutHandler}>
+                    <Pressable style={style.profile} onPress={logoutHandler}>
                         <Text style={style.logoutText}>Çıkış Yap</Text>
                         <MaterialCommunityIcons name="logout" size={24} color="black" />
-                    </View>
+                    </Pressable>
                 </View>
 
-                <Text style={globalS.title}>Ne Yapmak İstersin?</Text>
-                <View style={style.menu}>
-                    <View style={style.menuItem}>
-                        <MaterialCommunityIcons name="login" size={24} color="white" />
-                        <Text style={style.menuTitle}>Giriş</Text>
-                    </View>
-                    <View style={style.menuItem}>
-                        <MaterialCommunityIcons name="logout" size={24} color="white" />
-                        <Text style={style.menuTitle}>Çıkış</Text>
-                    </View>
-                    <View style={style.menuItem}>
-                        <MaterialCommunityIcons name="security" size={24} color="white" />
-                        <Text style={style.menuTitle}>Devriye</Text>
-                    </View>
-                </View>
+                {
+                    isSecurity ?
+                        <>
+                            <Text style={globalS.title}>Ne Yapmak İstersin?</Text>
+                            <View style={style.menu}>
+                                <View style={style.menuItem}>
+                                    <MaterialCommunityIcons name="login" size={24} color="white" />
+                                    <Text style={style.menuTitle}>Giriş</Text>
+                                </View>
+                                <View style={style.menuItem}>
+                                    <MaterialCommunityIcons name="logout" size={24} color="white" />
+                                    <Text style={style.menuTitle}>Çıkış</Text>
+                                </View>
+                                <View style={style.menuItem}>
+                                    <MaterialCommunityIcons name="security" size={24} color="white" />
+                                    <Text style={style.menuTitle}>Devriye</Text>
+                                </View>
+                            </View>
 
-                <Text style={globalS.title}>Evrakları İncele</Text>
-                <View style={style.doc}>
-                    <Image style={style.docImg} source={require("../assets/images/doc.png")} />
-                    <View style={style.docContent}>
-                        <Text style={style.docText}>Özlük Evrakları</Text>
-                        <Button style={style.docBtn} textStyle={style.docBtnText} onPress={() => goToLink("Documents")}>İncelemeye Başla</Button>
-                    </View>
-                </View>
+                            <Text style={globalS.title}>Evrakları İncele</Text>
+                            <View style={style.doc}>
+                                <Image style={style.docImg} source={require("../assets/images/doc.png")} />
+                                <View style={style.docContent}>
+                                    <Text style={style.docText}>Özlük Evrakları</Text>
+                                    <Button style={style.docBtn} textStyle={style.docBtnText} onPress={() => goToLink("Documents")}>İncelemeye Başla</Button>
+                                </View>
+                            </View></>
+                        : ""
+                }
+
             </View>
         </Layout>
     );

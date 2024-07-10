@@ -4,9 +4,10 @@ import { AuthContext } from '../store/auth-context';
 import { login } from "../utils/auth";
 import LoadingOverlay from '../components/UI/LoadingOverlay';
 
-export default function Login() {
+export default function Login({ route }) {
     const [isAuthenticating, setIsAuthenticating] = useState(false);
     const authCtx = useContext(AuthContext);
+    const { role } = route.params;
 
     useEffect(() => {
         authCtx.loginControl(false, "");
@@ -14,17 +15,17 @@ export default function Login() {
 
     async function loginHandler({ username, password }) {
         setIsAuthenticating(true);
-     
+
         try {
             const token = await login(username, password);
-            authCtx.authenticate(token);
+            authCtx.authenticate(token, role);
 
         } catch (error) {
             console.log(error);
             if (error.includes("503")) {
                 authCtx.loginControl(true, "Sunucularımız bakımda, bir süre sonra tekrar deneyin.");
             }
-            else{
+            else {
                 authCtx.loginControl(true, "Hatalı e-mail ya da şifre!");
             }
 

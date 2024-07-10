@@ -64,8 +64,8 @@ export default function AuthForm({ onSubmit }) {
                     <Image source={require("../../assets/images/logo.png")} style={styles.logo} />
                     <LinearGradient colors={["#D82026", "#721011"]} style={styles.formContainer}>
                         <View>
-                            <Input label="Kullanıcı Adı" mb={12} onUpdateValue={updateInputValue.bind(this, "username")} value={enteredUsername} />
-                            <Input label="Şifre" mb={12} onUpdateValue={updateInputValue.bind(this, "password")} value={enteredPassword} password />
+                            <Input label="Kullanıcı Adı" style={styles.customInput} mb={12} onUpdateValue={updateInputValue.bind(this, "username")} value={enteredUsername} />
+                            <Input label="Şifre" style={styles.customInput} mb={12} onUpdateValue={updateInputValue.bind(this, "password")} value={enteredPassword} password />
                             {hasError && (<Text style={{ marginBottom: 12, color: Colors.white }}>{errorText}</Text>)}
                             <Button onPress={submitHandler} style={styles.btn} solidBg>Giriş Yap</Button>
                             <Text style={globalS.linkText} onPress={goMenu}>Seçim ekranına geri dön</Text>
@@ -124,5 +124,8 @@ const styles = StyleSheet.create({
         top: 75,
         left: "13%",
         // transform:"-50%"
+    },
+    customInput: {
+        color: Colors.white
     }
 });

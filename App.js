@@ -30,16 +30,42 @@ function AuthStack() {
   )
 }
 
+// function SecurityAuth() {
+//   return (
+//     <>
+//       <StatusBar style="auto" />
+//       <Stack.Navigator screenOptions={{ headerShown: false }}>
+//         <Stack.Screen name='Home' component={Home} />
+//         <Stack.Screen name='Audit' component={Audit} />
+//         <Stack.Screen name='Profile' component={Profile} />
+//       </Stack.Navigator>
+//     </>
+//   )
+// }
+
+// function SupervizorAuth() {
+//   return (
+//     <>
+//       <StatusBar style="auto" />
+//       <Stack.Navigator screenOptions={{ headerShown: false }}>
+//         <Stack.Screen name='Profile' component={Profile} />
+//         <Stack.Screen name='Documents' component={Documents} />
+//         <Stack.Screen name='QR' component={QR} />
+//       </Stack.Navigator>
+//     </>
+//   )
+// }
 
 function AuthenticatedStack() {
   return (
     <>
       <StatusBar style="auto" />
       <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name='Documents' component={Documents} />
         <Stack.Screen name='Home' component={Home} />
         <Stack.Screen name='Audit' component={Audit} />
         <Stack.Screen name='Profile' component={Profile} />
-        <Stack.Screen name='Documents' component={Documents} />
+
         <Stack.Screen name='QR' component={QR} />
       </Stack.Navigator>
     </>
@@ -74,7 +100,10 @@ function Root() {
 
   return (
     <NavigationContainer>
-      {authCtx.isAuthenticated ? <AuthenticatedStack /> : <AuthStack />}
+      {authCtx.isAuthenticated ?
+        // (authCtx.isSecurity ? <SecurityAuth /> : <SupervizorAuth />) 
+        <AuthenticatedStack />
+        : <AuthStack />}
     </NavigationContainer>
   );
 }

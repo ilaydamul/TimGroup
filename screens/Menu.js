@@ -7,8 +7,8 @@ import { useNavigation } from "@react-navigation/native";
 export default function Menu() {
     const navigation = useNavigation();
 
-    function pageChangeHandler(page) {
-        navigation.navigate(page);
+    function pageChangeHandler(page, role) {
+        navigation.navigate(page, { role: role });
     }
 
     return (
@@ -16,8 +16,8 @@ export default function Menu() {
             <ScrollView contentContainerStyle={styles.scrollContainer}>
                 <Image source={require("../assets/images/logo.png")} style={styles.logo} />
                 <View>
-                    <Button onPress={() => pageChangeHandler("Login")} style={styles.btn} >Güvenlik Personelleri</Button>
-                    <Button onPress={() => pageChangeHandler("Login")} style={styles.btn} mt={20}>Denetmenler</Button>
+                    <Button onPress={() => pageChangeHandler("Login", "true")} style={styles.btn} >Güvenlik Personelleri</Button>
+                    <Button onPress={() => pageChangeHandler("Login", "false")} style={styles.btn} mt={20}>Denetmenler</Button>
                 </View>
                 <Image source={require("../assets/images/stars.png")} style={styles.bgStar} />
             </ScrollView>
