@@ -53,7 +53,7 @@ const comboBox = [
 ];
 
 export default function Audit() {
-    const [step, setStep] = useState(3);
+    const [step, setStep] = useState(1);
     const [projects, setProjects] = useState();
     const [image, setImage] = useState(null);
     const [selected, setSelected] = useState();
@@ -84,6 +84,8 @@ export default function Audit() {
             41.11812142291902
         ]
     ];
+
+    //Model 
 
     const [selectedStaff, setSelectedStaff] = useState("Seç");
     const pickerRef = useRef();

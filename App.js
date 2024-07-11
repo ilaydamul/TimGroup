@@ -35,8 +35,8 @@ function SecurityAuth() {
     <>
       <StatusBar style="auto" />
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name='Audit' component={Audit} />
         <Stack.Screen name='Home' component={Home} />
+        <Stack.Screen name='Audit' component={Audit} />
         <Stack.Screen name='Profile' component={Profile} />
       </Stack.Navigator>
     </>
