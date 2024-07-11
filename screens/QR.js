@@ -22,14 +22,14 @@ export default function QR() {
     (async () => {
       //Kamera izni
       const { status2 } = await Camera.requestCameraPermissionsAsync();
-      console.log(status2);
+      // console.log(status2);
       setHasPermission(status2 === "granted");
 
       //Ağ bağlantı kontrolu
       const networkStatus = await Network.getNetworkStateAsync();
       setIsConnected(networkStatus.isConnected);
 
-      console.log(networkStatus.isConnected);
+      // console.log(networkStatus.isConnected);
 
       if (networkStatus.isConnected) {
         const storedData = await AsyncStorage.getItem("data");

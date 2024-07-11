@@ -30,43 +30,46 @@ function AuthStack() {
   )
 }
 
-// function SecurityAuth() {
-//   return (
-//     <>
-//       <StatusBar style="auto" />
-//       <Stack.Navigator screenOptions={{ headerShown: false }}>
-//         <Stack.Screen name='Home' component={Home} />
-//         <Stack.Screen name='Audit' component={Audit} />
-//         <Stack.Screen name='Profile' component={Profile} />
-//       </Stack.Navigator>
-//     </>
-//   )
-// }
+function SecurityAuth() {
+  return (
+    <>
+      <StatusBar style="auto" />
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name='Audit' component={Audit} />
+        <Stack.Screen name='Home' component={Home} />
+        <Stack.Screen name='Profile' component={Profile} />
+      </Stack.Navigator>
+    </>
+  )
+}
 
-// function SupervizorAuth() {
-//   return (
-//     <>
-//       <StatusBar style="auto" />
-//       <Stack.Navigator screenOptions={{ headerShown: false }}>
-//         <Stack.Screen name='Profile' component={Profile} />
-//         <Stack.Screen name='Documents' component={Documents} />
-//         <Stack.Screen name='QR' component={QR} />
-//       </Stack.Navigator>
-//     </>
-//   )
-// }
+function SupervizorAuth() {
+  return (
+    <>
+      <StatusBar style="auto" />
+      <Stack.Navigator screenOptions={{ headerShown: false }}>
+        <Stack.Screen name='Profile' component={Profile} />
+        <Stack.Screen name='Documents' component={Documents} />
+        <Stack.Screen name='QR' component={QR} />
+      </Stack.Navigator>
+    </>
+  )
+}
 
 function AuthenticatedStack() {
   return (
     <>
       <StatusBar style="auto" />
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name='Documents' component={Documents} />
+
+
         <Stack.Screen name='Home' component={Home} />
+        <Stack.Screen name='QR' component={QR} />
+        <Stack.Screen name='Documents' component={Documents} />
+
         <Stack.Screen name='Audit' component={Audit} />
         <Stack.Screen name='Profile' component={Profile} />
 
-        <Stack.Screen name='QR' component={QR} />
       </Stack.Navigator>
     </>
   )
@@ -81,8 +84,11 @@ function Root() {
     async function fetchToken() {
       try {
         const token = await AsyncStorage.getItem('token');
+        const role = await AsyncStorage.getItem('role');
+        // console.log(token);
+        // console.log(role);
         if (token) {
-          authCtx.authenticate(token);
+          authCtx.authenticate(token, role);
         }
       } catch (error) {
         console.error('Token alınırken hata oluştu:', error);
@@ -101,8 +107,8 @@ function Root() {
   return (
     <NavigationContainer>
       {authCtx.isAuthenticated ?
-        // (authCtx.isSecurity ? <SecurityAuth /> : <SupervizorAuth />) 
-        <AuthenticatedStack />
+        (authCtx.isSecurity ? <SecurityAuth /> : <SupervizorAuth />)
+        // <AuthenticatedStack />
         : <AuthStack />}
     </NavigationContainer>
   );

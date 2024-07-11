@@ -17,7 +17,6 @@ export default function Profile() {
 
     useEffect(() => {
         setIsSecurity(authCtx.isSecurity);
-        console.log(isSecurity);
     }, [authCtx])
 
     function logoutHandler() {
@@ -43,7 +42,7 @@ export default function Profile() {
                 </View>
 
                 {
-                    isSecurity ?
+                    !isSecurity ?
                         <>
                             <Text style={globalS.title}>Ne Yapmak İstersin?</Text>
                             <View style={style.menu}>

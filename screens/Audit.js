@@ -14,6 +14,8 @@ import * as ImageManipulator from 'expo-image-manipulator';
 import { SelectList } from 'react-native-dropdown-select-list';
 import { FontAwesome } from '@expo/vector-icons';
 import { Picker } from '@react-native-picker/picker';
+import * as Location from "expo-location";
+import * as turf from "@turf/turf";
 
 const organizations = [{ id: 0, title: "Güvenlik" }, { id: 1, title: "Tesis" }, { id: 2, title: "Temizlik" }];
 const organizationProjects = [
@@ -38,6 +40,10 @@ const projectInfo = {
     phone: "0530 178 97 17",
     email: "gorkem@17yonetim.com",
     address: "İçmeler Mah. Çağdaş Sok. 2C/1 Tuzla/İst",
+    locatin: {
+        lat: 1234.43,
+        long: 2343.43
+    }
 };
 const comboBox = [
     { key: '1', value: 'Jammu & Kashmir' },
@@ -47,11 +53,37 @@ const comboBox = [
 ];
 
 export default function Audit() {
-    const [step, setStep] = useState(1);
+    const [step, setStep] = useState(3);
     const [projects, setProjects] = useState();
     const [image, setImage] = useState(null);
     const [selected, setSelected] = useState();
+    const [location, setLocation] = useState();
     const [permission, requestPermission] = useCameraPermissions();
+
+    // const pointCoords = [41.117478394919374, 28.99353263902384];
+
+    const polygonCoords = [
+        [
+            28.99277127785544,
+            41.11812142291902
+        ],
+        [
+            28.99277127785544,
+            41.116334994013926
+        ],
+        [
+            28.994206851549308,
+            41.116334994013926
+        ],
+        [
+            28.994206851549308,
+            41.11812142291902
+        ],
+        [
+            28.99277127785544,
+            41.11812142291902
+        ]
+    ];
 
     const [selectedStaff, setSelectedStaff] = useState("Seç");
     const pickerRef = useRef();
@@ -73,12 +105,49 @@ export default function Audit() {
         return true;
     }
 
+    async function locationPermissions() {
+        let { status } = await Location.requestForegroundPermissionsAsync();
+
+        if (status !== 'granted') {
+            Alert.alert(
+                "Yetersiz İzinler!",
+                "Bu uygulamayı kullanmak için konum izinlerini vermeniz gerekiyor."
+            );
+            return;
+        }
+
+        let location = await Location.getCurrentPositionAsync({});
+        setLocation(location);
+
+        const currentLat = location.coords.latitude;
+        const currentLong = location.coords.longitude;
+
+        console.log(currentLong);
+        console.log(currentLat);
+
+        const point = turf.point([currentLong, currentLat]);
+        const polygon = turf.polygon([polygonCoords]);
+        const isInside = turf.booleanPointInPolygon(point, polygon);
+        console.log(isInside);
+    }
+
     const handleNextStep = (item) => {
         if (step === 1) {
             setProjects(organizationProjects[item].projects);
         }
 
-        setStep(prevStep => prevStep + 1);
+        if (step == 3) {
+            locationPermissions();
+            // var currentLat = location.coords.latitude;
+            // var currentLong = location.coords.longitude;
+            // console.log(currentLat);
+            // console.log(currentLong);
+        }
+        else {
+            setStep(prevStep => prevStep + 1);
+        }
+
+
     };
 
     const handlePrevStep = (item) => {
@@ -149,7 +218,7 @@ export default function Audit() {
 
                             <View style={globalS.btnGroup}>
                                 <Button style={[globalS.btnGray, globalS.btnHalf]} textColor={Colors.black} solidBg onPress={handlePrevStep}>Geri</Button>
-                                <Button onPress={handleNextStep}>Denetime Başla</Button>
+                                <Button onPress={() => handleNextStep(projectInfo.location)}>Denetime Başla</Button>
                             </View>
                         </Box>
                     </>
@@ -314,7 +383,7 @@ const style = StyleSheet.create({
     smallBtn: {
         width: 120
     },
-   
+
     inputBg: {
         backgroundColor: Colors.gray400,
         width: 150

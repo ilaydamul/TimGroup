@@ -14,8 +14,7 @@ export default function Home({ navigation }) {
     return (
         <Layout>
             <View style={[globalS.itemContainer]}>
-
-                <Box title={"Talimatlarım"} style={globalS.mb8}>
+                <Box title={"Talimatlarım"} style={globalS.mb12}>
                     <ListItem title="Kime" content="Yeni Talimatınız" listContentBg />
                     <ListItem title="Konu" content="Konu İçerik" />
                     <ListItem title="Tarih" content="3.07.2024" />
