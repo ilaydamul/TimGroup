@@ -56,7 +56,7 @@ export default function Audit() {
         if (step === 1) {
             setProjects(organizationProjects[item].projects);
         }
-
+        
         setStep(prevStep => prevStep + 1);
     };
 

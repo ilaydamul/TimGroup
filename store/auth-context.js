@@ -4,10 +4,10 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 export const AuthContext = createContext({
     token: "",
     isAuthenticated: false,
-    isSecurity: "false",
+    isSecurity: true,
     error: null,
     errorText: "",
-    authenticate: (token) => { },
+    authenticate: (token, role) => { },
     logout: () => { },
     loginControl: () => { },
 });
@@ -21,19 +21,14 @@ export default function AuthContextProvider({ children }) {
     async function authenticate(token, role) {
         setAuthToken(token);
         await AsyncStorage.setItem("token", token);
-        
-        if (role == "false") {
+        await AsyncStorage.setItem("role", role);
+
+        if (role == "supervisor") {
             setIsSecurity(false);
-            await AsyncStorage.removeItem("role");
         }
         else {
             setIsSecurity(true);
-            await AsyncStorage.setItem("role", role);
         }
-
-        // console.log(isSecurity);
-        // console.log(authToken);
-
     }
 
     async function logout() {

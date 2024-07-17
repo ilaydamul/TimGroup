@@ -9,7 +9,7 @@ import LoadingOverlay from './components/UI/LoadingOverlay';
 
 //SCREENS
 import Login from './screens/Login';
-import Profile from './screens/Profile';
+import SecurityHome from './screens/SecurityHome';
 import Home from './screens/Home';
 import Audit from './screens/Audit';
 import QR from './screens/QR';
@@ -30,25 +30,25 @@ function AuthStack() {
   )
 }
 
-function SecurityAuth() {
+function SupervizorAuth() {
   return (
     <>
       <StatusBar style="auto" />
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name='Home' component={Home} />
         <Stack.Screen name='Audit' component={Audit} />
-        <Stack.Screen name='Profile' component={Profile} />
+        {/* <Stack.Screen name='SecurityHome' component={SecurityHome} /> */}
       </Stack.Navigator>
     </>
   )
 }
 
-function SupervizorAuth() {
+function SecurityAuth() {
   return (
     <>
       <StatusBar style="auto" />
       <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name='Profile' component={Profile} />
+        <Stack.Screen name='SecurityHome' component={SecurityHome} />
         <Stack.Screen name='Documents' component={Documents} />
         <Stack.Screen name='QR' component={QR} />
       </Stack.Navigator>
@@ -68,7 +68,7 @@ function AuthenticatedStack() {
         <Stack.Screen name='Documents' component={Documents} />
 
         <Stack.Screen name='Audit' component={Audit} />
-        <Stack.Screen name='Profile' component={Profile} />
+        <Stack.Screen name='SecurityHome' component={SecurityHome} />
 
       </Stack.Navigator>
     </>
@@ -85,8 +85,8 @@ function Root() {
       try {
         const token = await AsyncStorage.getItem('token');
         const role = await AsyncStorage.getItem('role');
-        // console.log(token);
-        // console.log(role);
+        console.log(token);
+        console.log(role);
         if (token) {
           authCtx.authenticate(token, role);
         }

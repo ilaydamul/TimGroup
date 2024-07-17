@@ -8,32 +8,41 @@ import { Colors } from "../constants/colors";
 import * as Network from "expo-network";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons";
+import useCameraPermissionsHandler from "../hooks/useCameraPermissionsHandler";
 
-export default function QR() {
-  const [hasPermission, setHasPermission] = useState(true);
+export default function QR({ route }) {
   const [scanned, setScanned] = useState(false);
   const [scanData, setScanData] = useState(null);
-  
   const [status, setStatus] = useState(0);
   const [isConnected, setIsConnected] = useState(false);
   const [data, setData] = useState(null);
 
+  const { params } = route.params;
+  // console.log(params);
+
+  const verifyPermissions = useCameraPermissionsHandler();
+
   useEffect(() => {
     (async () => {
-      //Kamera izni
-      const { status2 } = await Camera.requestCameraPermissionsAsync();
-      // console.log(status2);
-      setHasPermission(status2 === "granted");
+      const hasPermission = await verifyPermissions();
+      console.log("Has Permission:", hasPermission);
+      if (!hasPermission) {
+        return;
+      }
 
+
+
+      //Kamera izni
+      // const { status2 } = await Camera.requestCameraPermissionsAsync();
+      // console.log(status2);
+      // setHasPermission(status2 === "granted");
       //Ağ bağlantı kontrolu
+
       const networkStatus = await Network.getNetworkStateAsync();
       setIsConnected(networkStatus.isConnected);
 
-      // console.log(networkStatus.isConnected);
-
       if (networkStatus.isConnected) {
         const storedData = await AsyncStorage.getItem("data");
-        // console.log(storedData);
         if (storedData) {
           setData(storedData);
           await AsyncStorage.removeItem("data");
@@ -69,14 +78,6 @@ export default function QR() {
 
   };
 
-  if (hasPermission === null) {
-    return <Text>Kamera için erişim izni bekleniyor.</Text>;
-  }
-
-  if (hasPermission === false) {
-    return <Text>Kameraya erişim izni verilmedi</Text>;
-  }
-
 
   const openLink = (link) => {
     Linking.canOpenURL(link).then((supported) => {
@@ -89,7 +90,7 @@ export default function QR() {
   }
 
   return (
-    <Layout>
+    <Layout isBack={true}>
       <View style={[globalS.itemContainer]}>
         <CameraView
           onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}

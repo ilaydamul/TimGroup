@@ -1,10 +1,13 @@
 import { View, Text, StyleSheet, Animated, SafeAreaView, Image } from "react-native";
-import { Feather, FontAwesome5, Ionicons } from '@expo/vector-icons';
+import { Feather, FontAwesome5, Ionicons, MaterialCommunityIcons } from '@expo/vector-icons';
 import { globalS } from "../../constants/styles";
 import { Colors } from "../../constants/colors";
 import { useNavigation } from "@react-navigation/native";
+import { useContext } from "react";
+import { AuthContext } from "../../store/auth-context";
 
 export default function Header({ isBack }) {
+    const authCtx = useContext(AuthContext);
     const navigation = useNavigation();
 
     function buttonClick() {
@@ -20,6 +23,11 @@ export default function Header({ isBack }) {
         navigation.navigate("Profile");
     }
 
+    function logoutHandler() {
+        authCtx.logout();
+    }
+
+
     function NavButton() {
         if (isBack) return <Feather name="arrow-left" size={32} color="black" onPress={buttonClick} />
         // else return <Ionicons name="menu" size={32} color="black" onPress={buttonClick} />
@@ -31,7 +39,8 @@ export default function Header({ isBack }) {
             <Animated.View style={[style.headerContainer, globalS.dFlexCenterBetween]}>
                 <NavButton />
                 <Image source={require("./../../assets/images/logo.png")} style={style.logo} />
-                <FontAwesome5 name="user-alt" size={24} color="black" onPress={goProfile} />
+                <MaterialCommunityIcons name="logout" size={24} color="black" onPress={logoutHandler} />
+                {/* <FontAwesome5 name="user-alt" size={24} color="black" onPress={goProfile} /> */}
             </Animated.View>
         </SafeAreaView>
     )
