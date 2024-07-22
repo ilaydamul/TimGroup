@@ -16,15 +16,18 @@ export default function SecurityHome() {
         navigation.navigate(link, (stuff && { params: stuff }));
     }
 
+    const headerDoc = (
+        <View style={[style.profileContainer]}>
+            <View style={style.profile}>
+                <FontAwesome6 name="user-large" size={24} color="#C62027" />
+                <Text style={style.profileText}>Ad Soyad</Text>
+            </View>
+        </View>
+    );
+
     return (
-        <Layout>
+        <Layout bgDark={true} doc={headerDoc}>
             <View style={[globalS.itemContainer]}>
-                <View style={[globalS.mb12, style.profileContainer]}>
-                    <View style={style.profile}>
-                        <FontAwesome6 name="user-large" size={24} color="#C62027" />
-                        <Text style={style.profileText}>Ad Soyad</Text>
-                    </View>
-                </View>
 
                 <Text style={globalS.title}>Ne Yapmak İstersin?</Text>
                 <View style={style.menu}>
@@ -49,6 +52,9 @@ export default function SecurityHome() {
                         <Text style={style.docText}>Özlük Evrakları</Text>
                         <Button style={style.docBtn} textStyle={style.docBtnText} onPress={() => goToLink("Documents")}>İncelemeye Başla</Button>
                     </View>
+                    <View style={style.warning}>
+                            <Text style={style.warningTxt}>!</Text>
+                        </View>
                 </View>
 
             </View>
@@ -58,19 +64,22 @@ export default function SecurityHome() {
 
 const style = StyleSheet.create({
     profileContainer: {
-        position: "relative",
-        top: -70
+        // position: "relative",
+        // top: -70
+        paddingBottom: 30,
+        paddingTop: 20
     },
     profile:
     {
         flexDirection: "row",
         alignItems: "center",
-        gap: 8,
+        gap: 14,
         justifyContent: "center",
     },
     profileText: {
         fontWeight: "600",
         fontSize: 18,
+        color: Colors.white
 
     },
     logoutText: {
@@ -99,20 +108,21 @@ const style = StyleSheet.create({
         backgroundColor: Colors.softBlack,
         flexDirection: "row",
         borderRadius: 8,
-        overflow: "hidden"
+        overflow: "hidden",
+        position: "relative"
     },
     docImg: {
-        width: 160,
+        width: 140,
         objectFit: "cover"
     },
     docText: {
         color: Colors.white,
         fontSize: 16,
-        marginBottom: 12
+        marginBottom: 12,
     },
     docContent: {
         padding: 12,
-        justifyContent: "center"
+        justifyContent: "center",
     },
     docBtn: {
         paddingHorizontal: 12,
@@ -121,5 +131,19 @@ const style = StyleSheet.create({
     },
     docBtnText: {
         fontSize: 15
+    },
+    warning: {
+        backgroundColor: Colors.white,
+        width: 25,
+        height: 25,
+        borderRadius: 50,
+        alignItems: "center",
+        justifyContent: "center",
+        position: "absolute",
+        right: 6,
+        top: 6
+    },
+    warningTxt: {
+        fontWeight: "700"
     }
 })

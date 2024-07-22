@@ -46,7 +46,7 @@ function SupervizorAuth() {
 function SecurityAuth() {
   return (
     <>
-      <StatusBar style="auto" />
+      <StatusBar style="light" />
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name='SecurityHome' component={SecurityHome} />
         <Stack.Screen name='Documents' component={Documents} />

@@ -13,82 +13,81 @@ export default function StepSix({ onSubmit }) {
 
 
     return (
-        <Box title={"Değerlendirme"}>
-            <Text style={globalS.leftTitle}>Müşteri Görüşleri</Text>
-            <Input textarea mb={12} />
-            <Text style={globalS.leftTitle}>Notlarınız</Text>
-            <Input textarea mb={12} />
-            <Text style={globalS.leftTitle}>Uyarılar</Text>
-            <View style={[globalS.dFlexCenterBetween, globalS.mb12]}>
-                <Text style={style.selectText}>Görevli Personel</Text>
-                <Picker selectedValue={selectedStaff}
-                    onValueChange={(itemValue, i) => {
-                        setSelectedStaff(itemValue)
-                    }}
-                    ref={pickerRef}
-                    style={style.picker}
-                    itemStyle={style.pickerText}
-                >
-                    <Picker.Item label='Seç' value="0" />
-                    <Picker.Item label='Personel' value="personel" />
-                    <Picker.Item label='Personel 2' value="personel2" />
-                    <Picker.Item label='Personel 3' value="personel3" />
-                    <Picker.Item label='Personel 4' value="personel4" />
-                </Picker>
-            </View>
-            <View style={[globalS.dFlexCenterBetween, globalS.mb12]}>
-                <Text style={globalS.selectText}>İşlem</Text>
-                <Picker selectedValue={selectedStaff}
-                    onValueChange={(itemValue, i) => {
-                        setSelectedStaff(itemValue)
-                    }}
-                    ref={pickerRef}
-                    style={style.picker}
-                    itemStyle={style.pickerText}
-                >
-                    <Picker.Item label='Sözlü Uyarı' value="0" />
-                    <Picker.Item label='Sözlü Uyarı 2' value="personel2" />
-                    <Picker.Item label='Sözlü Uyarı 3' value="personel3" />
-                    <Picker.Item label='Sözlü Uyarı 4' value="personel4" />
-                </Picker>
-            </View>
-            <Text style={[globalS.selectText, globalS.mb12]}>Açıklama</Text>
-            <Input textarea mb={12} />
-            <View style={[style.flexRight, globalS.mb12]}>
-                <Button style={style.smallBtn}>Ekle</Button>
-            </View>
-            <Text style={globalS.leftTitle}>Depo Talimatları</Text>
-            <View style={[globalS.dFlexCenterBetween, globalS.mb12]}>
-                <Text style={style.selectText}>Görevli Personel</Text>
-                <Picker selectedValue={selectedStaff}
-                    onValueChange={(itemValue, i) => {
-                        setSelectedStaff(itemValue)
-                    }}
-                    ref={pickerRef}
-                    style={style.picker}
-                    itemStyle={style.pickerText}
-                >
-                    <Picker.Item label='Seç' value="0" />
-                    <Picker.Item label='Personel' value="personel" />
-                    <Picker.Item label='Personel 2' value="personel2" />
-                    <Picker.Item label='Personel 3' value="personel3" />
-                    <Picker.Item label='Personel 4' value="personel4" />
-                </Picker>
-            </View>
-            <Text style={globalS.leftTitle}>Talimatlar</Text>
-            <View style={[globalS.flexStart, globalS.mb12]}>
-                <Text style={globalS.textStyle}>Talimat Ver</Text>
-            </View>
-            <Text style={globalS.leftTitle}>Müşteri Temsilcisi</Text>
-            <View style={[globalS.dFlexCenterBetween]}>
-                <Input placeholderText={"Şifre Girin"} style={style.inputBg} />
-                <Button style={style.smallBtn}>Doğrula</Button>
-            </View>
+        <>
+            <Box title={"Değerlendirme"}>
+                <Text style={globalS.leftTitle}>Müşteri Görüşleri</Text>
+                <Input textarea mb={12} />
+                <Text style={globalS.leftTitle}>Notlarınız</Text>
+                <Input textarea mb={12} />
+                <Text style={globalS.leftTitle}>Uyarılar</Text>
+                <View style={[globalS.dFlexCenterBetween, globalS.mb12]}>
+                    <Text style={style.selectText}>Görevli Personel</Text>
+                    <Picker selectedValue={selectedStaff}
+                        onValueChange={(itemValue, i) => {
+                            setSelectedStaff(itemValue)
+                        }}
+                        ref={pickerRef}
+                        style={style.picker}
+                        itemStyle={style.pickerText}
+                    >
+                        <Picker.Item label='Seç' value="0" />
+                        <Picker.Item label='Personel' value="personel" />
+                        <Picker.Item label='Personel 2' value="personel2" />
+                        <Picker.Item label='Personel 3' value="personel3" />
+                        <Picker.Item label='Personel 4' value="personel4" />
+                    </Picker>
+                </View>
+                <View style={[globalS.dFlexCenterBetween, globalS.mb12]}>
+                    <Text style={globalS.selectText}>İşlem</Text>
+                    <Picker selectedValue={selectedStaff}
+                        onValueChange={(itemValue, i) => {
+                            setSelectedStaff(itemValue)
+                        }}
+                        ref={pickerRef}
+                        style={style.picker}
+                        itemStyle={style.pickerText}
+                    >
+                        <Picker.Item label='Sözlü Uyarı' value="0" />
+                        <Picker.Item label='Sözlü Uyarı 2' value="personel2" />
+                        <Picker.Item label='Sözlü Uyarı 3' value="personel3" />
+                        <Picker.Item label='Sözlü Uyarı 4' value="personel4" />
+                    </Picker>
+                </View>
+                <Text style={[globalS.selectText, globalS.mb12]}>Açıklama</Text>
+                <Input textarea mb={12} />
+                <View style={[style.flexRight, globalS.mb12]}>
+                    <Button style={style.smallBtn}>Ekle</Button>
+                </View>
+                <Text style={globalS.leftTitle}>Talimatlar</Text>
+                <View style={[globalS.dFlexCenterBetween, globalS.mb12]}>
+                    <Text style={style.selectText}>Görevli Personel</Text>
+                    <Picker selectedValue={selectedStaff}
+                        onValueChange={(itemValue, i) => {
+                            setSelectedStaff(itemValue)
+                        }}
+                        ref={pickerRef}
+                        style={style.picker}
+                        itemStyle={style.pickerText}
+                    >
+                        <Picker.Item label='Seç' value="0" />
+                        <Picker.Item label='Personel' value="personel" />
+                        <Picker.Item label='Personel 2' value="personel2" />
+                        <Picker.Item label='Personel 3' value="personel3" />
+                        <Picker.Item label='Personel 4' value="personel4" />
+                    </Picker>
+                </View>
+                <Text style={[globalS.selectText, globalS.mb12]}>Açıklama</Text>
+                <Input textarea mb={12} />
+                <View style={[style.flexRight, globalS.mb12]}>
+                    <Button style={style.smallBtn}>Talimat Ver</Button>
+                </View>
 
+
+            </Box>
             <View style={[globalS.mAuto, globalS.mt16]}>
                 <Button onPress={onSubmit}>Kayıt</Button>
             </View>
-        </Box>
+        </>
     );
 }
 
@@ -107,7 +106,7 @@ const style = StyleSheet.create({
         alignItems: "flex-end"
     },
     smallBtn: {
-        width: 120
+        width: 130
     },
     inputBg: {
         backgroundColor: Colors.gray400,

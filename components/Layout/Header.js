@@ -6,7 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 import { useContext } from "react";
 import { AuthContext } from "../../store/auth-context";
 
-export default function Header({ isBack }) {
+export default function Header({ isBack, bgDark, doc }) {
     const authCtx = useContext(AuthContext);
     const navigation = useNavigation();
 
@@ -29,26 +29,35 @@ export default function Header({ isBack }) {
 
 
     function NavButton() {
-        if (isBack) return <Feather name="arrow-left" size={32} color="black" onPress={buttonClick} />
+        if (isBack) return <Feather name="arrow-left" size={32} color={bgDark ? "white" : "black"} onPress={buttonClick} />
         // else return <Ionicons name="menu" size={32} color="black" onPress={buttonClick} />
         else return <Ionicons name="menu" size={20} color="transparent" />
     }
     // { backgroundColor: headerBackgroundColor }
     return (
-        <SafeAreaView style={[style.safeArea]}>
+        <SafeAreaView style={[style.safeArea, bgDark && style.bgDark]}>
             <Animated.View style={[style.headerContainer, globalS.dFlexCenterBetween]}>
                 <NavButton />
                 <Image source={require("./../../assets/images/logo.png")} style={style.logo} />
-                <MaterialCommunityIcons name="logout" size={24} color="black" onPress={logoutHandler} />
+                <MaterialCommunityIcons name="logout" size={24} color={bgDark ? "white" : "black"} onPress={logoutHandler} />
                 {/* <FontAwesome5 name="user-alt" size={24} color="black" onPress={goProfile} /> */}
             </Animated.View>
+            {
+                doc && doc
+            }
         </SafeAreaView>
     )
 }
 
 const style = StyleSheet.create({
     safeArea: {
-        // backgroundColor:Colors.accent500
+        // backgroundColor: Colors.softBlack
+    },
+    bgDark: {
+        backgroundColor: Colors.softBlack,
+        borderBottomLeftRadius: 60,
+        borderBottomRightRadius: 60,
+
     },
     headerContainer: {
         width: '100%',

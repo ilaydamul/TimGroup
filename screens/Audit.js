@@ -28,12 +28,12 @@ const organizationProjects = [
 const projectInfo = {
     customer: "Asist Koruma ve Güven",
     project: "Vema Tuzla",
-    location: "40.8489652,293002849",
+    // location: "40.8489652, 293002849",
     customerRepresentative: "Görkem Okar",
     phone: "0530 178 97 17",
     email: "gorkem@17yonetim.com",
     address: "İçmeler Mah. Çağdaş Sok. 2C/1 Tuzla/İst",
-    locatin: {
+    location: {
         lat: 1234.43,
         long: 2343.43
     }
@@ -56,6 +56,8 @@ export default function Audit() {
         if (step === 1) {
             setProjects(organizationProjects[item].projects);
         }
+
+        
         
         setStep(prevStep => prevStep + 1);
     };

@@ -90,15 +90,17 @@ export default function QR({ route }) {
   }
 
   return (
-    <Layout isBack={true}>
+    <Layout isBack={true} bgDark={true} >
       <View style={[globalS.itemContainer]}>
-        <CameraView
-          onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
-          barcodeScannerSettings={{
-            barcodeTypes: ["qr", "pdf417"],
-          }}
-          style={styles.camera}
-        />
+        <View style={styles.camera2}>
+          <CameraView
+            onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
+            barcodeScannerSettings={{
+              barcodeTypes: ["qr", "pdf417"],
+            }}
+            style={styles.camera}
+          />
+        </View>
 
 
         {scanned && (
@@ -122,6 +124,14 @@ const styles = StyleSheet.create({
   camera: {
     width: 300,
     height: 300,
+    // borderRadius: 12,
+    // overflow: "hidden",
+    // margin: "auto",
+    // marginBottom: 30
+  },
+  camera2: {
+    // width: 300,
+    // height: 300,
     borderRadius: 12,
     overflow: "hidden",
     margin: "auto",
