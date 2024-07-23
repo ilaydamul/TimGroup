@@ -3,9 +3,14 @@ import Box from '../../components/UI/Box';
 import ListButton from '../../components/UI/ListButton';
 import { globalS } from '../../constants/styles';
 
-const organizations = [{ id: 0, title: "Güvenlik" }, { id: 1, title: "Tesis" }, { id: 2, title: "Temizlik" }, { id: 1, title: "Tesis" }, { id: 2, title: "Temizlik" }];
+const organizations = [{ id: 0, title: "Güvenlik" }, { id: 1, title: "Tesis" }, { id: 2, title: "Temizlik" }];
 
 export default function StepOne({ onNext }) {
+
+
+
+
+    
     return (
         <Box title={"Organizasyon Türünü Seçin"}>
             <ScrollView style={globalS.scrollBox} >

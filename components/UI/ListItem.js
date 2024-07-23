@@ -3,20 +3,24 @@ import { View, Text, StyleSheet, Switch } from 'react-native';
 import { Colors } from '../../constants/colors';
 import { useState } from 'react';
 
-export default function ListItem({ title, content, noBorder, listContentBg, style, contentStyle, isRadio }) {
+export default function ListItem({ title, content, noBorder, listContentBg, style, contentStyle, isRadio, onToggle, radioValue }) {
     const [isEnabled, setIsEnabled] = useState(false);
-    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
-    
+    // const toggleSwitch = () => {
+    //     setIsEnabled(previousState => !previousState)
+    //     radioValue = isEnabled;
+    //     console.log(!isEnabled);
+    // };
+
     return (
         <View style={[styles.listItem, noBorder && styles.noBorder, style]}>
             <Text style={[styles.listTitle, { fontSize: isRadio ? 14 : 16 }]}>{title}</Text>
             {isRadio ?
                 <Switch
                     trackColor={{ false: '#FBE6E7', true: "#DCF9DC" }}
-                    thumbColor={isEnabled ? '#17D817' : '#D92126'}
+                    thumbColor={radioValue ? '#17D817' : '#D92126'}
                     ios_backgroundColor="#FBE6E7"
-                    onValueChange={toggleSwitch}
-                    value={isEnabled}
+                    onValueChange={onToggle}
+                    value={radioValue}
                 />
                 :
                 <Text style={[styles.listContent, listContentBg && styles.listContentBg, contentStyle]}>{content}</Text>

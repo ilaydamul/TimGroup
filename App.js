@@ -85,8 +85,8 @@ function Root() {
       try {
         const token = await AsyncStorage.getItem('token');
         const role = await AsyncStorage.getItem('role');
-        console.log(token);
-        console.log(role);
+        // console.log(token);
+        // console.log(role);
         if (token) {
           authCtx.authenticate(token, role);
         }

@@ -8,8 +8,15 @@ import * as ImagePicker from 'expo-image-picker';
 import { useState } from 'react';
 import useCameraPermissionsHandler from '../../hooks/useCameraPermissionsHandler';
 
-export default function StepFour({ image, setImage, onNext, onPrev }) {
+export default function StepFour({ onNext, onPrev }) {
     const verifyPermissions = useCameraPermissionsHandler();
+    const [comment, setComment] = useState();
+    const [image, setImage] = useState();
+
+
+    function updateInputValue(enteredValue) {
+        setComment(enteredValue);
+    }
 
     const takePhoto = async () => {
         const hasPermission = await verifyPermissions();
@@ -35,15 +42,20 @@ export default function StepFour({ image, setImage, onNext, onPrev }) {
         imagePreview = <Image source={{ uri: image }} style={style.img} />;
     }
 
+    function onPressHandler() {
+
+        onNext({ comment, image });
+    }
+
     return (
         <Box title={"Fotoğraf Alım"}>
             {imagePreview}
             <Button onPress={takePhoto} style={globalS.mt16}>Resim Çek</Button>
             <Text style={style.txt}>Fotoğrafı Yorumla</Text>
-            <Input textarea />
+            <Input textarea placeholderText={"Yorumunu yaz.."} value={comment} onUpdateValue={updateInputValue} />
             <View style={globalS.btnGroup}>
                 <Button style={[globalS.btnGray, globalS.btnHalf]} textColor={Colors.black} solidBg onPress={onPrev}>Geri</Button>
-                <Button style={globalS.btnHalf} onPress={onNext}>Devam</Button>
+                <Button style={globalS.btnHalf} onPress={onPressHandler}>Devam</Button>
             </View>
         </Box>
     );

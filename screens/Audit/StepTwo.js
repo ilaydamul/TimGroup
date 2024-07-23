@@ -5,7 +5,27 @@ import Button from '../../components/UI/Button';
 import { globalS } from '../../constants/styles';
 import { Colors } from '../../constants/colors';
 
-export default function StepTwo({ projects, onNext, onPrev }) {
+const organizationProjects = [
+    {
+        title: "Güvenlik",
+        projects: [{ id: 0, title: "Güvenlik Projesi" }, { id: 1, title: "Güvenlik Projesi 2" }, { id: 2, title: "Güvenlik Projesi 3" }, { id: 3, title: "Güvenlik Projesi 4" }]
+    },
+    {
+        title: "Tesis",
+        projects: [{ id: 0, title: "Tesis Projesi" }, { id: 1, title: "Tesis Projesi 2" }, { id: 2, title: "Tesis Projesi 3" }, { id: 3, title: "Tesis Projesi 4" }]
+    },
+    {
+        title: "Temizlik",
+        projects: [{ id: 0, title: "Temizlik Projesi" }, { id: 1, title: "Temizlik Projesi 2" }, { id: 2, title: "Temizlik Projesi 3" }, { id: 3, title: "Temizlik Projesi 4" }]
+    }
+];
+
+export default function StepTwo({ onNext, onPrev, selectedProject }) {
+
+    // console.log(selectedProject);
+
+    const projects = organizationProjects[selectedProject].projects;
+
     return (
         <Box title={"Proje Seçin"}>
             <ScrollView style={globalS.scrollBox}>

@@ -5,12 +5,30 @@ import Button from '../../components/UI/Button';
 import { globalS } from '../../constants/styles';
 import { Colors } from '../../constants/colors';
 
-export default function StepThree({ projectInfo, onNext, onPrev }) {
+
+const projectInfo = {
+    customer: "Asist Koruma ve Güven",
+    project: "Vema Tuzla",
+    // location: "40.8489652, 293002849",
+    customerRepresentative: "Görkem Okar",
+    phone: "0530 178 97 17",
+    email: "gorkem@17yonetim.com",
+    address: "İçmeler Mah. Çağdaş Sok. 2C/1 Tuzla/İst",
+    location: {
+        lat: 1234.43,
+        long: 2343.43
+    }
+};
+
+
+export default function StepThree({ projectId, onNext, onPrev }) {
 
     function onPressHandler(){
         //LOCATION KONTROLLERİ 
         onNext();
     }
+
+    //Proje bilgilerini api ile çekme
 
 
 
