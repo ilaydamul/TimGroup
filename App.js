@@ -15,6 +15,7 @@ import Audit from './screens/Audit';
 import QR from './screens/QR';
 import Menu from './screens/Menu';
 import Documents from './screens/Documents';
+import PDFViewer from './screens/PDFViewer';
 
 const Stack = createNativeStackNavigator();
 
@@ -51,6 +52,7 @@ function SecurityAuth() {
         <Stack.Screen name='SecurityHome' component={SecurityHome} />
         <Stack.Screen name='Documents' component={Documents} />
         <Stack.Screen name='QR' component={QR} />
+        {/* <Stack.Screen name='PDFViewer' component={PDFViewer} /> */}
       </Stack.Navigator>
     </>
   )
@@ -90,6 +92,7 @@ function Root() {
         if (token) {
           authCtx.authenticate(token, role);
         }
+
       } catch (error) {
         console.error('Token alınırken hata oluştu:', error);
       } finally {

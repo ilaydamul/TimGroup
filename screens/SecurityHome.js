@@ -53,8 +53,8 @@ export default function SecurityHome() {
                         <Button style={style.docBtn} textStyle={style.docBtnText} onPress={() => goToLink("Documents")}>İncelemeye Başla</Button>
                     </View>
                     <View style={style.warning}>
-                            <Text style={style.warningTxt}>!</Text>
-                        </View>
+                        <Text style={style.warningTxt}>!</Text>
+                    </View>
                 </View>
 
             </View>
@@ -102,7 +102,8 @@ const style = StyleSheet.create({
         borderRadius: 12
     },
     menuTitle: {
-        color: Colors.white
+        color: Colors.white,
+        marginTop: 6
     },
     doc: {
         backgroundColor: Colors.softBlack,

@@ -2,23 +2,24 @@ import { View, Text, ScrollView, StyleSheet, SafeAreaView, Image, Platform } fro
 import { LinearGradient } from "expo-linear-gradient";
 import Header from "./Header";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
+import { Colors } from "../../constants/colors";
 
 export default function Layout({ children, isBack, bgDark, doc }) {
 
     return (
         <LinearGradient colors={["#DCDCDC", "#FFFFFF", "#DCDCDC"]} style={style.safeArea}>
-            <SafeAreaView style={style.safeArea} >
-                <KeyboardAwareScrollView contentContainerStyle={{ flex: 1 }}
-                    behavior={Platform.OS === "ios" ? "padding" : "height"}>
+            {/* <SafeAreaView style={style.safeArea} > */}
+            <KeyboardAwareScrollView contentContainerStyle={{ flex: 1 }}
+                behavior={Platform.OS === "ios" ? "padding" : "height"}>
 
 
-                    <Header isBack={isBack} bgDark={bgDark} doc={doc}/>
-                    <ScrollView contentContainerStyle={style.scrollViewContent} nestedScrollEnabled={true}>
-                        {children}
-                        <Image source={require("../../assets/images/stars.png")} style={style.bgStar} />
-                    </ScrollView>
-                </KeyboardAwareScrollView>
-            </SafeAreaView>
+                <Header isBack={isBack} bgDark={bgDark} doc={doc} />
+                <ScrollView contentContainerStyle={style.scrollViewContent} nestedScrollEnabled={true}>
+                    {children}
+                    <Image source={require("../../assets/images/stars.png")} style={style.bgStar} />
+                </ScrollView>
+            </KeyboardAwareScrollView>
+            {/* </SafeAreaView> */}
         </LinearGradient >
     )
 }
@@ -26,7 +27,7 @@ export default function Layout({ children, isBack, bgDark, doc }) {
 const style = StyleSheet.create({
     safeArea: {
         flex: 1,
-
+        // backgroundColor: Colors.red
     },
     // contentContainerStyle={style.scrollViewContent}
     scrollViewContent: {

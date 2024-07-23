@@ -7,6 +7,7 @@ import { globalS } from "../constants/styles";
 import { Colors } from "../constants/colors";
 import { useState } from "react";
 import Input from "../components/UI/Input";
+import { useNavigation } from "@react-navigation/native";
 
 
 const documents = [{ id: 0, title: "Rapor Adı", isSuccess: true }, { id: 1, title: "Rapor Adı 2" }, { id: 2, title: "Rapor Adı 3" }, { id: 3, title: "Rapor Adı 4" }, { id: 4, title: "Rapor Adı 5" },
@@ -16,9 +17,12 @@ const documents = [{ id: 0, title: "Rapor Adı", isSuccess: true }, { id: 1, tit
 
 export default Documents = () => {
     const [step, setStep] = useState(1);
+    const navigation = useNavigation();
+
 
     const handleNextStep = (item) => {
-        setStep(step => step + 1);
+        navigation.navigate("PDFViewer", { pdf: "../../assets/pdf.pdf" });
+        // setStep(step => step + 1);
     }
 
     const onPressHandler = () => {
@@ -29,22 +33,22 @@ export default Documents = () => {
         <Layout isBack={true} bgDark={true}>
             <View style={globalS.contentContainer}>
 
-                {step === 1 && (
-                    <>
-                        <Box title={"Özlük Evrakları"}>
-                            <ScrollView style={globalS.scrollBox} >
-                                {documents.map((item, id) => {
-                                    return <ListButton onPress={() => handleNextStep(item.id)} key={id} isSuccess={item.isSuccess}>{item.title}</ListButton>;
-                                })}
-                            </ScrollView>
-                        </Box>
+                {/* {step === 1 && ( */}
+                <>
+                    <Box title={"Özlük Evrakları"}>
+                        <ScrollView style={globalS.scrollBox} >
+                            {documents.map((item, id) => {
+                                return <ListButton onPress={() => handleNextStep(item.id)} key={id} isSuccess={item.isSuccess}>{item.title}</ListButton>;
+                            })}
+                        </ScrollView>
+                    </Box>
 
-                    </>
-                )}
-
-                {step === 2 && (
-                    <>
-                        {/* <Box title={"Değerlendirme"}>
+                </>
+                {/* )} */}
+                {/*  */}
+                {/* {step === 2 && ( */}
+                <>
+                    {/* <Box title={"Değerlendirme"}>
                             <Text style={globalS.leftTitle}>Müşteri Görüşleri</Text>
                             <Input textarea mb={12} />
                             <Text style={globalS.leftTitle}>Notlarınız</Text>
@@ -64,8 +68,8 @@ export default Documents = () => {
                         <View style={[globalS.mAuto, globalS.mt16]}>
                             <Button onPress={onPressHandler}>Raporu Onayla</Button>
                         </View> */}
-                    </>
-                )}
+                </>
+                {/* )} */}
             </View>
         </Layout>
     )
