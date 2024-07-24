@@ -16,6 +16,7 @@ import QR from './screens/QR';
 import Menu from './screens/Menu';
 import Documents from './screens/Documents';
 import PDFViewer from './screens/PDFViewer';
+import { View } from 'react-native';
 
 const Stack = createNativeStackNavigator();
 
@@ -108,6 +109,7 @@ function Root() {
   }
 
   return (
+    // <View></View>
     <NavigationContainer>
       {authCtx.isAuthenticated ?
         (authCtx.isSecurity ? <SecurityAuth /> : <SupervizorAuth />)

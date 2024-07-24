@@ -23,7 +23,7 @@ export default function StepFive({ onNext, onPrev, projectId }) {
 
     function onSubmitHandler() {
         // onSubmit logic
-        // onNext(questions);
+        onNext({ questions, point });
     }
 
     const toggleSwitch = (index) => {
@@ -44,7 +44,7 @@ export default function StepFive({ onNext, onPrev, projectId }) {
         }
     };
 
-    
+
     return (
         <Box title={"Değerlendirme"}>
             {questions.map((item, index) => (
