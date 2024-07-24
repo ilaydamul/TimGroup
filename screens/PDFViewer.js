@@ -12,6 +12,7 @@ export default function PDFViewer({ pdf }) {
                 source={pdfResource}
                 onLoadComplete={(numberOfPages, filePath) => console.log(numberOfPages)}
             />
+            
             <Text>PDF Viewer</Text>
         </View>
     )
