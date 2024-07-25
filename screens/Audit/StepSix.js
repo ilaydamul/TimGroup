@@ -6,6 +6,7 @@ import { useState } from 'react';
 import { globalS } from '../../constants/styles';
 import { Colors } from '../../constants/colors';
 import ComboBox from '../../components/UI/ComboBox';
+import Toast from 'react-native-root-toast';
 
 
 export default function StepSix({ onSubmit }) {
@@ -41,13 +42,7 @@ export default function StepSix({ onSubmit }) {
     }
 
     function submitHandler() {
-        console.log(customerComment);
-        console.log(note);
-        console.log(warningDesc);
-        console.log(instructionDesc);
-        console.log(warnedStaff);
-
-        // onSubmit
+        onSubmit({ customerComment, note, warnings, instructions });
     }
 
     const personnelNames = [
@@ -64,32 +59,41 @@ export default function StepSix({ onSubmit }) {
     }]
 
     function saveWarning() {
-        // if (!warnedStaff || !transitionVal || !warningDesc) {
-        //     //Boş bırakılamaz uyarısı
-        // }
-
+        if (!warnedStaff || !transitionVal || !warningDesc) {
+            //Boş bırakılamaz uyarısı
+            Toast.show('Uyarı girdilerini doldurunuz!', {
+                duration: 2000,
+            });
+            return;
+        }
+        
         setWarnings((prevWarn) => [...prevWarn, { warnedStaff, warningDesc, transitionVal }]);
         console.log(warnings);
+
+        //Başarılı bildirimi
+         Toast.show('Uyarı başarılı bir şekilde eklendi.', {
+            duration: 2000,
+        });
     }
 
     function saveInstruction() {
-        // if (!instructedStaff || !instructedStaff) {
-        //     //Boş bırakılamaz uyarısı
-        // }
+        if (!instructedStaff || !instructedStaff) {
+            //Boş bırakılamaz uyarısı
+            Toast.show('Talimat girdilerini doldurunuz!', {
+                duration: 2000,
+            });
+            return;
+        }
 
         setInstructions((prevInst) => [...prevInst, { instructedStaff, instructedStaff }]);
         console.log(instructions);
 
-        //B
+        //Başarılı bildirimi
+        Toast.show('Talimat başarılı bir şekilde eklendi.', {
+            duration: 2000,
+        });
 
     }
-
-
-    Toast.show({
-        type: 'success',
-        text1: 'Başarılı',
-        text2: 'Bu bir başarı mesajıdır 👋'
-      });
 
     return (
         <>

@@ -21,8 +21,9 @@ export default function Home({ navigation }) {
         }
         else {
             console.log("Üzerimdeki Görevler");
-
         }
+        console.log(id);
+        navigation.navigate("InstructionDetail", { id: id, type: type })
     }
 
     return (
@@ -35,13 +36,6 @@ export default function Home({ navigation }) {
                             return <ListButton onPress={() => handleItemPress(item.id, 1)} key={id} isSuccess={item.isSuccess}>{item.title}</ListButton>;
                         })}
                     </ScrollView>
-
-                    {/* <ListItem title="Kime" content="Yeni Talimatınız" listContentBg />
-                    <ListItem title="Konu" content="Konu İçerik" />
-                    <ListItem title="Tarih" content="3.07.2024" />
-                    <ListItem title="Alındığı Tarih" content="3.07.2024" />
-                    <ListItem title="Durum" content="Durum İçerik" />
-                    <ListItem title="Sonuçlanma Tarihi" content="3.07.2024" noBorder /> */}
                 </Box>
                 <Box title={"Üzerimdeki Görevler"} style={globalS.mb8}>
                     <ScrollView style={globalS.scrollBox} >
@@ -49,12 +43,6 @@ export default function Home({ navigation }) {
                             return <ListButton onPress={() => handleItemPress(item.id, 2)} key={id} isSuccess={item.isSuccess}>{item.title}</ListButton>;
                         })}
                     </ScrollView>
-                    {/* <ListItem title="Kime" content="Yeni Talimatınız" />
-                    <ListItem title="Konu" content="Konu İçerik" />
-                    <ListItem title="Tarih" content="3.07.2024" />
-                    <ListItem title="Alındığı Tarih" content="3.07.2024" />
-                    <ListItem title="Durum" content="Durum İçerik" />
-                    <ListItem title="Sonuçlanma Tarihi" content="3.07.2024" noBorder /> */}
                 </Box>
 
                 <View style={[globalS.mAuto, globalS.mt8]}>

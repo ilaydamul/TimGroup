@@ -1,30 +1,19 @@
 import { View } from 'react-native';
 import Layout from '../components/Layout/Layout';
 import { globalS } from '../constants/styles';
+import { useState } from 'react';
+
+//STEPS
 import StepOne from './Audit/StepOne';
 import StepTwo from './Audit/StepTwo';
 import StepThree from './Audit/StepThree';
 import StepFour from './Audit/StepFour';
 import StepFive from './Audit/StepFive';
 import StepSix from './Audit/StepSix';
-import { useState } from 'react';
 
-
-
-
-
-
-const comboBox = [
-    { key: '1', value: 'Jammu & Kashmir' },
-    { key: '2', value: 'Gujrat' },
-    { key: '3', value: 'Maharashtra' },
-    { key: '4', value: 'Goa' },
-];
 
 export default function Audit() {
     const [step, setStep] = useState(1);
-    const [image, setImage] = useState(null);
-    const [selectedProject, setSelectedProject] = useState();
     const [infos, setInfos] = useState([]);
 
     const handleNextStep = (item) => {
@@ -42,10 +31,7 @@ export default function Audit() {
             updatedInfos.push({ step, item });
         }
 
-
         setInfos(updatedInfos);
-
-        console.log(infos);
 
         setStep(prevStep => prevStep + 1);
     };
@@ -55,6 +41,8 @@ export default function Audit() {
     };
 
     const saveHandler = () => {
+        //API ile bilgiler gönderilecek
+        console.log(infos);
 
     }
 

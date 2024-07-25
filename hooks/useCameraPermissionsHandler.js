@@ -11,11 +11,12 @@ export default function useCameraPermissionsHandler() {
         }
 
         if (permission.status === PermissionStatus.DENIED) {
-            Alert.alert(
-                "Yetersiz İzinler!",
-                "Bu uygulamayı kullanmak için kamera izinlerini vermeniz gerekiyor."
-            );
-            return false;
+            // Alert.alert(
+            //     "Yetersiz İzinler!",
+            //     "Bu uygulamayı kullanmak için kamera izinlerini vermeniz gerekiyor."
+            // );
+            const permissionResponse = await requestPermission();
+            return permissionResponse.granted;
         }
 
         return true;

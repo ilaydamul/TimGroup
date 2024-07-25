@@ -6,6 +6,7 @@ import { StatusBar } from 'expo-status-bar';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import AuthContextProvider, { AuthContext } from './store/auth-context';
 import LoadingOverlay from './components/UI/LoadingOverlay';
+import { RootSiblingParent } from 'react-native-root-siblings';
 
 //SCREENS
 import Login from './screens/Login';
@@ -16,7 +17,8 @@ import QR from './screens/QR';
 import Menu from './screens/Menu';
 import Documents from './screens/Documents';
 import PDFViewer from './screens/PDFViewer';
-import { View } from 'react-native';
+import InstructionDetail from './screens/InstructionDetail';
+
 
 const Stack = createNativeStackNavigator();
 
@@ -39,7 +41,7 @@ function SupervizorAuth() {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name='Home' component={Home} />
         <Stack.Screen name='Audit' component={Audit} />
-        {/* <Stack.Screen name='SecurityHome' component={SecurityHome} /> */}
+        <Stack.Screen name='InstructionDetail' component={InstructionDetail}/>
       </Stack.Navigator>
     </>
   )
@@ -54,25 +56,6 @@ function SecurityAuth() {
         <Stack.Screen name='Documents' component={Documents} />
         <Stack.Screen name='QR' component={QR} />
         {/* <Stack.Screen name='PDFViewer' component={PDFViewer} /> */}
-      </Stack.Navigator>
-    </>
-  )
-}
-
-function AuthenticatedStack() {
-  return (
-    <>
-      <StatusBar style="auto" />
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-
-
-        <Stack.Screen name='Home' component={Home} />
-        <Stack.Screen name='QR' component={QR} />
-        <Stack.Screen name='Documents' component={Documents} />
-
-        <Stack.Screen name='Audit' component={Audit} />
-        <Stack.Screen name='SecurityHome' component={SecurityHome} />
-
       </Stack.Navigator>
     </>
   )
@@ -111,19 +94,17 @@ function Root() {
   return (
     // <View></View>
     <NavigationContainer>
-      {authCtx.isAuthenticated ?
-        (authCtx.isSecurity ? <SecurityAuth /> : <SupervizorAuth />)
-        // <AuthenticatedStack />
-        : <AuthStack />}
+      {authCtx.isAuthenticated ? (authCtx.isSecurity ? <SecurityAuth /> : <SupervizorAuth />) : <AuthStack />}
     </NavigationContainer>
   );
 }
 
-
 export default () => {
   return (
-    <AuthContextProvider>
-      <Root />
-    </AuthContextProvider>
+    <RootSiblingParent>
+      <AuthContextProvider>
+        <Root />
+      </AuthContextProvider>
+    </RootSiblingParent>
   );
 }
