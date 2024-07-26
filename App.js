@@ -55,7 +55,7 @@ function SecurityAuth() {
         <Stack.Screen name='SecurityHome' component={SecurityHome} />
         <Stack.Screen name='Documents' component={Documents} />
         <Stack.Screen name='QR' component={QR} />
-        {/* <Stack.Screen name='PDFViewer' component={PDFViewer} /> */}
+        <Stack.Screen name='PDFViewer' component={PDFViewer} />
       </Stack.Navigator>
     </>
   )
