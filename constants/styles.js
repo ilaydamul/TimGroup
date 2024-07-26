@@ -5,6 +5,9 @@ export const globalS = StyleSheet.create({
     mt8: {
         marginTop: 8
     },
+    mt12: {
+        marginTop: 12
+    },
     mt16: {
         marginTop: 16
     },
@@ -57,6 +60,9 @@ export const globalS = StyleSheet.create({
     m16: {
         margin: 16
     },
+    mb16: {
+        marginBottom: 16
+    },
     mb12: {
         marginBottom: 12
     },
@@ -105,6 +111,9 @@ export const globalS = StyleSheet.create({
         justifyContent: "space-between",
         gap: 12,
         marginTop: 16,
+    },
+    btnGroupRight: {
+        justifyContent: "flex-end"
     },
     btnHalf: {
         minWidth: 120

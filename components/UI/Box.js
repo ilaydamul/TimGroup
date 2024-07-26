@@ -5,7 +5,7 @@ import { globalS } from "../../constants/styles";
 export default function Box({ children, title, style, isScroll }) {
     return (
         <View style={[styles.box, style]}>
-            <View style={styles.boxTitleGroup}><Text style={styles.boxTitle}>{title}</Text></View>
+            {title && <View style={styles.boxTitleGroup}><Text style={styles.boxTitle}>{title}</Text></View>}
             <View style={styles.boxContent}>
                 {children}
             </View>

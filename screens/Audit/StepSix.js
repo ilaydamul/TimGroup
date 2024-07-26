@@ -13,6 +13,7 @@ export default function StepSix({ onSubmit }) {
     const [customerComment, setCustomerComment] = useState("");
     const [note, setNote] = useState("");
     const [warningDesc, setWarningDesc] = useState("");
+    const [instructionTitle, setInstructionTitle] = useState("");
     const [instructionDesc, setInstructionDesc] = useState("");
     const [instructedStaff, setInstructedStaff] = useState('');
     const [warnedStaff, setWarnedStaff] = useState('');
@@ -32,6 +33,9 @@ export default function StepSix({ onSubmit }) {
                 break;
             case "warningDesc":
                 setWarningDesc(enteredValue);
+                break;
+            case "instructionTitle":
+                setInstructionTitle(enteredValue);
                 break;
             case "instructionDesc":
                 setInstructionDesc(enteredValue);
@@ -66,18 +70,18 @@ export default function StepSix({ onSubmit }) {
             });
             return;
         }
-        
+
         setWarnings((prevWarn) => [...prevWarn, { warnedStaff, warningDesc, transitionVal }]);
         console.log(warnings);
 
         //Başarılı bildirimi
-         Toast.show('Uyarı başarılı bir şekilde eklendi.', {
+        Toast.show('Uyarı başarılı bir şekilde eklendi.', {
             duration: 2000,
         });
     }
 
     function saveInstruction() {
-        if (!instructedStaff || !instructedStaff) {
+        if (!instructedStaff || !instructionDesc || !instructionTitle) {
             //Boş bırakılamaz uyarısı
             Toast.show('Talimat girdilerini doldurunuz!', {
                 duration: 2000,
@@ -87,7 +91,7 @@ export default function StepSix({ onSubmit }) {
 
         setInstructions((prevInst) => [...prevInst, { instructedStaff, instructedStaff }]);
         console.log(instructions);
-
+        
         //Başarılı bildirimi
         Toast.show('Talimat başarılı bir şekilde eklendi.', {
             duration: 2000,
@@ -125,6 +129,8 @@ export default function StepSix({ onSubmit }) {
                         <Text style={style.selectText}>Görevli Personel</Text>
                         <ComboBox data={personnelNames} setValue={setInstructedStaff} placeholder={"Personel Seçin.."} />
                     </View>
+                    <Text style={[globalS.selectText, globalS.mb12]}>Başlık</Text>
+                    <Input mb={12} grayBg onUpdateValue={updateInputValue.bind(this, "instructionTitle")} />
                     <Text style={[globalS.selectText, globalS.mb12]}>Açıklama</Text>
                     <Input textarea mb={12} onUpdateValue={updateInputValue.bind(this, "instructionDesc")} />
                     <View style={[style.flexRight, globalS.mb12]}>

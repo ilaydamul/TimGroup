@@ -3,10 +3,10 @@ import { View, Text, StyleSheet, Pressable } from 'react-native';
 import { Colors } from '../../constants/colors';
 import { AntDesign } from '@expo/vector-icons';
 
-export default function ListButton({ children, onPress, isSuccess }) {
+export default function ListButton({ children, onPress, status }) {
     return (
         <Pressable style={({ pressed }) => [style.buton, pressed && style.pressed]} onPress={onPress}>
-            {isSuccess && <AntDesign name="checkcircle" size={24} color="green" style={style.check} />}
+            {status == "Sonlandırıldı" && <AntDesign name="checkcircle" size={24} color="green" style={style.check} />}
             <Text style={style.btnText}>{children}</Text>
         </Pressable>
     );
