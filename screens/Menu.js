@@ -16,8 +16,8 @@ export default function Menu() {
             <ScrollView contentContainerStyle={styles.scrollContainer}>
                 <Image source={require("../assets/images/logo.png")} style={styles.logo} />
                 <View>
-                    <Button onPress={() => pageChangeHandler("Login", "security")} style={styles.btn} >Güvenlik Personelleri</Button>
-                    <Button onPress={() => pageChangeHandler("Login", "supervisor")} style={styles.btn} mt={20}>Denetmenler</Button>
+                    <Button onPress={() => pageChangeHandler("Login", "employee")} style={styles.btn} >Güvenlik Personelleri</Button>
+                    <Button onPress={() => pageChangeHandler("Login", "audit")} style={styles.btn} mt={20}>Denetmenler</Button>
                 </View>
                 <Image source={require("../assets/images/stars.png")} style={styles.bgStar} />
             </ScrollView>

@@ -4,6 +4,7 @@ import ListButton from '../../components/UI/ListButton';
 import Button from '../../components/UI/Button';
 import { globalS } from '../../constants/styles';
 import { Colors } from '../../constants/colors';
+import { useEffect } from 'react';
 
 const organizationProjects = [
     {
@@ -23,6 +24,10 @@ const organizationProjects = [
 export default function StepTwo({ onNext, onPrev, selectedProject }) {
 
     // console.log(selectedProject);
+    useEffect(()=>{
+        console.log(selectedProject);
+        
+    },[])
 
     const projects = organizationProjects[selectedProject].projects;
 

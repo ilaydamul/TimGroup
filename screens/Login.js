@@ -3,6 +3,7 @@ import AuthContent from '../components/Auth/AuthContent';
 import { AuthContext } from '../store/auth-context';
 import { login } from "../utils/auth";
 import LoadingOverlay from '../components/UI/LoadingOverlay';
+import Toast from 'react-native-root-toast';
 
 export default function Login({ route }) {
     const [isAuthenticating, setIsAuthenticating] = useState(false);
@@ -17,8 +18,18 @@ export default function Login({ route }) {
         setIsAuthenticating(true);
 
         try {
-            const token = await login(username, password);
-            authCtx.authenticate(token, role);
+            const response = await login(username, password, role);
+
+            if (response.data.result == 1) {
+                authCtx.authenticate(response.headers['set-cookie'][0], role);
+            } else {
+                Toast.show('Kullanıcı adı ya da şifre yanlış..', {
+                    duration: 2000,
+                });
+                setIsAuthenticating(false);
+            }
+
+
 
         } catch (error) {
             console.log(error);

@@ -23,7 +23,7 @@ export default function AuthContextProvider({ children }) {
         await AsyncStorage.setItem("token", token);
         await AsyncStorage.setItem("role", role);
 
-        if (role == "supervisor") {
+        if (role == "audit") {
             setIsSecurity(false);
         }
         else {
@@ -39,8 +39,6 @@ export default function AuthContextProvider({ children }) {
     }
 
     function loginControl(isError, errorTxt) {
-        // console.log("Hata durumu: ", isError);
-        // console.log("Hata mesajı: ", errorTxt);
         setError(isError);
         setErrorText(errorTxt);
     }
