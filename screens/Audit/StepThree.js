@@ -20,8 +20,8 @@ const projectInfo = {
     }
 };
 
-
-export default function StepThree({ projectId, onNext, onPrev }) {
+//project.id şeklinde id gelecek
+export default function StepThree({ project, onNext, onPrev }) {
 
     function onPressHandler(){
         //LOCATION KONTROLLERİ 

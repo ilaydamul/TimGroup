@@ -6,6 +6,8 @@ import Button from "../components/UI/Button";
 import Box from "../components/UI/Box";
 import ListItem from "../components/UI/ListItem";
 import ListButton from "../components/UI/ListButton";
+import { useEffect } from "react";
+import { getAuditDirective } from "../utils/auth";
 
 const instructions = [{ id: 0, title: "Talimat", status: "Sonlandırıldı" },
 { id: 1, title: "Talimat 2" },
@@ -31,20 +33,36 @@ export default function Home({ navigation }) {
         navigation.navigate("InstructionDetail", { id: id, type: type })
     }
 
+    useEffect(() => {
+        //Verilen Talimatları Al
+        
+        const getDirectives = async () => {
+            const response = await getAuditDirective();
+            console.log(response);
+        }
+    
+        getDirectives();
+            
+
+    }, [])
+
+   
+
+
     return (
         <Layout>
             <View style={[globalS.itemContainer]}>
                 <Box title={"Talimatlarım"} style={globalS.mb12}>
                     <ScrollView style={globalS.scrollBox} >
                         {instructions.map((item, id) => {
-                            return <ListButton onPress={() => handleItemPress(item.id, 1)} key={id} status={item.status}>{item.title}</ListButton>;
+                            return <ListButton onPress={() => handleItemPress(item.id, 1)} key={item.id} status={item.status}>{item.title}</ListButton>;
                         })}
                     </ScrollView>
                 </Box>
                 <Box title={"Üzerimdeki Görevler"} style={globalS.mb8}>
                     <ScrollView style={globalS.scrollBox} >
                         {instructions2.map((item, id) => {
-                            return <ListButton onPress={() => handleItemPress(item.id, 2)} key={id} status={item.status}>{item.title}</ListButton>;
+                            return <ListButton onPress={() => handleItemPress(item.id, 2)} key={item.id} status={item.status}>{item.title}</ListButton>;
                         })}
                     </ScrollView>
                 </Box>

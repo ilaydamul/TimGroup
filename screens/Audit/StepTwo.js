@@ -24,10 +24,10 @@ const organizationProjects = [
 export default function StepTwo({ onNext, onPrev, selectedProject }) {
 
     // console.log(selectedProject);
-    useEffect(()=>{
-        console.log(selectedProject);
-        
-    },[])
+    useEffect(() => {
+        // console.log(selectedProject.id);
+
+    }, [])
 
     const projects = organizationProjects[selectedProject].projects;
 
@@ -35,7 +35,7 @@ export default function StepTwo({ onNext, onPrev, selectedProject }) {
         <Box title={"Proje Seçin"}>
             <ScrollView style={globalS.scrollBox}>
                 {projects.map((item, id) => {
-                    return <ListButton onPress={() => onNext(item.id)} key={id}>{item.title}</ListButton>;
+                    return <ListButton onPress={() => onNext(item)} key={id}>{item.title}</ListButton>;
                 })}
             </ScrollView>
             <View style={globalS.btnGroup}>

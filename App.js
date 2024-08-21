@@ -41,7 +41,7 @@ function SupervizorAuth() {
       <Stack.Navigator screenOptions={{ headerShown: false }}>
         <Stack.Screen name='Home' component={Home} />
         <Stack.Screen name='Audit' component={Audit} />
-        <Stack.Screen name='InstructionDetail' component={InstructionDetail}/>
+        <Stack.Screen name='InstructionDetail' component={InstructionDetail} />
       </Stack.Navigator>
     </>
   )
@@ -94,7 +94,8 @@ function Root() {
   return (
     // <View></View>
     <NavigationContainer>
-      {authCtx.isAuthenticated ? (authCtx.isSecurity ? <SecurityAuth /> : <SupervizorAuth />) : <AuthStack />}
+      <SupervizorAuth />
+      {/* {authCtx.isAuthenticated ? (authCtx.isSecurity ? <SecurityAuth /> : <SupervizorAuth />) : <AuthStack />} */}
     </NavigationContainer>
   );
 }

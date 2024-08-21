@@ -29,15 +29,18 @@ export default function Login({ route }) {
                 setIsAuthenticating(false);
             }
 
-
-
         } catch (error) {
             console.log(error);
-            if (error.includes("503")) {
-                authCtx.loginControl(true, "Sunucularımız bakımda, bir süre sonra tekrar deneyin.");
-            }
-            else {
-                authCtx.loginControl(true, "Hatalı e-mail ya da şifre!");
+            if (error.response && error.response.status === 503) {
+                Toast.show('Sunucularımız bakımda, bir süre sonra tekrar deneyin.', {
+                    duration: 2000,
+                });
+                // authCtx.loginControl(true, "Sunucularımız bakımda, bir süre sonra tekrar deneyin.");
+            } else {
+                Toast.show('İnternet bağlantınızı kontrol ediniz.', {
+                    duration: 2000,
+                });
+                // authCtx.loginControl(true, "Hatalı e-mail ya da şifre!");
             }
 
             setIsAuthenticating(false);

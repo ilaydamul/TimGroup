@@ -6,11 +6,6 @@ import { globalS } from '../../constants/styles';
 const organizations = [{ id: 0, title: "Güvenlik" }, { id: 1, title: "Tesis" }, { id: 2, title: "Temizlik" }];
 
 export default function StepOne({ onNext }) {
-
-
-
-
-    
     return (
         <Box title={"Organizasyon Türünü Seçin"}>
             <ScrollView style={globalS.scrollBox} >

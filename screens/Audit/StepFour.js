@@ -20,7 +20,7 @@ export default function StepFour({ onNext, onPrev }) {
 
     const takePhoto = async () => {
         const hasPermission = await verifyPermissions();
-        console.log("Has Permission:", hasPermission);
+        // console.log("Has Permission:", hasPermission);
         if (!hasPermission) {
             return;
         }

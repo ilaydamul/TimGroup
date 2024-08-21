@@ -46,7 +46,14 @@ export default function StepSix({ onSubmit }) {
     }
 
     function submitHandler() {
-        onSubmit({ customerComment, note, warnings, instructions });
+        // console.log(customerComment, note, warnings, instructions);
+        
+        onSubmit({
+            gorus: customerComment,
+            not: note,
+            warnings: warnings,
+            instructions: instructions
+        });
     }
 
     const personnelNames = [
@@ -91,7 +98,7 @@ export default function StepSix({ onSubmit }) {
 
         setInstructions((prevInst) => [...prevInst, { instructedStaff, instructedStaff }]);
         console.log(instructions);
-        
+
         //Başarılı bildirimi
         Toast.show('Talimat başarılı bir şekilde eklendi.', {
             duration: 2000,
