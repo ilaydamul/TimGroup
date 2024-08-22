@@ -6,8 +6,9 @@ import Button from "../components/UI/Button";
 import Box from "../components/UI/Box";
 import ListItem from "../components/UI/ListItem";
 import ListButton from "../components/UI/ListButton";
-import { useEffect } from "react";
+import { useContext, useEffect } from "react";
 import { getAuditDirective } from "../utils/auth";
+import { AuthContext } from "../store/auth-context";
 
 const instructions = [{ id: 0, title: "Talimat", status: "Sonlandırıldı" },
 { id: 1, title: "Talimat 2" },
@@ -18,6 +19,8 @@ const instructions = [{ id: 0, title: "Talimat", status: "Sonlandırıldı" },
 const instructions2 = [{ id: 0, title: "Talimat", status: "Sonlandırıldı" }, { id: 1, title: "Talimat 2" }, { id: 2, title: "Talimat 3" }, { id: 3, title: "Talimat 4" }]
 
 export default function Home({ navigation }) {
+    const authCtx = useContext(AuthContext);
+
     function onPressHandler() {
         navigation.navigate("Audit");
     }
@@ -35,18 +38,22 @@ export default function Home({ navigation }) {
 
     useEffect(() => {
         //Verilen Talimatları Al
-        
         const getDirectives = async () => {
-            const response = await getAuditDirective();
-            console.log(response);
+            const response = await getAuditDirective(authCtx.token);
+            if (response.response == 1) { //Sonuç başarılıysa - Talimat yok su anda
+                // console.log(response.list);
+            }
+            else {
+
+            }
         }
-    
+
         getDirectives();
-            
+
 
     }, [])
 
-   
+
 
 
     return (

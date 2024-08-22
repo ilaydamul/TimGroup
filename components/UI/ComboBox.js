@@ -3,7 +3,7 @@ import { MaterialIcons } from '@expo/vector-icons';
 import { StyleSheet } from 'react-native';
 import { Colors } from '../../constants/colors';
 
-export default function ComboBox({data,placeholder,setValue}) {
+export default function ComboBox({ data, placeholder, setValue }) {
     return (
         <RNPickerSelect
             onValueChange={(value) => setValue(value)}
@@ -28,6 +28,8 @@ const pickerSelectStyles = StyleSheet.create({
         borderRadius: 4,
         color: 'black',
         paddingRight: 30,
+        maxWidth: 150,
+        width: 150
     },
     inputAndroid: {
         fontSize: 16,
@@ -38,5 +40,7 @@ const pickerSelectStyles = StyleSheet.create({
         borderRadius: 8,
         color: 'black',
         paddingRight: 30,
+        maxWidth: 150,
+        width: 150
     },
 });

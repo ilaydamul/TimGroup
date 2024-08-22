@@ -10,7 +10,7 @@ export default function StepOne({ onNext }) {
         <Box title={"Organizasyon Türünü Seçin"}>
             <ScrollView style={globalS.scrollBox} >
                 {organizations.map((item, id) => {
-                    return <ListButton onPress={() => onNext(item.id)} key={id}>{item.title}</ListButton>;
+                    return <ListButton onPress={() => onNext(item.title)} key={id}>{item.title}</ListButton>;
                 })}
             </ScrollView>
         </Box>

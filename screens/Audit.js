@@ -1,7 +1,7 @@
 import { View } from 'react-native';
 import Layout from '../components/Layout/Layout';
 import { globalS } from '../constants/styles';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 
 //STEPS
 import StepOne from './Audit/StepOne';
@@ -10,11 +10,13 @@ import StepThree from './Audit/StepThree';
 import StepFour from './Audit/StepFour';
 import StepFive from './Audit/StepFive';
 import StepSix from './Audit/StepSix';
+import { AuthContext } from '../store/auth-context';
 
 
 export default function Audit() {
     const [step, setStep] = useState(1);
     const [infos, setInfos] = useState([]);
+    
 
     const updateInfos = (item) => {
         let found = false;
@@ -39,10 +41,10 @@ export default function Audit() {
         updateInfos(item);
         // console.log(infos);
 
-        infos.forEach((item, id) => {
-            console.log("Step " + (id + 1) + " İçerik: " + item.item);
+        // infos.forEach((item, id) => {
+        //     console.log("Step " + (id + 1) + " İçerik: " + item.item);
 
-        })
+        // })
 
 
         setStep(prevStep => prevStep + 1);
@@ -53,11 +55,12 @@ export default function Audit() {
     };
 
     const saveHandler = (item) => {
+
         //API ile bilgiler gönderilecek
         // console.log("item");
         // console.log(item);
-        
-        updateInfos(item);
+
+        // updateInfos(item);
 
         // console.log(infos);
         // console.log(infos[0]); // Organizasyonlar 
@@ -65,7 +68,9 @@ export default function Audit() {
         // console.log(infos[2]); // Hiçbir şey gelmiyor, gelmeyecek - Proje id alınacak **
         // console.log(infos[3]); // Fotoğraf bilgileri **
         // console.log(infos[4]); // Denetim soruları **
-        console.log(infos[5]); // Diğer bilgiler, talimat ve uyarılar
+        // console.log(infos[5]); // Diğer bilgiler, talimat ve uyarılar
+        
+
 
 
         //Step 4 5 6 bilgileri api ile gönderilecek
@@ -81,7 +86,7 @@ export default function Audit() {
                 {step === 3 && <StepThree projectId={infos.find(info => info.step === 2)?.item} onNext={handleNextStep} onPrev={handlePrevStep} />}
                 {step === 4 && <StepFour onNext={handleNextStep} onPrev={handlePrevStep} />}
                 {step === 5 && <StepFive onNext={handleNextStep} onPrev={handlePrevStep} projectId={infos.find(info => info.step === 2)?.item} />}
-                {step === 6 && <StepSix onNext={handleNextStep} onSubmit={saveHandler} />}
+                {step === 6 && <StepSix onNext={handleNextStep} infos={infos} />}
             </View>
         </Layout>
     );

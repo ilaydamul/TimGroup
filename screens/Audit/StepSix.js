@@ -2,16 +2,25 @@ import { View, Text, StyleSheet, ToastAndroid } from 'react-native';
 import Box from '../../components/UI/Box';
 import Button from '../../components/UI/Button';
 import Input from '../../components/UI/Input';
-import { useState } from 'react';
+import { useContext, useEffect, useState } from 'react';
 import { globalS } from '../../constants/styles';
 import { Colors } from '../../constants/colors';
 import ComboBox from '../../components/UI/ComboBox';
 import Toast from 'react-native-root-toast';
+import { AuthContext } from '../../store/auth-context';
+import { addAuditWarning, getPersonelList } from '../../utils/auth';
 
 
-export default function StepSix({ onSubmit }) {
+export default function StepSix({ infos }) {
+    const authCtx = useContext(AuthContext);
+    const token = authCtx.token;
+
+    const [personels, setPersonels] = useState({});
+
+
     const [customerComment, setCustomerComment] = useState("");
     const [note, setNote] = useState("");
+
     const [warningDesc, setWarningDesc] = useState("");
     const [instructionTitle, setInstructionTitle] = useState("");
     const [instructionDesc, setInstructionDesc] = useState("");
@@ -45,31 +54,30 @@ export default function StepSix({ onSubmit }) {
         }
     }
 
-    function submitHandler() {
-        // console.log(customerComment, note, warnings, instructions);
-        
-        onSubmit({
-            gorus: customerComment,
-            not: note,
-            warnings: warnings,
-            instructions: instructions
-        });
-    }
+    useEffect(() => {
+        const personelList = async () => {
+            const personel = await getPersonelList(token);
 
-    const personnelNames = [
-        { label: 'Ahmet Yılmaz', value: 'ahmet' },
-        { label: 'Ayşe Demir', value: 'ayse' },
-        { label: 'Mehmet Kaya', value: 'mehmet' },
-        { label: 'Fatma Çelik', value: 'fatma' },
-    ];
+            if (personel.result == 1) {
+                const personelNamesAndIds = personel.list.map((person) => ({
+                    value: person.id,
+                    label: person.name
+                }));
+
+                setPersonels(personelNamesAndIds);
+            }
+        }
+
+        personelList();
+    }, [])
 
     const transationType = [{
-        label: "Sözlü Uyarı", value: "sozlu"
+        label: "Sözlü Uyarı", value: "Sözlü Uyarı"
     }, {
-        label: "Yazılı Uyarı", value: "yazili"
+        label: "Yazılı Uyarı", value: "Yazılı Uyarı"
     }]
 
-    function saveWarning() {
+    async function saveWarning() {
         if (!warnedStaff || !transitionVal || !warningDesc) {
             //Boş bırakılamaz uyarısı
             Toast.show('Uyarı girdilerini doldurunuz!', {
@@ -77,9 +85,31 @@ export default function StepSix({ onSubmit }) {
             });
             return;
         }
+        // setWarnings((prevWarn) => [...prevWarn, { warnedStaff, "comment": warningDesc, "status": transitionVal }]);
 
-        setWarnings((prevWarn) => [...prevWarn, { warnedStaff, warningDesc, transitionVal }]);
-        console.log(warnings);
+        const data = {
+            employeeId: warnedStaff,
+            comment: warningDesc,
+            status: transitionVal,
+            // projectId: 
+        }
+
+
+        // try {
+        //     const addAuditWarning2 = await addAuditWarning(token, data);
+
+
+        //     console.log("addAuditWarning");
+        //     console.log(addAuditWarning2);
+
+        // } catch (error) {
+        //     console.log(error);
+            
+        // }
+
+       
+        
+
 
         //Başarılı bildirimi
         Toast.show('Uyarı başarılı bir şekilde eklendi.', {
@@ -96,14 +126,38 @@ export default function StepSix({ onSubmit }) {
             return;
         }
 
-        setInstructions((prevInst) => [...prevInst, { instructedStaff, instructedStaff }]);
-        console.log(instructions);
+        setInstructions((prevInst) => [...prevInst, { instructedStaff, instructionTitle, instructionDesc }]);
+
 
         //Başarılı bildirimi
         Toast.show('Talimat başarılı bir şekilde eklendi.', {
             duration: 2000,
         });
 
+    }
+
+    function submitHandler() {
+        // console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+
+        // console.log(customerComment, note, warnings, instructions);
+
+
+        // const data = {
+        //     gorus: customerComment,
+        //     not: note,
+        //     warnings: warnings,
+        //     instructions: instructions
+        // };
+
+        // console.log(token);
+        // console.log(infos);
+        // console.log(data);
+
+
+
+
+
+        // onSubmit(data);
     }
 
     return (
@@ -117,7 +171,7 @@ export default function StepSix({ onSubmit }) {
                 <View>
                     <View style={[globalS.dFlexCenterBetween, globalS.mb12]}>
                         <Text style={style.selectText}>Görevli Personel</Text>
-                        <ComboBox data={personnelNames} setValue={setWarnedStaff} placeholder={"Personel Seçin.."} />
+                        <ComboBox data={personels} setValue={setWarnedStaff} placeholder={"Personel Seçin.."} />
                     </View>
                     <View style={[globalS.dFlexCenterBetween, globalS.mb12]}>
                         <Text style={globalS.selectText}>İşlem</Text>
@@ -126,7 +180,7 @@ export default function StepSix({ onSubmit }) {
                     <Text style={[globalS.selectText, globalS.mb12]} >Açıklama</Text>
                     <Input textarea mb={12} onUpdateValue={updateInputValue.bind(this, "warningDesc")} />
                     <View style={[style.flexRight, globalS.mb12]}>
-                        <Button style={style.smallBtn} onPress={saveWarning}>Ekle</Button>
+                        <Button style={style.smallBtn} onPress={async () => await saveWarning()}>Ekle</Button>
                     </View>
                 </View>
 
@@ -134,7 +188,7 @@ export default function StepSix({ onSubmit }) {
                 <View>
                     <View style={[globalS.dFlexCenterBetween, globalS.mb12]}>
                         <Text style={style.selectText}>Görevli Personel</Text>
-                        <ComboBox data={personnelNames} setValue={setInstructedStaff} placeholder={"Personel Seçin.."} />
+                        <ComboBox data={personels} setValue={setInstructedStaff} placeholder={"Personel Seçin.."} />
                     </View>
                     <Text style={[globalS.selectText, globalS.mb12]}>Başlık</Text>
                     <Input mb={12} grayBg onUpdateValue={updateInputValue.bind(this, "instructionTitle")} />

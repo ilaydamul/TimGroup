@@ -94,8 +94,8 @@ function Root() {
   return (
     // <View></View>
     <NavigationContainer>
-      <SupervizorAuth />
-      {/* {authCtx.isAuthenticated ? (authCtx.isSecurity ? <SecurityAuth /> : <SupervizorAuth />) : <AuthStack />} */}
+      {/* <SupervizorAuth /> */}
+      {authCtx.isAuthenticated ? (authCtx.isSecurity ? <SecurityAuth /> : <SupervizorAuth />) : <AuthStack />}
     </NavigationContainer>
   );
 }

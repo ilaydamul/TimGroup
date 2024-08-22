@@ -18,6 +18,8 @@ export default function AuthContextProvider({ children }) {
     const [error, setError] = useState(false);
     const [errorText, setErrorText] = useState("");
 
+    
+
     async function authenticate(token, role) {
         setAuthToken(token);
         await AsyncStorage.setItem("token", token);
