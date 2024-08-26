@@ -6,24 +6,35 @@ import ListItem from '../../components/UI/ListItem';
 import { globalS } from '../../constants/styles';
 import { Colors } from '../../constants/colors';
 
-export default function StepFive({ onNext, onPrev, projectId }) {
+export default function StepFive({ onNext, onPrev, project }) {
     const [point, setPoint] = useState(0);
-    const [questions, setQuestions] = useState([
-        { id: 0, question: "Güvenlik personeli nöbet kulübesi veya devriye yapması gereken alanda mı?", value: false },
-        { id: 1, question: "Güvenlik personelinin kimliği takılı mı?", value: false },
-        { id: 2, question: "Proje personel kadro sayısı tam mı?", value: false }
-    ]);
-    const [perPoint, setPerPoint] = useState(0); // Initialize perPoint state
-    const [truePoint, setTruePoint] = useState(0); // Initialize truePoint state
+    const [questions, setQuestions] = useState([]);
+    // [
+    //     { id: 0, question: "Güvenlik personeli nöbet kulübesi veya devriye yapması gereken alanda mı?", value: false },
+    //     { id: 1, question: "Güvenlik personelinin kimliği takılı mı?", value: false },
+    //     { id: 2, question: "Proje personel kadro sayısı tam mı?", value: false }
+    // ]
+    const [perPoint, setPerPoint] = useState(0);
+    const [truePoint, setTruePoint] = useState(0);
 
     useEffect(() => {
-        // Calculate perPoint whenever questions length changes
+        const updatedQuestions = project.questionList.map(question => ({
+            ...question,
+            value: false
+        }));
+
+        setQuestions(updatedQuestions);
+
         setPerPoint(100 / questions.length);
-    }, [questions.length]); // Ensure useEffect runs whenever questions length changes
+    }, [questions.length]);
 
     function onSubmitHandler() {
-        // onSubmit logic
-        onNext({ questions, point });
+        const formattedQuestions = questions.map(({ id, value }) => ({
+            projectQuestionId: id,
+            status: value,
+        }));
+
+        onNext(formattedQuestions);
     }
 
     const toggleSwitch = (index) => {
@@ -50,7 +61,7 @@ export default function StepFive({ onNext, onPrev, projectId }) {
             {questions.map((item, index) => (
                 <ListItem
                     key={item.id}
-                    title={item.question}
+                    title={item.quest}
                     isRadio
                     radioValue={item.value}
                     onToggle={() => toggleSwitch(index)}

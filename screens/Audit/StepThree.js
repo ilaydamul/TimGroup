@@ -6,41 +6,20 @@ import { globalS } from '../../constants/styles';
 import { Colors } from '../../constants/colors';
 
 
-const projectInfo = {
-    customer: "Asist Koruma ve Güven",
-    project: "Vema Tuzla",
-    // location: "40.8489652, 293002849",
-    customerRepresentative: "Görkem Okar",
-    phone: "0530 178 97 17",
-    email: "gorkem@17yonetim.com",
-    address: "İçmeler Mah. Çağdaş Sok. 2C/1 Tuzla/İst",
-    location: {
-        lat: 1234.43,
-        long: 2343.43
-    }
-};
-
-//project.id şeklinde id gelecek
 export default function StepThree({ project, onNext, onPrev }) {
-
-    function onPressHandler(){
+    function onPressHandler() {
         //LOCATION KONTROLLERİ 
         onNext();
     }
 
-    //Proje bilgilerini api ile çekme
-
-
-
     return (
-        <Box title={projectInfo.project}>
-            <ListItem title="Müşteri" content={projectInfo.customer} />
-            <ListItem title="Proje" content={projectInfo.project} />
-            {/* <ListItem title="Loc" content={projectInfo.location.lat} /> */}
-            <ListItem title="Müşteri Temsilcisi" content={projectInfo.customerRepresentative} />
-            <ListItem title="Telefon" content={projectInfo.phone} />
-            <ListItem title="E-Posta" content={projectInfo.email} />
-            <ListItem title="Adres" content={projectInfo.address} noBorder contentStyle={{ maxWidth: 200 }} />
+        <Box title={project.projectName}>
+            <ListItem title="Müşteri" content={project.customerName} />
+            <ListItem title="Proje" content={project.projectName} />
+            <ListItem title="Müşteri Temsilcisi" content={project.operationManagerName} contentStyle={{ maxWidth: 200 }} />
+            <ListItem title="Telefon" content={project.customerPhone} />
+            <ListItem title="E-Posta" content={project.customerEmail} contentStyle={{ maxWidth: 250 }} />
+            <ListItem title="Adres" content={project.address} noBorder contentStyle={{ maxWidth: 200 }} />
             <View style={globalS.btnGroup}>
                 <Button style={[globalS.btnGray, globalS.btnHalf]} textColor={Colors.black} solidBg onPress={onPrev}>Geri</Button>
                 <Button onPress={onPressHandler}>Denetime Başla</Button>

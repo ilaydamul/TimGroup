@@ -34,6 +34,7 @@ export default function StepFour({ onNext, onPrev }) {
 
         if (!result.canceled) {
             setImage(result.assets[0].uri);
+            
         }
     };
 

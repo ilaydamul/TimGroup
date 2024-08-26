@@ -46,23 +46,26 @@ export async function getAuditDirective(token) {
     return response.data;
 }
 
-export async function addAuditWarning(token, datas) {
-    // console.log(token, datas);
+export async function addAuditWarningOrDirective(token, datas, type) {
     const header = {
         "Cookie": token
     };
 
-    const data = JSONtoFormData(datas);
+    // const data = JSONtoFormData(datas);
+    // var apiType;
 
-    const response = await axios.post(api + "/api/add-audit-warning", data, {
+    if (type == "Warn") {
+        apiType = "/api/add-audit-warning";
+    }
+    else {
+        apiType = "/api/add-audit-directive";
+    }
+
+    const response = await axios.post(api + apiType, datas, {
         headers: header
     });
 
     return response.data;
-}
-
-export async function addAuditDirective(params) {
-
 }
 
 
@@ -92,3 +95,36 @@ export async function getProjects(token, projectType) {
 
     return response.data;
 }
+
+//GET PROJECT DETAILS
+export async function getProjectDetails(token, projectId) {
+    const header = {
+        "Cookie": token
+    };
+
+    const response = await axios.get(api + "/api/get-audit-project/" + projectId, {
+        headers: header
+    });
+
+
+    return response.data;
+}
+
+
+//POST PROJECT AUDIT
+export async function addAudit(token, datas) {
+    const header = {
+        "Cookie": token
+    };
+
+    const data = JSONtoFormData(datas);
+
+    const response = await axios.post(api + "/api/inspector-check", data, {
+        headers: header
+    });
+
+
+    return response.data;
+}
+
+

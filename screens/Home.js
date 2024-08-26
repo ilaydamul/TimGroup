@@ -6,8 +6,9 @@ import Button from "../components/UI/Button";
 import Box from "../components/UI/Box";
 import ListItem from "../components/UI/ListItem";
 import ListButton from "../components/UI/ListButton";
-import { useContext, useEffect } from "react";
+import { useContext, useEffect, useState } from "react";
 import { getAuditDirective } from "../utils/auth";
+import LoadingItems from '../components/UI/LoadingItems';
 import { AuthContext } from "../store/auth-context";
 
 const instructions = [{ id: 0, title: "Talimat", status: "Sonlandırıldı" },
@@ -20,6 +21,9 @@ const instructions2 = [{ id: 0, title: "Talimat", status: "Sonlandırıldı" }, 
 
 export default function Home({ navigation }) {
     const authCtx = useContext(AuthContext);
+
+    const [myDirectives, setMyDirectives] = useState();
+    const [loading, setLoading] = useState(true);
 
     function onPressHandler() {
         navigation.navigate("Audit");
@@ -38,14 +42,21 @@ export default function Home({ navigation }) {
 
     useEffect(() => {
         //Verilen Talimatları Al
+
         const getDirectives = async () => {
+            setLoading(true);
             const response = await getAuditDirective(authCtx.token);
-            if (response.response == 1) { //Sonuç başarılıysa - Talimat yok su anda
-                // console.log(response.list);
+            console.log(response);
+            if (response.result == 1) {
+                setMyDirectives(response.list);
+                
+                
             }
             else {
-
+                setMyDirectives([]);
             }
+
+            setLoading(false);
         }
 
         getDirectives();
@@ -55,15 +66,21 @@ export default function Home({ navigation }) {
 
 
 
+    // status={item.status}
 
     return (
         <Layout>
             <View style={[globalS.itemContainer]}>
                 <Box title={"Talimatlarım"} style={globalS.mb12}>
                     <ScrollView style={globalS.scrollBox} >
-                        {instructions.map((item, id) => {
-                            return <ListButton onPress={() => handleItemPress(item.id, 1)} key={item.id} status={item.status}>{item.title}</ListButton>;
-                        })}
+                        {
+                            loading ? (
+                                <LoadingItems />
+                            ) : myDirectives && myDirectives.length === 0 ? (<Text>Henüz talimat atamanız bulunmamaktadır.</Text>)
+                                : (myDirectives.map((item, id) => {
+                                    return <ListButton onPress={() => handleItemPress(item.id, 1)} key={item.id}>{item.title}</ListButton>;
+                                })
+                                )}
                     </ScrollView>
                 </Box>
                 <Box title={"Üzerimdeki Görevler"} style={globalS.mb8}>

@@ -8,8 +8,10 @@ import { Colors } from '../../constants/colors';
 import ComboBox from '../../components/UI/ComboBox';
 import Toast from 'react-native-root-toast';
 import { AuthContext } from '../../store/auth-context';
-import { addAuditWarning, getPersonelList } from '../../utils/auth';
+import { addAudit, addAuditWarningOrDirective, getPersonelList } from '../../utils/auth';
+import useLocationPermissionsHandler from '../../hooks/useLocationPermissions';
 
+const transationType = [{ label: "Sözlü Uyarı", value: "Sözlü Uyarı" }, { label: "Yazılı Uyarı", value: "Yazılı Uyarı" }];
 
 export default function StepSix({ infos }) {
     const authCtx = useContext(AuthContext);
@@ -22,14 +24,20 @@ export default function StepSix({ infos }) {
     const [note, setNote] = useState("");
 
     const [warningDesc, setWarningDesc] = useState("");
-    const [instructionTitle, setInstructionTitle] = useState("");
-    const [instructionDesc, setInstructionDesc] = useState("");
-    const [instructedStaff, setInstructedStaff] = useState('');
+    const [directiveTitle, setDirectiveTitle] = useState("");
+    const [directiveDesc, setDirectiveDesc] = useState("");
+    const [directivedStaff, setDirectivedStaff] = useState('');
     const [warnedStaff, setWarnedStaff] = useState('');
     const [transitionVal, setTransitionVal] = useState('');
 
     const [warnings, setWarnings] = useState([]);
-    const [instructions, setInstructions] = useState([]);
+    const [directives, setDirectives] = useState([]);
+
+    const [checkStatus, setCheckStatus] = useState(0);
+
+    const projectId = infos.find(info => info.step === 2)?.item.id;
+    const projectPhotoInfos = infos.find(info => info.step === 4)?.item;
+    const projectAnswerList = infos.find(info => info.step === 5)?.item;
 
 
     function updateInputValue(inputType, enteredValue) {
@@ -43,16 +51,17 @@ export default function StepSix({ infos }) {
             case "warningDesc":
                 setWarningDesc(enteredValue);
                 break;
-            case "instructionTitle":
-                setInstructionTitle(enteredValue);
+            case "directiveTitle":
+                setDirectiveTitle(enteredValue);
                 break;
-            case "instructionDesc":
-                setInstructionDesc(enteredValue);
+            case "directiveDesc":
+                setDirectiveDesc(enteredValue);
                 break;
             default:
                 break;
         }
     }
+
 
     useEffect(() => {
         const personelList = async () => {
@@ -71,54 +80,44 @@ export default function StepSix({ infos }) {
         personelList();
     }, [])
 
-    const transationType = [{
-        label: "Sözlü Uyarı", value: "Sözlü Uyarı"
-    }, {
-        label: "Yazılı Uyarı", value: "Yazılı Uyarı"
-    }]
+
 
     async function saveWarning() {
+        setCheckStatus(0);
         if (!warnedStaff || !transitionVal || !warningDesc) {
-            //Boş bırakılamaz uyarısı
             Toast.show('Uyarı girdilerini doldurunuz!', {
                 duration: 2000,
             });
             return;
         }
-        // setWarnings((prevWarn) => [...prevWarn, { warnedStaff, "comment": warningDesc, "status": transitionVal }]);
 
         const data = {
             employeeId: warnedStaff,
+            projectId: projectId,
             comment: warningDesc,
             status: transitionVal,
-            // projectId: 
         }
 
+        try {
+            const addAuditWarning2 = await addAuditWarningOrDirective(token, data, "Warn");
+            setCheckStatus(addAuditWarning2.result);
+        } catch (error) {
+            console.log(error);
+            return;
+        }
 
-        // try {
-        //     const addAuditWarning2 = await addAuditWarning(token, data);
+        if (checkStatus == 1) {
+            //Başarılı bildirimi
+            Toast.show('Uyarı başarılı bir şekilde eklendi.', {
+                duration: 2000,
+            });
+        }
 
-
-        //     console.log("addAuditWarning");
-        //     console.log(addAuditWarning2);
-
-        // } catch (error) {
-        //     console.log(error);
-            
-        // }
-
-       
-        
-
-
-        //Başarılı bildirimi
-        Toast.show('Uyarı başarılı bir şekilde eklendi.', {
-            duration: 2000,
-        });
     }
 
-    function saveInstruction() {
-        if (!instructedStaff || !instructionDesc || !instructionTitle) {
+    async function saveDirective() {
+        setCheckStatus(0);
+        if (!directivedStaff || !directiveDesc || !directiveTitle) {
             //Boş bırakılamaz uyarısı
             Toast.show('Talimat girdilerini doldurunuz!', {
                 duration: 2000,
@@ -126,36 +125,59 @@ export default function StepSix({ infos }) {
             return;
         }
 
-        setInstructions((prevInst) => [...prevInst, { instructedStaff, instructionTitle, instructionDesc }]);
+        const data = {
+            employeeId: directivedStaff,
+            projectId: projectId,
+            title: directiveTitle,
+            directive: directiveDesc,
+        }
+
+        try {
+            const addAuditDirective2 = await addAuditWarningOrDirective(token, data, "Directive");
+
+            setCheckStatus(addAuditDirective2.result);
 
 
-        //Başarılı bildirimi
-        Toast.show('Talimat başarılı bir şekilde eklendi.', {
-            duration: 2000,
-        });
+        } catch (error) {
+            console.log(error);
+            return;
+        }
+
+        if (checkStatus === 1) {
+            //Başarılı bildirimi
+            Toast.show('Talimat başarılı bir şekilde eklendi.', {
+                duration: 2000,
+            });
+        }
+
+
+
 
     }
 
-    function submitHandler() {
-        // console.log("++++++++++++++++++++++++++++++++++++++++++++++++++++++");
+    async function submitHandler() {
 
-        // console.log(customerComment, note, warnings, instructions);
-
-
-        // const data = {
-        //     gorus: customerComment,
-        //     not: note,
-        //     warnings: warnings,
-        //     instructions: instructions
-        // };
-
-        // console.log(token);
-        // console.log(infos);
-        // console.log(data);
+        var loc = useLocationPermissionsHandler();
+        console.log(loc);
 
 
+        const data = {
+            projectId: projectId,
+            customerComment: customerComment,
+            note: note,
+            picture: projectPhotoInfos.image,
+            pictureComment: projectPhotoInfos.comment,
+            auditAnswerList: projectAnswerList
+        };
 
 
+        try {
+            const response = await addAudit(token, data);
+            console.log(response);
+        } catch (error) {
+            console.log(error);
+
+        }
 
         // onSubmit(data);
     }
@@ -188,14 +210,14 @@ export default function StepSix({ infos }) {
                 <View>
                     <View style={[globalS.dFlexCenterBetween, globalS.mb12]}>
                         <Text style={style.selectText}>Görevli Personel</Text>
-                        <ComboBox data={personels} setValue={setInstructedStaff} placeholder={"Personel Seçin.."} />
+                        <ComboBox data={personels} setValue={setDirectivedStaff} placeholder={"Personel Seçin.."} />
                     </View>
                     <Text style={[globalS.selectText, globalS.mb12]}>Başlık</Text>
-                    <Input mb={12} grayBg onUpdateValue={updateInputValue.bind(this, "instructionTitle")} />
+                    <Input mb={12} grayBg onUpdateValue={updateInputValue.bind(this, "directiveTitle")} />
                     <Text style={[globalS.selectText, globalS.mb12]}>Açıklama</Text>
-                    <Input textarea mb={12} onUpdateValue={updateInputValue.bind(this, "instructionDesc")} />
+                    <Input textarea mb={12} onUpdateValue={updateInputValue.bind(this, "directiveDesc")} />
                     <View style={[style.flexRight, globalS.mb12]}>
-                        <Button style={style.smallBtn} onPress={saveInstruction}>Talimat Ver</Button>
+                        <Button style={style.smallBtn} onPress={saveDirective}>Talimat Ver</Button>
                     </View>
                 </View>
             </Box>
