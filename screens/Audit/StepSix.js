@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ToastAndroid } from 'react-native';
+import { View, Text, StyleSheet, ToastAndroid, Alert, Platform } from 'react-native';
 import Box from '../../components/UI/Box';
 import Button from '../../components/UI/Button';
 import Input from '../../components/UI/Input';
@@ -10,6 +10,7 @@ import Toast from 'react-native-root-toast';
 import { AuthContext } from '../../store/auth-context';
 import { addAudit, addAuditWarningOrDirective, getPersonelList } from '../../utils/auth';
 import useLocationPermissionsHandler from '../../hooks/useLocationPermissions';
+import axios from 'axios';
 
 const transationType = [{ label: "Sözlü Uyarı", value: "Sözlü Uyarı" }, { label: "Yazılı Uyarı", value: "Yazılı Uyarı" }];
 
@@ -18,7 +19,7 @@ export default function StepSix({ infos }) {
     const token = authCtx.token;
 
     const [personels, setPersonels] = useState({});
-
+    const [location, requestLocationPermissions] = useLocationPermissionsHandler();
 
     const [customerComment, setCustomerComment] = useState("");
     const [note, setNote] = useState("");
@@ -30,8 +31,8 @@ export default function StepSix({ infos }) {
     const [warnedStaff, setWarnedStaff] = useState('');
     const [transitionVal, setTransitionVal] = useState('');
 
-    const [warnings, setWarnings] = useState([]);
-    const [directives, setDirectives] = useState([]);
+    // const [warnings, setWarnings] = useState([]);
+    // const [directives, setDirectives] = useState([]);
 
     const [checkStatus, setCheckStatus] = useState(0);
 
@@ -62,6 +63,16 @@ export default function StepSix({ infos }) {
         }
     }
 
+    const handleGetLocation = async () => {
+        const hasPermission = await requestLocationPermissions();
+        if (!hasPermission) {
+            Alert.alert('Konum izni verilmedi.');
+        }
+    };
+
+    handleGetLocation();
+
+
 
     useEffect(() => {
         const personelList = async () => {
@@ -73,11 +84,16 @@ export default function StepSix({ infos }) {
                     label: person.name
                 }));
 
+                // console.log(personelNamesAndIds);
+
+
                 setPersonels(personelNamesAndIds);
             }
         }
 
         personelList();
+
+
     }, [])
 
 
@@ -157,23 +173,42 @@ export default function StepSix({ infos }) {
 
     async function submitHandler() {
 
-        var loc = useLocationPermissionsHandler();
-        console.log(loc);
+        const hasPermission = await requestLocationPermissions();
+        if (!hasPermission) {
+            return;
+        }
 
+
+        if (!location) {
+            Toast.show('Konum bilgisi alınamadı. Lütfen tekrar deneyin.', {
+                duration: 2000,
+            });
+            return;
+        }
+
+        // const image = {
+        //     uri: Platform.OS === "android" ? projectPhotoInfos.image : projectPhotoInfos.image.replace("file://", ""),
+        //     type: 'image/jpeg',
+        //     name: 'image.jpg',
+        // }
 
         const data = {
             projectId: projectId,
             customerComment: customerComment,
             note: note,
-            picture: projectPhotoInfos.image,
+            picture: projectPhotoInfos.currentImage,
             pictureComment: projectPhotoInfos.comment,
-            auditAnswerList: projectAnswerList
+            auditAnswerList: projectAnswerList,
+            lat: location.lat,
+            lng: location.lng
         };
 
+        // console.log(data);
 
         try {
             const response = await addAudit(token, data);
             console.log(response);
+
         } catch (error) {
             console.log(error);
 

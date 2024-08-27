@@ -10,10 +10,10 @@ import Input from "../components/UI/Input"
 
 export default function InstructionDetail({ route }) {
     const [isCheck, setIsCheck] = useState(false);
-    const { id, type } = route.params;
-    const root = { id, type };
+    const { item, type } = route.params;
+    const root = { item, type };
 
-    // console.log(root);
+    console.log(item);
     //Type 1 - Verilen Talimatlar, Type 2 - Alınan Talimatlar
 
     useEffect(() => {
@@ -21,17 +21,18 @@ export default function InstructionDetail({ route }) {
     }, [])
 
 
-    const instruction = {
-        id: 1,
-        fromWho: "Ali", //Atayan
-        toWho: "Kadir", //Kime Atandı?
-        date: "12.05.2024", //Atandığı tarih
-        title: "Başlık",
-        content: "Konu İçerik Konu İçerik Konu İçerik Konu İçerik Konu İçerik",
-        readDate: "13.05.2024",
-        status: "Okundu",//Gönderildi, okundu, sonlandırıldı
-        endNote: "Sonuç..",
-    }
+    // const instruction = {
+    //     id: 1,
+    //     fromWho: "Ali", //Atayan
+    //     toWho: "Kadir", //Kime Atandı?
+    //     date: "12.05.2024", //Atandığı tarih
+    //     title: "Başlık",
+    //     content: "Konu İçerik Konu İçerik Konu İçerik Konu İçerik Konu İçerik",
+    //     readDate: "13.05.2024",
+    //     status: "Okundu",//Gönderildi, okundu, sonlandırıldı
+    //     endNote: "Sonuç..",
+    // }
+    
 
     function endTask() {
         console.log("Sonlandır");
@@ -40,28 +41,28 @@ export default function InstructionDetail({ route }) {
     return (
         <Layout isBack={true}>
             <View style={[globalS.contentContainer]}>
-                <Box title={instruction.title} style={globalS.mb16}>
-                    {type == 1 && <ListItem title="Kime" content={instruction.toWho} listContentBg />}
-                    {type == 2 && <ListItem title="Kimden" content={instruction.fromWho} listContentBg />}
-                    <ListItem title="Konu" content={instruction.content} column />
-                    <ListItem title="Tarih" content={instruction.date} />
-                    <ListItem title="Alındığı Tarih" content={instruction.readDate} />
-                    <ListItem title="Durum" content={instruction.status} noBorder={instruction.status != "Sonlandırıldı" && true} />
-                    {
+                <Box title={item.title} style={globalS.mb16}>
+                    {type == 1 && <ListItem title="Kime" content={item.employeeName} listContentBg />}
+                    {/* {type == 2 && <ListItem title="Kimden" content={instruction.fromWho} listContentBg />} */}
+                    <ListItem title="Konu" content={item.directive} column />
+                    <ListItem title="Tarih" content={item.createdDate} noBorder />
+                    {/* <ListItem title="Alındığı Tarih" content={instruction.readDate} /> */}
+                    {/* <ListItem title="Durum" content={instruction.status} noBorder={instruction.status != "Sonlandırıldı" && true} /> */}
+                    {/* {
                         instruction.status == "Sonlandırıldı" &&
                         <>
                             <ListItem title="Sonuçlanma Tarihi" content="3.07.2024" />
                             <ListItem title="Not" content={instruction.endNote} column noBorder />
                         </>
-                    }
+                    } */}
                 </Box>
-                {
+                {/* {
                    type == 2 && instruction.status != "Sonlandırıldı" &&
                     <Box>
                         <Input placeholderText={"Açıklama giriniz."} textarea={true} />
                         <Button style={[globalS.btnHalf, globalS.mt12]} onPress={endTask}>Sonlandır</Button>
                     </Box>
-                }
+                } */}
             </View>
 
         </Layout >

@@ -23,12 +23,24 @@ export async function login(email, password, role) {
 }
 
 
-function JSONtoFormData(datas) {
-    var formData = new FormData();
-    for (let i = 0; i < datas.length; i++) {
-        formData.append(datas[i])
-    }
+// function JSONtoFormData(datas) {
+//     var formData = new FormData();
+//     for (let i = 0; i < datas.length; i++) {
+//         formData.append(datas[i])
+//     }
 
+//     return formData;
+// }
+
+function JSONtoFormData(json) {
+    const formData = new FormData();
+    for (const key in json) {
+        if (json[key] instanceof Array || json[key] instanceof Object) {
+            formData.append(key, JSON.stringify(json[key]));
+        } else {
+            formData.append(key, json[key]);
+        }
+    }
     return formData;
 }
 
@@ -114,13 +126,40 @@ export async function getProjectDetails(token, projectId) {
 //POST PROJECT AUDIT
 export async function addAudit(token, datas) {
     const header = {
-        "Cookie": token
+        "Cookie": token,
+        'Content-Type': 'multipart/form-data'
     };
 
-    const data = JSONtoFormData(datas);
+    // const data = JSONtoFormData(datas);
+    // console.log(data);
 
-    const response = await axios.post(api + "/api/inspector-check", data, {
-        headers: header
+    // console.log(token);
+    
+    const formData = new FormData();
+
+    for (const key in datas) {
+        if (key === 'picture') {
+            if (datas[key]) {
+                formData.append('picture', {
+                    uri: datas[key].uri,
+                    type: datas[key].type,
+                    name: datas[key].name,
+                    length: datas[key].length
+                });
+            }
+        } else {
+            formData.append(key, datas[key]);
+        }
+    }
+
+    // console.log(formData);
+    
+
+    const response = await axios.post(api + "/api/inspector-check", formData, {
+        headers: {
+            ...header,
+            'Accept': 'application/json'
+        },
     });
 
 

@@ -1,4 +1,4 @@
-import { View, Image, Text, Alert, StyleSheet } from 'react-native';
+import { View, Image, Text, Alert, StyleSheet, Platform } from 'react-native';
 import Box from '../../components/UI/Box';
 import Button from '../../components/UI/Button';
 import Input from '../../components/UI/Input';
@@ -12,6 +12,7 @@ export default function StepFour({ onNext, onPrev }) {
     const verifyPermissions = useCameraPermissionsHandler();
     const [comment, setComment] = useState();
     const [image, setImage] = useState();
+    const [currentImage, setCurrentImage] = useState();
 
 
     function updateInputValue(enteredValue) {
@@ -27,14 +28,23 @@ export default function StepFour({ onNext, onPrev }) {
 
         const result = await ImagePicker.launchCameraAsync({
             mediaTypes: ImagePicker.MediaTypeOptions.Images,
-            allowsEditing: true,
+            allowsEditing: false,
             aspect: [4, 3],
             quality: 1,
         });
 
         if (!result.canceled) {
-            setImage(result.assets[0].uri);
+            console.log(result.assets[0]);
             
+            const image = {
+                uri: Platform.OS === "android" ? result.assets[0].uri : result.assets[0].uri.replace("file://", ""),
+                type: result.assets[0].mimeType,
+                name: result.assets[0].fileName || 'image.jpg',
+                length:  result.assets[0].fileSize
+            }
+
+            setImage(result.assets[0].uri);
+            setCurrentImage(image);
         }
     };
 
@@ -44,8 +54,7 @@ export default function StepFour({ onNext, onPrev }) {
     }
 
     function onPressHandler() {
-
-        onNext({ comment, image });
+        onNext({ comment, currentImage });
     }
 
     return (

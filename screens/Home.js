@@ -29,7 +29,7 @@ export default function Home({ navigation }) {
         navigation.navigate("Audit");
     }
 
-    function handleItemPress(id, type) {
+    function handleItemPress(item, type) {
         // if (type == 1) {
         //     console.log("Talimatlarım");
         // }
@@ -37,7 +37,7 @@ export default function Home({ navigation }) {
         //     console.log("Üzerimdeki Görevler");
         // }
         // console.log(id);
-        navigation.navigate("InstructionDetail", { id: id, type: type })
+        navigation.navigate("InstructionDetail", { item: item, type: type })
     }
 
     useEffect(() => {
@@ -46,11 +46,11 @@ export default function Home({ navigation }) {
         const getDirectives = async () => {
             setLoading(true);
             const response = await getAuditDirective(authCtx.token);
-            console.log(response);
+            // console.log(response);
             if (response.result == 1) {
                 setMyDirectives(response.list);
-                
-                
+
+
             }
             else {
                 setMyDirectives([]);
@@ -78,18 +78,18 @@ export default function Home({ navigation }) {
                                 <LoadingItems />
                             ) : myDirectives && myDirectives.length === 0 ? (<Text>Henüz talimat atamanız bulunmamaktadır.</Text>)
                                 : (myDirectives.map((item, id) => {
-                                    return <ListButton onPress={() => handleItemPress(item.id, 1)} key={item.id}>{item.title}</ListButton>;
+                                    return <ListButton onPress={() => handleItemPress(item, 1)} key={item.id}>{item.title}</ListButton>;
                                 })
                                 )}
                     </ScrollView>
                 </Box>
-                <Box title={"Üzerimdeki Görevler"} style={globalS.mb8}>
+                {/* <Box title={"Üzerimdeki Görevler"} style={globalS.mb8}>
                     <ScrollView style={globalS.scrollBox} >
                         {instructions2.map((item, id) => {
                             return <ListButton onPress={() => handleItemPress(item.id, 2)} key={item.id} status={item.status}>{item.title}</ListButton>;
                         })}
                     </ScrollView>
-                </Box>
+                </Box> */}
 
                 <View style={[globalS.mAuto, globalS.mt8]}>
                     <Button onPress={onPressHandler}>Denetime Geç</Button>

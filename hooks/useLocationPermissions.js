@@ -16,10 +16,10 @@ export default function useLocationPermissionsHandler() {
             return false;
         }
 
-        const location = await Location.getCurrentPositionAsync({});
+        const location2 = await Location.getCurrentPositionAsync({});
         setLocation({
-            lat: location.coords.latitude,
-            lng: location.coords.longitude
+            lat: location2.coords.latitude,
+            lng: location2.coords.longitude
         });
 
         return true;

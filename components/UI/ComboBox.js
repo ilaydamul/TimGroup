@@ -13,6 +13,7 @@ export default function ComboBox({ data, placeholder, setValue }) {
             Icon={() => {
                 return <MaterialIcons name="arrow-drop-down" size={28} color="gray" />;
             }}
+            // key={data.value}
         />
     )
 }
