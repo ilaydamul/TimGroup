@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Text, View, StyleSheet, Linking, Alert, Pressable } from "react-native";
 import { CameraView, Camera } from "expo-camera";
 import Layout from "../components/Layout/Layout";
@@ -9,6 +9,11 @@ import * as Network from "expo-network";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { Ionicons } from "@expo/vector-icons";
 import useCameraPermissionsHandler from "../hooks/useCameraPermissionsHandler";
+// import { location, requestLocationPermissions } from "../hooks/useLocationPermissions";
+import Toast from "react-native-root-toast";
+import { qrReadWrite } from "../utils/auth";
+import { AuthContext } from "../store/auth-context";
+import requestLocationPermissions from "../hooks/useLocationPermissions";
 
 export default function QR({ route }) {
   const [scanned, setScanned] = useState(false);
@@ -16,21 +21,32 @@ export default function QR({ route }) {
   const [status, setStatus] = useState(0);
   const [isConnected, setIsConnected] = useState(false);
   const [data, setData] = useState(null);
+  const [readData, setReadData] = useState(null);
+
+  const authCtx = useContext(AuthContext);
+  const token = authCtx.token;
+
+  // const [location, requestLocationPermissions] = requestLocationPermissions();
 
   const { params } = route.params;
   // console.log(params);
 
-  const verifyPermissions = useCameraPermissionsHandler();
+  // const verifyPermissions =await useCameraPermissionsHandler();
+  // const verifyLocPermissions =await requestLocationPermissions();
 
   useEffect(() => {
-    (async () => {
-      const hasPermission = await verifyPermissions();
+
+    const permFunc = async () => {
+      const hasPermission = useCameraPermissionsHandler;
       console.log("Has Permission:", hasPermission);
+
+
+      const hasLocPermission = requestLocationPermissions();
+      console.log("Has Permission:", hasLocPermission);
+
       if (!hasPermission) {
         return;
       }
-
-
 
       //Kamera izni
       // const { status2 } = await Camera.requestCameraPermissionsAsync();
@@ -49,7 +65,10 @@ export default function QR({ route }) {
           setStatus(3);
         }
       }
-    })
+    }
+
+    permFunc();
+
   }, []);
 
   const a = async () => {
@@ -59,61 +78,69 @@ export default function QR({ route }) {
 
   a();
 
-  const handleBarCodeScanned = async ({ type, data }) => {
+  const handleBarCodeScanned = async ({ type, qrCode }) => {
     setScanned(true);
-    setScanData(data);
+    setScanData(qrCode);
+
+
+
+    if (!location) {
+      Alert.alert("Konum bilgisi alınamadı", "Konum bilgisi alınmadan QR kodu işleyemezsiniz.");
+      return;
+    }
+
+    console.log(qrCode);
+
+    setReadData({
+      "code": qrCode,
+      "lat": location.lat,
+      "lng": location.lng,
+    });
+
+    console.log(readData);
+
+    // API ISTEKLERI
+    // const response = qrReadWrite(token, data);
+
+
+    Toast.show('Kod okuma başarılı!', {
+      duration: 2000,
+    });
 
     const networkStatus = await Network.getNetworkStateAsync();
     setIsConnected(networkStatus.isConnected);
 
     if (networkStatus.isConnected) {
-      // İnternet bağlantısı varsa
-      await AsyncStorage.setItem("data", data);
       setStatus(1);
     } else {
-      // İnternet bağlantısı yoksa
-      await AsyncStorage.setItem('data', data);
       setStatus(2);
     }
 
+    await AsyncStorage.setItem("data", JSON.stringify(datas));
   };
 
-
-  const openLink = (link) => {
-    Linking.canOpenURL(link).then((supported) => {
-      if (supported) {
-        Linking.openURL(link);
-      } else {
-        Alert.alert("Uyarı", "Bu URL açılamıyor: " + link);
-      }
-    }).catch((err) => { console.error("URL açma hatası: ", err) })
-  }
 
   return (
     <Layout isBack={true} bgDark={true} >
       <View style={[globalS.itemContainer]}>
         <View style={styles.camera2}>
-          <CameraView
+          {/* <CameraView
             onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
             barcodeScannerSettings={{
               barcodeTypes: ["qr", "pdf417"],
             }}
             style={styles.camera}
-          />
+          /> */}
         </View>
-
 
         {scanned && (
           <>
-            <Text style={[globalS.textCenter, styles.linkText]} onPress={() => openLink(scanData)}>Bağlantıya gitmek için tıklayın{'\n'}({scanData})</Text>
             <Pressable style={globalS.textCenter} onPress={() => { setScanned(false); setScanData(null) }}>
               <Ionicons name="reload" size={24} color="black" style={globalS.textCenter} />
               <Text style={[globalS.textCenter, styles.iconText]}>Tekrar Dene</Text>
             </Pressable>
           </>
         )}
-
-
       </View>
     </Layout>
   );
@@ -124,14 +151,8 @@ const styles = StyleSheet.create({
   camera: {
     width: 300,
     height: 300,
-    // borderRadius: 12,
-    // overflow: "hidden",
-    // margin: "auto",
-    // marginBottom: 30
   },
   camera2: {
-    // width: 300,
-    // height: 300,
     borderRadius: 12,
     overflow: "hidden",
     margin: "auto",
@@ -139,8 +160,5 @@ const styles = StyleSheet.create({
   },
   iconText: {
     fontSize: 16
-  },
-  linkText: {
-    marginBottom: 30
   }
 });

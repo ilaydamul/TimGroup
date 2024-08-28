@@ -25,6 +25,10 @@ export default function SecurityHome() {
         </View>
     );
 
+
+   
+
+
     return (
         <Layout bgDark={true} doc={headerDoc}>
             <View style={[globalS.itemContainer]}>

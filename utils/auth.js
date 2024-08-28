@@ -151,3 +151,19 @@ export async function addAudit(token, datas) {
 
     return response.data;
 }
+
+
+
+//QR READ WRITE
+export async function qrReadWrite(token, datas) {
+    const header = {
+        "Cookie": token
+    };
+
+    const response = await axios.get(api + "/api/employee/qr-read-write?resultId=asd&Lat=342&Lng=34", {
+        headers: header
+    });
+
+
+    return response.data;
+}

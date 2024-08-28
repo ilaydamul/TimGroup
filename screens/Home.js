@@ -11,13 +11,11 @@ import { getAuditDirective } from "../utils/auth";
 import LoadingItems from '../components/UI/LoadingItems';
 import { AuthContext } from "../store/auth-context";
 
-const instructions = [{ id: 0, title: "Talimat", status: "Sonlandırıldı" },
-{ id: 1, title: "Talimat 2" },
-{ id: 2, title: "Talimat 3" },
-{ id: 3, title: "Talimat 4" }]
-
-
-const instructions2 = [{ id: 0, title: "Talimat", status: "Sonlandırıldı" }, { id: 1, title: "Talimat 2" }, { id: 2, title: "Talimat 3" }, { id: 3, title: "Talimat 4" }]
+// const instructions = [{ id: 0, title: "Talimat", status: "Sonlandırıldı" },
+// { id: 1, title: "Talimat 2" },
+// { id: 2, title: "Talimat 3" },
+// { id: 3, title: "Talimat 4" }]
+// const instructions2 = [{ id: 0, title: "Talimat", status: "Sonlandırıldı" }, { id: 1, title: "Talimat 2" }, { id: 2, title: "Talimat 3" }, { id: 3, title: "Talimat 4" }]
 
 export default function Home({ navigation }) {
     const authCtx = useContext(AuthContext);
@@ -30,19 +28,11 @@ export default function Home({ navigation }) {
     }
 
     function handleItemPress(item, type) {
-        // if (type == 1) {
-        //     console.log("Talimatlarım");
-        // }
-        // else {
-        //     console.log("Üzerimdeki Görevler");
-        // }
-        // console.log(id);
         navigation.navigate("InstructionDetail", { item: item, type: type })
     }
 
     useEffect(() => {
         //Verilen Talimatları Al
-
         const getDirectives = async () => {
             setLoading(true);
             const response = await getAuditDirective(authCtx.token);
@@ -55,7 +45,6 @@ export default function Home({ navigation }) {
             else {
                 setMyDirectives([]);
             }
-
             setLoading(false);
         }
 
@@ -63,10 +52,6 @@ export default function Home({ navigation }) {
 
 
     }, [])
-
-
-
-    // status={item.status}
 
     return (
         <Layout>
