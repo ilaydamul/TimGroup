@@ -16,6 +16,10 @@ export default function Audit() {
     const [step, setStep] = useState(1);
     const [infos, setInfos] = useState([]);
 
+    const [projects, setProjects] = useState([]);
+    const [projectIdControl, setProjectIdControl] = useState();
+
+
     const updateInfos = (item) => {
         let found = false;
 
@@ -41,7 +45,12 @@ export default function Audit() {
     };
 
     const handlePrevStep = () => {
+        if (step==3) {
+            
+        }
+
         setStep(prevStep => prevStep - 1);
+
     };
 
     const saveHandler = (item) => {
@@ -52,7 +61,7 @@ export default function Audit() {
         <Layout isBack={true}>
             <View style={[globalS.itemContainer]}>
                 {step === 1 && <StepOne onNext={handleNextStep} />}
-                {step === 2 && <StepTwo onNext={handleNextStep} onPrev={handlePrevStep} selectedProject={infos.find(info => info.step === 1)?.item} />}
+                {step === 2 && <StepTwo onNext={handleNextStep} onPrev={handlePrevStep} selectedProject={infos.find(info => info.step === 1)?.item}  idControl={projectIdControl} setIdControl={setProjectIdControl} projects={projects} setProjects={setProjects}/>}
                 {step === 3 && <StepThree project={infos.find(info => info.step === 2)?.item} onNext={handleNextStep} onPrev={handlePrevStep} />}
                 {step === 4 && <StepFour onNext={handleNextStep} onPrev={handlePrevStep} />}
                 {step === 5 && <StepFive onNext={handleNextStep} onPrev={handlePrevStep} project={infos.find(info => info.step === 2)?.item} />}

@@ -9,11 +9,9 @@ import { AuthContext } from '../../store/auth-context';
 import { getProjectDetails, getProjects } from '../../utils/auth';
 import LoadingItems from '../../components/UI/LoadingItems';
 
-export default function StepTwo({ onNext, onPrev, selectedProject }) {
+export default function StepTwo({ onNext, onPrev, selectedProject, idControl, setIdControl, projects, setProjects }) {
     const authCtx = useContext(AuthContext);
     const token = authCtx.token;
-
-    const [projects, setProjects] = useState([]);
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
@@ -22,8 +20,6 @@ export default function StepTwo({ onNext, onPrev, selectedProject }) {
             const projectListItems = await getProjects(token, selectedProject);
 
             if (projectListItems.result == 1) {
-
-
                 if (projectListItems.list.length != 0) {
                     setProjects(projectListItems.list);
                 } else {
@@ -31,19 +27,24 @@ export default function StepTwo({ onNext, onPrev, selectedProject }) {
                 }
             }
 
+            setIdControl(selectedProject);
             setLoading(false);
         }
 
-        projectList();
+
+        if (idControl !== selectedProject) {
+            projectList();
+        }
+        else {
+            setLoading(false);
+        }
 
     }, [selectedProject])
 
     const pressHandler = async (item) => {
         const projectDetails = await getProjectDetails(token, item.id);
-
         onNext(projectDetails.project);
     }
-
 
     return (
         <Box title={"Proje Seçin"}>
