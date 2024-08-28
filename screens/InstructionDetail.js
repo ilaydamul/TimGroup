@@ -13,7 +13,8 @@ export default function InstructionDetail({ route }) {
     const { item, type } = route.params;
     const root = { item, type };
 
-    console.log(item);
+    // console.log(item);
+
     //Type 1 - Verilen Talimatlar, Type 2 - Alınan Talimatlar
 
     useEffect(() => {
@@ -32,7 +33,7 @@ export default function InstructionDetail({ route }) {
     //     status: "Okundu",//Gönderildi, okundu, sonlandırıldı
     //     endNote: "Sonuç..",
     // }
-    
+
 
     function endTask() {
         console.log("Sonlandır");

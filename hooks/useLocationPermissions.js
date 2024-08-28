@@ -18,8 +18,8 @@ export default function useLocationPermissionsHandler() {
 
         const location2 = await Location.getCurrentPositionAsync({});
         setLocation({
-            lat: location2.coords.latitude,
-            lng: location2.coords.longitude
+            lat: location2.coords.latitude.toString(),
+            lng: location2.coords.longitude.toString()
         });
 
         return true;

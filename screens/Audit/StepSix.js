@@ -1,4 +1,4 @@
-import { View, Text, StyleSheet, ToastAndroid, Alert, Platform } from 'react-native';
+import { View, Text, StyleSheet, Alert } from 'react-native';
 import Box from '../../components/UI/Box';
 import Button from '../../components/UI/Button';
 import Input from '../../components/UI/Input';
@@ -10,7 +10,6 @@ import Toast from 'react-native-root-toast';
 import { AuthContext } from '../../store/auth-context';
 import { addAudit, addAuditWarningOrDirective, getPersonelList } from '../../utils/auth';
 import useLocationPermissionsHandler from '../../hooks/useLocationPermissions';
-import axios from 'axios';
 
 const transationType = [{ label: "Sözlü Uyarı", value: "Sözlü Uyarı" }, { label: "Yazılı Uyarı", value: "Yazılı Uyarı" }];
 
@@ -18,7 +17,7 @@ export default function StepSix({ infos }) {
     const authCtx = useContext(AuthContext);
     const token = authCtx.token;
 
-    const [personels, setPersonels] = useState({});
+    const [personels, setPersonels] = useState([]);
     const [location, requestLocationPermissions] = useLocationPermissionsHandler();
 
     const [customerComment, setCustomerComment] = useState("");
@@ -31,15 +30,11 @@ export default function StepSix({ infos }) {
     const [warnedStaff, setWarnedStaff] = useState('');
     const [transitionVal, setTransitionVal] = useState('');
 
-    // const [warnings, setWarnings] = useState([]);
-    // const [directives, setDirectives] = useState([]);
-
     const [checkStatus, setCheckStatus] = useState(0);
 
     const projectId = infos.find(info => info.step === 2)?.item.id;
     const projectPhotoInfos = infos.find(info => info.step === 4)?.item;
     const projectAnswerList = infos.find(info => info.step === 5)?.item;
-
 
     function updateInputValue(inputType, enteredValue) {
         switch (inputType) {
@@ -63,40 +58,19 @@ export default function StepSix({ infos }) {
         }
     }
 
-    const handleGetLocation = async () => {
-        const hasPermission = await requestLocationPermissions();
-        if (!hasPermission) {
-            Alert.alert('Konum izni verilmedi.');
-        }
-    };
-
-    handleGetLocation();
-
-
-
     useEffect(() => {
         const personelList = async () => {
             const personel = await getPersonelList(token);
-
             if (personel.result == 1) {
                 const personelNamesAndIds = personel.list.map((person) => ({
                     value: person.id,
-                    label: person.name
+                    label: person.name,
                 }));
-
-                // console.log(personelNamesAndIds);
-
-
                 setPersonels(personelNamesAndIds);
             }
         }
-
         personelList();
-
-
     }, [])
-
-
 
     async function saveWarning() {
         setCheckStatus(0);
@@ -123,7 +97,6 @@ export default function StepSix({ infos }) {
         }
 
         if (checkStatus == 1) {
-            //Başarılı bildirimi
             Toast.show('Uyarı başarılı bir şekilde eklendi.', {
                 duration: 2000,
             });
@@ -134,7 +107,6 @@ export default function StepSix({ infos }) {
     async function saveDirective() {
         setCheckStatus(0);
         if (!directivedStaff || !directiveDesc || !directiveTitle) {
-            //Boş bırakılamaz uyarısı
             Toast.show('Talimat girdilerini doldurunuz!', {
                 duration: 2000,
             });
@@ -150,10 +122,7 @@ export default function StepSix({ infos }) {
 
         try {
             const addAuditDirective2 = await addAuditWarningOrDirective(token, data, "Directive");
-
             setCheckStatus(addAuditDirective2.result);
-
-
         } catch (error) {
             console.log(error);
             return;
@@ -165,11 +134,18 @@ export default function StepSix({ infos }) {
                 duration: 2000,
             });
         }
-
-
-
-
     }
+
+
+    // const handleGetLocation = async () => {
+    //     const hasPermission = await requestLocationPermissions();
+    //     if (!hasPermission) {
+    //         Alert.alert('Konum izni verilmedi.');
+    //     }
+    // };
+
+    // handleGetLocation();
+
 
     async function submitHandler() {
 
@@ -178,19 +154,12 @@ export default function StepSix({ infos }) {
             return;
         }
 
-
         if (!location) {
             Toast.show('Konum bilgisi alınamadı. Lütfen tekrar deneyin.', {
                 duration: 2000,
             });
             return;
         }
-
-        // const image = {
-        //     uri: Platform.OS === "android" ? projectPhotoInfos.image : projectPhotoInfos.image.replace("file://", ""),
-        //     type: 'image/jpeg',
-        //     name: 'image.jpg',
-        // }
 
         const data = {
             projectId: projectId,
@@ -199,15 +168,23 @@ export default function StepSix({ infos }) {
             picture: projectPhotoInfos.currentImage,
             pictureComment: projectPhotoInfos.comment,
             auditAnswerList: projectAnswerList,
-            lat: location.lat,
-            lng: location.lng
+            lat: "41.11580403170734",
+            lng: "28.996875144292844"
+
         };
 
-        // console.log(data);
+        // lat: location.lat,
+        // lng: location.lng
+
+
+        console.log(data.picture);
 
         try {
             const response = await addAudit(token, data);
             console.log(response);
+            if (response.result == 2) {
+                Toast.show('Alan dışındasınız. Lütfen proje alanına giriniz.', { duration: 2000, });
+            }
 
         } catch (error) {
             console.log(error);
@@ -224,11 +201,15 @@ export default function StepSix({ infos }) {
                 <Input textarea mb={12} onUpdateValue={updateInputValue.bind(this, "customerComment")} />
                 <Text style={globalS.leftTitle}>Notlarınız</Text>
                 <Input textarea mb={12} onUpdateValue={updateInputValue.bind(this, "note")} />
+                <View style={[style.flexRight, globalS.mb12]}>
+                    <Button style={style.smallBtn} onPress={submitHandler}>Kaydet</Button>
+                </View>
                 <Text style={globalS.leftTitle}>Uyarılar</Text>
                 <View>
                     <View style={[globalS.dFlexCenterBetween, globalS.mb12]}>
                         <Text style={style.selectText}>Görevli Personel</Text>
-                        <ComboBox data={personels} setValue={setWarnedStaff} placeholder={"Personel Seçin.."} />
+                        {personels && <ComboBox data={personels} setValue={setWarnedStaff} placeholder={"Personel Seçin.."} />}
+
                     </View>
                     <View style={[globalS.dFlexCenterBetween, globalS.mb12]}>
                         <Text style={globalS.selectText}>İşlem</Text>
@@ -245,7 +226,8 @@ export default function StepSix({ infos }) {
                 <View>
                     <View style={[globalS.dFlexCenterBetween, globalS.mb12]}>
                         <Text style={style.selectText}>Görevli Personel</Text>
-                        <ComboBox data={personels} setValue={setDirectivedStaff} placeholder={"Personel Seçin.."} />
+                        {personels && <ComboBox data={personels} setValue={setDirectivedStaff} placeholder={"Personel Seçin.."} />}
+
                     </View>
                     <Text style={[globalS.selectText, globalS.mb12]}>Başlık</Text>
                     <Input mb={12} grayBg onUpdateValue={updateInputValue.bind(this, "directiveTitle")} />
@@ -257,9 +239,9 @@ export default function StepSix({ infos }) {
                 </View>
             </Box>
 
-            <View style={[globalS.mAuto, globalS.mt16]}>
+            {/* <View style={[globalS.mAuto, globalS.mt16]}>
                 <Button onPress={submitHandler}>Kayıt</Button>
-            </View>
+            </View> */}
         </>
     );
 }

@@ -31,17 +31,22 @@ export default function StepFour({ onNext, onPrev }) {
             allowsEditing: false,
             aspect: [4, 3],
             quality: 1,
+            // base64: true
         });
 
         if (!result.canceled) {
-            console.log(result.assets[0]);
-            
+            // console.log(result.assets[0]);
+
             const image = {
                 uri: Platform.OS === "android" ? result.assets[0].uri : result.assets[0].uri.replace("file://", ""),
                 type: result.assets[0].mimeType,
                 name: result.assets[0].fileName || 'image.jpg',
-                length:  result.assets[0].fileSize
+                length: result.assets[0].fileSize,
+                // base64: result.assets[0].base64
             }
+
+
+
 
             setImage(result.assets[0].uri);
             setCurrentImage(image);

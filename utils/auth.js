@@ -125,45 +125,29 @@ export async function getProjectDetails(token, projectId) {
 
 //POST PROJECT AUDIT
 export async function addAudit(token, datas) {
+    const formData2 = new FormData();
+    formData2.append("projectId", datas.projectId);
+    formData2.append("customerComment", datas.customerComment);
+    formData2.append("picture", datas.picture);
+    formData2.append("pictureComment", datas.pictureComment);
+    formData2.append("lng", datas.lng);
+    formData2.append("lat", datas.lat);
+    formData2.append("note", datas.note);
+
     const header = {
-        "Cookie": token,
-        'Content-Type': 'multipart/form-data'
+        'Cookie': token,
+        'Content-Type': 'multipart/form-data',
     };
 
-    // const data = JSONtoFormData(datas);
-    // console.log(data);
-
-    // console.log(token);
-    
-    const formData = new FormData();
-
-    for (const key in datas) {
-        if (key === 'picture') {
-            if (datas[key]) {
-                formData.append('picture', {
-                    uri: datas[key].uri,
-                    type: datas[key].type,
-                    name: datas[key].name,
-                    length: datas[key].length
-                });
-            }
-        } else {
-            formData.append(key, datas[key]);
-        }
-    }
-
-    // console.log(formData);
-    
-
-    const response = await axios.post(api + "/api/inspector-check", formData, {
-        headers: {
-            ...header,
-            'Accept': 'application/json'
-        },
+    datas.auditAnswerList.forEach((item, index) => {
+        const prefix = `auditAnswerList[${index}]`;
+        formData2.append(`${prefix}.projectQuestionId`, item.projectQuestionId);
+        formData2.append(`${prefix}.status`, item.status);
     });
 
+    const response = await axios.post(api + "/api/inspector-check", formData2, {
+        headers: header
+    });
 
     return response.data;
 }
-
-

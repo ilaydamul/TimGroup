@@ -4,16 +4,16 @@ import { StyleSheet } from 'react-native';
 import { Colors } from '../../constants/colors';
 
 export default function ComboBox({ data, placeholder, setValue }) {
+
     return (
         <RNPickerSelect
             onValueChange={(value) => setValue(value)}
-            items={data}
+            items={data.map(item => ({ ...item, key: item.value }))}
             placeholder={{ label: placeholder, value: null }}
             style={pickerSelectStyles}
             Icon={() => {
                 return <MaterialIcons name="arrow-drop-down" size={28} color="gray" />;
             }}
-            // key={data.value}
         />
     )
 }
