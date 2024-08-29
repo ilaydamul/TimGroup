@@ -182,7 +182,10 @@ export default function StepSix({ infos }) {
         try {
             const response = await addAudit(token, data);
             console.log(response);
-            if (response.result == 2) {
+            if (response.result == 1) {
+                Toast.show('Denetim kaydı başarıyla eklendi.', { duration: 2000, });
+            }
+            else if (response.result == 2) {
                 Toast.show('Alan dışındasınız. Lütfen proje alanına giriniz.', { duration: 2000, });
             }
 

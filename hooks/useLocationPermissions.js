@@ -16,12 +16,12 @@ export default function useLocationPermissionsHandler() {
             return false;
         }
 
-        const location2 = await Location.getCurrentPositionAsync({});
+        const locationResult = await Location.getCurrentPositionAsync({});
         setLocation({
-            lat: location2.coords.latitude.toString(),
-            lng: location2.coords.longitude.toString()
+            lat: locationResult.coords.latitude.toString(),
+            lng: locationResult.coords.longitude.toString(),
         });
-
+        
         return true;
     }
 

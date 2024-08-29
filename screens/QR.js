@@ -13,7 +13,9 @@ import useCameraPermissionsHandler from "../hooks/useCameraPermissionsHandler";
 import Toast from "react-native-root-toast";
 import { qrReadWrite } from "../utils/auth";
 import { AuthContext } from "../store/auth-context";
-import requestLocationPermissions from "../hooks/useLocationPermissions";
+import useLocationPermissionsHandler from "../hooks/useLocationPermissions";
+import LoadingItems from "../components/UI/LoadingItems"
+
 
 export default function QR({ route }) {
   const [scanned, setScanned] = useState(false);
@@ -25,10 +27,12 @@ export default function QR({ route }) {
 
   const authCtx = useContext(AuthContext);
   const token = authCtx.token;
-
-  // const [location, requestLocationPermissions] = requestLocationPermissions();
-
   const { params } = route.params;
+  const [location, requestLocationPermissions] = useLocationPermissionsHandler();
+  const verifyPermissions = useCameraPermissionsHandler();
+
+  const [checkLocation, setCheckLocation] = useState(false);
+
   // console.log(params);
 
   // const verifyPermissions =await useCameraPermissionsHandler();
@@ -37,16 +41,19 @@ export default function QR({ route }) {
   useEffect(() => {
 
     const permFunc = async () => {
-      const hasPermission = useCameraPermissionsHandler;
-      console.log("Has Permission:", hasPermission);
+
+      const hasPermission = await verifyPermissions();
+      const hasLocPermission = await requestLocationPermissions();
+
+      console.log("Has Camera Permission:", hasPermission);
+      console.log("Has Loc Permission:", hasLocPermission);
 
 
-      const hasLocPermission = requestLocationPermissions();
-      console.log("Has Permission:", hasLocPermission);
-
-      if (!hasPermission) {
+      if (!hasPermission || !hasLocPermission) {
         return;
       }
+
+      setCheckLocation(true);
 
       //Kamera izni
       // const { status2 } = await Camera.requestCameraPermissionsAsync();
@@ -67,7 +74,9 @@ export default function QR({ route }) {
       }
     }
 
-    permFunc();
+    permFunc().catch((error) => {
+      console.error("Permission Error:", error);
+    });
 
   }, []);
 
@@ -78,45 +87,57 @@ export default function QR({ route }) {
 
   a();
 
-  const handleBarCodeScanned = async ({ type, qrCode }) => {
+  const handleBarCodeScanned = async ({ type, data }) => {
+    // if (!qrCode) {
+    //   console.error("QR Code is undefined");
+    //   return;
+    // }
+
     setScanned(true);
-    setScanData(qrCode);
+    setScanData(data);
 
+    console.log(data);
 
-
-    if (!location) {
-      Alert.alert("Konum bilgisi alınamadı", "Konum bilgisi alınmadan QR kodu işleyemezsiniz.");
-      return;
-    }
-
-    console.log(qrCode);
 
     setReadData({
-      "code": qrCode,
+      "code": data,
       "lat": location.lat,
       "lng": location.lng,
     });
 
-    console.log(readData);
-
-    // API ISTEKLERI
-    // const response = qrReadWrite(token, data);
+  
 
 
-    Toast.show('Kod okuma başarılı!', {
-      duration: 2000,
-    });
+
 
     const networkStatus = await Network.getNetworkStateAsync();
     setIsConnected(networkStatus.isConnected);
 
+    // API ISTEKLERI
+    try {
+      const response = qrReadWrite(token, readData);
+      console.log(response);
+
+    } catch (error) {
+      console.log(error);
+
+    }
+
+    Toast.show('Kod okuma başarılı! ', {
+      duration: 2000,
+    });
+
+  
+
     if (networkStatus.isConnected) {
       setStatus(1);
     } else {
+
+      await AsyncStorage.setItem("data", JSON.stringify(readData));
       setStatus(2);
     }
 
-    await AsyncStorage.setItem("data", JSON.stringify(datas));
+
   };
 
 
@@ -124,13 +145,19 @@ export default function QR({ route }) {
     <Layout isBack={true} bgDark={true} >
       <View style={[globalS.itemContainer]}>
         <View style={styles.camera2}>
-          {/* <CameraView
-            onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
-            barcodeScannerSettings={{
-              barcodeTypes: ["qr", "pdf417"],
-            }}
-            style={styles.camera}
-          /> */}
+          {
+            checkLocation ?
+              <CameraView
+                onBarcodeScanned={scanned ? undefined : handleBarCodeScanned}
+                barcodeScannerSettings={{
+                  barcodeTypes: ["qr", "pdf417"],
+                }}
+                style={styles.camera}
+              />
+              :
+              <LoadingItems />
+          }
+
         </View>
 
         {scanned && (

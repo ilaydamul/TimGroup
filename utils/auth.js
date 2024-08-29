@@ -16,6 +16,7 @@ export async function login(email, password, role) {
     formData.append('username', email);
     formData.append('password', password);
 
+
     const response = await axios.post((api + apiDr), formData);
     var result = response;
 
@@ -160,7 +161,14 @@ export async function qrReadWrite(token, datas) {
         "Cookie": token
     };
 
-    const response = await axios.get(api + "/api/employee/qr-read-write?resultId=asd&Lat=342&Lng=34", {
+    // console.log(token);
+    // console.log(datas.code);
+    // console.log(datas.lat);
+    // console.log(datas.lng);
+    
+
+    const response = await axios.get(api + "/api/employee/qr-read-write?resultId=" + 
+        datas.code + "&lat=" + datas.lat + "&lng=" + datas.lng, {
         headers: header
     });
 
