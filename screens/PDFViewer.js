@@ -11,7 +11,7 @@ export default function PDFViewer({ pdf }) {
         <Layout bgDark={true} isBack={true}>
             <View style={[globalS.itemContainer]}>
                 <WebView style={styles.container} source={{ uri: "https://digimondi.com/" }} />
-                <Text>PDF Viewer</Text>
+                {/* <Text>PDF Viewer</Text> */}
             </View>
         </Layout>
     );

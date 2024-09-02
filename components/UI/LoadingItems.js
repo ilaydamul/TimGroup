@@ -18,8 +18,8 @@ const styles = StyleSheet.create({
     alignItems: "center",
     padding: 32,
   },
-//   message: {
-//     fontSize: 16,
-//     marginBottom: 12,
-//   },
+  //   message: {
+  //     fontSize: 16,
+  //     marginBottom: 12,
+  //   },
 });
