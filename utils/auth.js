@@ -165,10 +165,32 @@ export async function qrReadWrite(token, datas) {
     // console.log(datas.code);
     // console.log(datas.lat);
     // console.log(datas.lng);
-    
 
-    const response = await axios.get(api + "/api/employee/qr-read-write?resultId=" + 
+
+    const response = await axios.get(api + "/api/employee/qr-read-write?resultId=" +
         datas.code + "&lat=" + datas.lat + "&lng=" + datas.lng, {
+        headers: header
+    });
+
+
+    return response.data;
+}
+
+
+
+//LOCATION CONTROL
+export async function locationCheck(token, datas) {
+    const header = {
+        "Cookie": token
+    };
+
+
+    // console.log(datas.code);
+    // console.log(datas.lat);
+    // console.log(datas.lng);
+    F
+
+    const response = await axios.post(api + "/api/check-location", datas, {
         headers: header
     });
 
