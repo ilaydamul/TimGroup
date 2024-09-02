@@ -198,12 +198,31 @@ export async function locationCheck(token, datas) {
 
 
 //GET DOCUMENTS
-export async function getDocuments(token, id) {
+export async function getDocuments(token) {
     const header = {
         "Cookie": token
     };
 
-    const response = await axios.get(api + "/api/get-employee", {
+    const response = await axios.get(api + "/api/get-employee-files", {
+        headers: header
+    });
+
+
+    return response.data;
+}
+
+
+//UPDATE DOCUMENT STATUS
+export async function updateFileStatus(token, data) {
+    const header = {
+        "Cookie": token
+    };
+
+    console.log(token);
+    console.log(data);
+    
+
+    const response = await axios.post(api + "/api/update-employee-status", data, {
         headers: header
     });
 

@@ -7,7 +7,7 @@ export const AuthContext = createContext({
     isSecurity: true,
     error: null,
     errorText: "",
-    authenticate: (token, role) => { },
+    authenticate: (token, role, name) => { },
     logout: () => { },
     loginControl: () => { },
 });
@@ -18,12 +18,13 @@ export default function AuthContextProvider({ children }) {
     const [error, setError] = useState(false);
     const [errorText, setErrorText] = useState("");
 
-    
 
-    async function authenticate(token, role) {
+
+    async function authenticate(token, role, name) {
         setAuthToken(token);
         await AsyncStorage.setItem("token", token);
         await AsyncStorage.setItem("role", role);
+        await AsyncStorage.setItem("name", name);
 
         if (role == "audit") {
             setIsSecurity(false);
