@@ -18,6 +18,7 @@ import Menu from './screens/Menu';
 import Documents from './screens/Documents';
 import PDFViewer from './screens/PDFViewer';
 import InstructionDetail from './screens/InstructionDetail';
+import { DocumentProvider } from './store/document-context';
 
 
 const Stack = createNativeStackNavigator();
@@ -51,12 +52,14 @@ function SecurityAuth() {
   return (
     <>
       <StatusBar style="light" />
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name='SecurityHome' component={SecurityHome} />
-        <Stack.Screen name='Documents' component={Documents} />
-        <Stack.Screen name='QR' component={QR} />
-        <Stack.Screen name='PDFViewer' component={PDFViewer} />
-      </Stack.Navigator>
+      <DocumentProvider>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name='SecurityHome' component={SecurityHome} />
+          <Stack.Screen name='Documents' component={Documents} />
+          <Stack.Screen name='QR' component={QR} />
+          <Stack.Screen name='PDFViewer' component={PDFViewer} />
+        </Stack.Navigator>
+      </DocumentProvider>
     </>
   )
 }

@@ -218,14 +218,9 @@ export async function updateFileStatus(token, data) {
         "Cookie": token
     };
 
-    console.log(token);
-    console.log(data);
-    
-
     const response = await axios.post(api + "/api/update-employee-status", data, {
         headers: header
     });
-
 
     return response.data;
 }

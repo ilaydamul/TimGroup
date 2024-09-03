@@ -7,6 +7,7 @@ import { useContext, useEffect, useState } from "react";
 import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../store/auth-context";
 import LoadingItems from "../components/UI/LoadingItems";
+import { DocumentContext } from "../store/document-context";
 
 
 export default Documents = ({ route }) => {
@@ -14,7 +15,8 @@ export default Documents = ({ route }) => {
     // const [documents, setDocuments] = useState([]);
     const [loading, setLoading] = useState(true);
     const authCtx = useContext(AuthContext);
-    const { documents } = route.params || {};
+    // const { documents, setDocuments } = route.params || {};
+    const { documents, setDocuments } = useContext(DocumentContext);
 
     // const routeItems = route.params;
 
@@ -42,7 +44,7 @@ export default Documents = ({ route }) => {
 
 
     const handleNextStep = (selectedItem) => {
-        navigation.navigate("PDFViewer", { item: selectedItem, token: authCtx.token });
+        navigation.navigate("PDFViewer", { item: selectedItem, token: authCtx.token});
     }
 
     return (

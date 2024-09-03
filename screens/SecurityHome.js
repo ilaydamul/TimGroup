@@ -1,8 +1,8 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Text, View, TouchableOpacity, Image, StyleSheet, Dimensions, Pressable } from "react-native";
+import { Text, View, Image, StyleSheet, Pressable } from "react-native";
 import Layout from "../components/Layout/Layout";
 import { globalS } from "../constants/styles";
-import { FontAwesome5, FontAwesome6, MaterialCommunityIcons, Octicons, SimpleLineIcons } from "@expo/vector-icons";
+import { FontAwesome6, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Colors } from "../constants/colors";
 import Button from "../components/UI/Button";
 import { AuthContext } from "../store/auth-context";
@@ -10,63 +10,64 @@ import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { getDocuments } from "../utils/auth";
 import LoadingItems from "../components/UI/LoadingItems";
-
-
+import Toast from "react-native-root-toast";
+import { DocumentContext } from "../store/document-context";
 
 export default function SecurityHome() {
     const navigation = useNavigation();
     const [name, setName] = useState("");
-
-    const [documents, setDocuments] = useState([]);
     const [loading, setLoading] = useState(false);
+    const [hasWarning, setHasWarning] = useState(false);
+    const { documents, setDocuments } = useContext(DocumentContext);
     const authCtx = useContext(AuthContext);
 
-    const [hasWarning, setHasWarning] = useState(false);
+
+    useEffect(() => {
+        const initialize = async () => {
+            const storedName = await AsyncStorage.getItem("name");
+            setName(storedName);
+
+            await fetchDocuments();
+        };
+
+        initialize();
+    }, []);
+
+    useEffect(() => {
+        if (documents.length > 0) {
+            const hasFalseStatus = documents.some(doc => !doc.status);
+            setHasWarning(hasFalseStatus);
+        }
+    }, [documents]);
+
+    const fetchDocuments = async () => {
+        setLoading(true);
+        try {
+            const response = await getDocuments(authCtx.token);
+            if (response.result === 1) {
+                setDocuments(response.files);
+            }
+        } catch (error) {
+            console.error("Belgeler Çekim Hatası: ", error);
+        } finally {
+            setLoading(false);
+        }
+    };
 
 
     const goToLink = (link, stuff) => {
-        // console.log("stuff");
-        // console.log(stuff);
-
-        navigation.navigate(link, (stuff && { stuff }));
+        if (link == "QR") {
+            if (hasWarning) {
+                Toast.show('Özlük evraklarını okuyunuz! ', {
+                    duration: 1000,
+                });
+            }
+            else {
+                navigation.navigate(link, (stuff && { stuff }));
+            }
+        }
     }
 
-    useEffect(() => {
-        const getName = async () => {
-            const getName = await AsyncStorage.getItem("name");
-            setName(getName);
-        }
-
-        getName();
-
-
-        const getDocumentItems = async () => {
-
-            try {
-                const response = await getDocuments(authCtx.token);
-                if (response.result == 1) {
-                    setDocuments(response.files);
-                    setLoading(false);
-                    // console.log(documents);
-
-                    const hasFalseStatus = response.files.some(doc => !doc.status);
-                    setHasWarning(hasFalseStatus);
-
-                }
-
-
-
-            } catch (error) {
-                console.log("Belgeler Çekim Hatası: " + error);
-            }
-
-        }
-
-        getDocumentItems();
-
-
-
-    }, [])
 
     const headerDoc = (
         <View style={[style.profileContainer]}>
@@ -78,14 +79,9 @@ export default function SecurityHome() {
                         <Text style={style.profileText}>{name}</Text>
                     </>
                 }
-
             </View>
         </View>
     );
-
-
-
-
 
     return (
         <Layout bgDark={true} doc={headerDoc}>
@@ -93,15 +89,15 @@ export default function SecurityHome() {
 
                 <Text style={globalS.title}>Ne Yapmak İstersin?</Text>
                 <View style={style.menu}>
-                    <Pressable style={style.menuItem} disabled={hasWarning} onPress={() => goToLink("QR", "login")}>
+                    <Pressable style={style.menuItem} onPress={() => goToLink("QR", "login")}>
                         <MaterialCommunityIcons name="login" size={24} color="white" />
                         <Text style={style.menuTitle}>Giriş</Text>
                     </Pressable>
-                    <Pressable style={style.menuItem} disabled={hasWarning} onPress={() => goToLink("QR", "logout")}>
+                    <Pressable style={style.menuItem} onPress={() => goToLink("QR", "logout")}>
                         <MaterialCommunityIcons name="logout" size={24} color="white" />
                         <Text style={style.menuTitle}>Çıkış</Text>
                     </Pressable>
-                    <Pressable style={style.menuItem} disabled={hasWarning} onPress={() => goToLink("QR", "patrol")}>
+                    <Pressable style={style.menuItem} onPress={() => goToLink("QR", "patrol")}>
                         <MaterialCommunityIcons name="security" size={24} color="white" />
                         <Text style={style.menuTitle}>Devriye</Text>
                     </Pressable>
@@ -118,7 +114,7 @@ export default function SecurityHome() {
                             <Button
                                 style={style.docBtn}
                                 textStyle={style.docBtnText}
-                                onPress={() => navigation.navigate("Documents", { documents: documents })}
+                                onPress={() => navigation.navigate("Documents")}
                             >
                                 İncelemeye Başla
                             </Button>
@@ -130,8 +126,6 @@ export default function SecurityHome() {
                         )}
                     </View>
                 )}
-
-
             </View>
         </Layout>
     );
@@ -139,8 +133,6 @@ export default function SecurityHome() {
 
 const style = StyleSheet.create({
     profileContainer: {
-        // position: "relative",
-        // top: -70
         paddingBottom: 30,
         paddingTop: 20
     },
