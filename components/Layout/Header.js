@@ -5,6 +5,7 @@ import { Colors } from "../../constants/colors";
 import { useNavigation } from "@react-navigation/native";
 import { useContext } from "react";
 import { AuthContext } from "../../store/auth-context";
+import LoadingItems from "../UI/LoadingItems";
 
 export default function Header({ isBack, bgDark, doc }) {
     const authCtx = useContext(AuthContext);
@@ -35,21 +36,38 @@ export default function Header({ isBack, bgDark, doc }) {
     }
     // { backgroundColor: headerBackgroundColor }
     return (
-        <SafeAreaView style={[style.safeArea, bgDark && style.bgDark]}>
-            <Animated.View style={[style.headerContainer, globalS.dFlexCenterBetween]}>
-                <NavButton />
-                <Image source={require("./../../assets/images/logo.png")} style={style.logo} />
-                <MaterialCommunityIcons name="logout" size={24} color={bgDark ? "white" : "black"} onPress={logoutHandler} />
-                {/* <FontAwesome5 name="user-alt" size={24} color="black" onPress={goProfile} /> */}
-            </Animated.View>
-            {
-                doc && doc
-            }
-        </SafeAreaView>
+        <>
+            <SafeAreaView style={[style.safeArea, bgDark && style.bgDark]}>
+                <Animated.View style={[style.headerContainer, globalS.dFlexCenterBetween]}>
+                    <NavButton />
+                    <Image source={require("./../../assets/images/logo.png")} style={style.logo} />
+                    <MaterialCommunityIcons name="logout" size={24} color={bgDark ? "white" : "black"} onPress={logoutHandler} />
+                    {/* <FontAwesome5 name="user-alt" size={24} color="black" onPress={goProfile} /> */}
+                </Animated.View>
+                {
+                    doc && doc
+                }
+
+            </SafeAreaView>
+            {/* {
+                isLoading == true && <View style={style.full}>
+                    <LoadingItems />
+                </View>
+            } */}
+        </>
     )
 }
 
 const style = StyleSheet.create({
+    // full: {
+    //     position: "absolute",
+    //     width: "100%",
+    //     height: "100%",
+    //     zIndex: 5,
+    //     top: 0,
+    //     left: 0,
+    //     backgroundColor: Colors.whiteOp
+    // },
     safeArea: {
         // backgroundColor: Colors.softBlack
     },

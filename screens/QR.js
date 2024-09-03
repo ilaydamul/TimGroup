@@ -19,59 +19,46 @@ import LoadingItems from "../components/UI/LoadingItems"
 
 export default function QR({ route }) {
   const [scanned, setScanned] = useState(false);
-  const [scanData, setScanData] = useState(null);
   const [status, setStatus] = useState(0);
   const [isConnected, setIsConnected] = useState(false);
-  const [data, setData] = useState(null);
+  const [data2, setData2] = useState(null);
   const [readData, setReadData] = useState(null);
 
   const authCtx = useContext(AuthContext);
   const token = authCtx.token;
+
   const { params } = route.params;
+
   const [location, requestLocationPermissions] = useLocationPermissionsHandler();
   const verifyPermissions = useCameraPermissionsHandler();
 
   const [checkLocation, setCheckLocation] = useState(false);
 
-  // console.log(params);
-
-  // const verifyPermissions =await useCameraPermissionsHandler();
-  // const verifyLocPermissions =await requestLocationPermissions();
-
   useEffect(() => {
 
     const permFunc = async () => {
-
       const hasPermission = await verifyPermissions();
       const hasLocPermission = await requestLocationPermissions();
-
-      console.log("Has Camera Permission:", hasPermission);
-      console.log("Has Loc Permission:", hasLocPermission);
-
-
       if (!hasPermission || !hasLocPermission) {
         return;
       }
 
       setCheckLocation(true);
 
-      //Kamera izni
-      // const { status2 } = await Camera.requestCameraPermissionsAsync();
-      // console.log(status2);
-      // setHasPermission(status2 === "granted");
-      //Ağ bağlantı kontrolu
-
       const networkStatus = await Network.getNetworkStateAsync();
       setIsConnected(networkStatus.isConnected);
 
-      if (networkStatus.isConnected) {
+      if (isConnected) {
         const storedData = await AsyncStorage.getItem("data");
         if (storedData) {
-          setData(storedData);
+          qrFunc();
+
+          setData2(storedData);
           await AsyncStorage.removeItem("data");
           setStatus(3);
         }
       }
+
     }
 
     permFunc().catch((error) => {
@@ -88,58 +75,74 @@ export default function QR({ route }) {
   a();
 
   const handleBarCodeScanned = async ({ type, data }) => {
-    // if (!qrCode) {
-    //   console.error("QR Code is undefined");
-    //   return;
-    // }
+    if (!scanned) {
 
-    setScanned(true);
-    setScanData(data);
+      if (!data) {
+        Toast.show('Tekrar deneyin.', {
+          duration: 1000,
+        });
+      }
 
-    console.log(data);
+      const rr = {
+        "code": data,
+        "lat": location.lat,
+        "lng": location.lng,
+      };
 
+      setReadData(rr);
+      // console.log(readData);
 
-    setReadData({
-      "code": data,
-      "lat": location.lat,
-      "lng": location.lng,
-    });
+      const networkStatus = await Network.getNetworkStateAsync();
+      setIsConnected(networkStatus.isConnected);
 
-  
+      qrFunc();
 
+      setScanned(true);
+    }
+  };
 
-
-
-    const networkStatus = await Network.getNetworkStateAsync();
-    setIsConnected(networkStatus.isConnected);
-
+  const qrFunc = async () => {
     // API ISTEKLERI
     try {
-      const response = qrReadWrite(token, readData);
+      const response = await qrReadWrite(token, readData);
       console.log(response);
+
+      if (response.result == 1) {
+
+        if (isConnected) {
+
+          Toast.show('Kod okuma başarılı!', {
+            duration: 1000,
+          });
+          setStatus(1);
+
+        } else {
+          Toast.show('Verileriniz kaydedildi, bağlandıktan sonra işlenecektir.', {
+            duration: 1000,
+          });
+
+          await AsyncStorage.setItem("data", JSON.stringify(readData));
+          setStatus(2);
+        }
+
+
+      }
 
     } catch (error) {
       console.log(error);
-
+      Toast.show('Tekrar deneyiniz.', {
+        duration: 1000,
+      });
     }
-
-    Toast.show('Kod okuma başarılı! ', {
-      duration: 2000,
-    });
-
-  
-
-    if (networkStatus.isConnected) {
-      setStatus(1);
-    } else {
-
-      await AsyncStorage.setItem("data", JSON.stringify(readData));
-      setStatus(2);
-    }
+  }
 
 
-  };
-
+  const refreshScan = () => {
+    // setTimeout(() => {
+    // console.log("refresh");
+    setScanned(false);
+    // }, 500);
+  }
 
   return (
     <Layout isBack={true} bgDark={true} >
@@ -162,12 +165,13 @@ export default function QR({ route }) {
 
         {scanned && (
           <>
-            <Pressable style={globalS.textCenter} onPress={() => { setScanned(false); setScanData(null) }}>
+            <Pressable style={globalS.textCenter} onPress={refreshScan}>
               <Ionicons name="reload" size={24} color="black" style={globalS.textCenter} />
               <Text style={[globalS.textCenter, styles.iconText]}>Tekrar Dene</Text>
             </Pressable>
           </>
         )}
+
       </View>
     </Layout>
   );

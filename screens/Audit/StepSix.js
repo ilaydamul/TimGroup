@@ -9,19 +9,24 @@ import ComboBox from '../../components/UI/ComboBox';
 import Toast from 'react-native-root-toast';
 import { AuthContext } from '../../store/auth-context';
 import { addAudit, addAuditWarningOrDirective, getPersonelList } from '../../utils/auth';
-import useLocationPermissionsHandler from '../../hooks/useLocationPermissions';
+import { LocationContext } from '../../store/location-context';
+import LoadingItems from '../../components/UI/LoadingItems';
+// import useLocationPermissionsHandler from '../../hooks/useLocationPermissions';
 
 const transationType = [{ label: "Sözlü Uyarı", value: "Sözlü Uyarı" }, { label: "Yazılı Uyarı", value: "Yazılı Uyarı" }];
 
 export default function StepSix({ infos }) {
     const authCtx = useContext(AuthContext);
+    const { getLocation } = useContext(LocationContext);
     const token = authCtx.token;
 
     const [personels, setPersonels] = useState([]);
-    const [location, requestLocationPermissions] = useLocationPermissionsHandler();
+    // const [location, requestLocationPermissions] = useLocationPermissionsHandler();
+    // console.log(getLocation);
 
     const [customerComment, setCustomerComment] = useState("");
     const [note, setNote] = useState("");
+    const [isLoading, setIsLoading] = useState(false);
 
     const [warningDesc, setWarningDesc] = useState("");
     const [directiveTitle, setDirectiveTitle] = useState("");
@@ -87,10 +92,14 @@ export default function StepSix({ infos }) {
             comment: warningDesc,
             status: transitionVal,
         }
-
+        setIsLoading(true);
         try {
             const addAuditWarning2 = await addAuditWarningOrDirective(token, data, "Warn");
             setCheckStatus(addAuditWarning2.result);
+            console.log(addAuditWarning2);
+            console.log(checkStatus);
+
+
         } catch (error) {
             console.log(error);
             return;
@@ -100,8 +109,14 @@ export default function StepSix({ infos }) {
             Toast.show('Uyarı başarılı bir şekilde eklendi.', {
                 duration: 2000,
             });
+        } else {
+            Toast.show('Uyarı eklerken bir sorun oluştu.', {
+                duration: 2000,
+            });
         }
 
+
+        setIsLoading(false);
     }
 
     async function saveDirective() {
@@ -119,7 +134,7 @@ export default function StepSix({ infos }) {
             title: directiveTitle,
             directive: directiveDesc,
         }
-
+        setIsLoading(true);
         try {
             const addAuditDirective2 = await addAuditWarningOrDirective(token, data, "Directive");
             setCheckStatus(addAuditDirective2.result);
@@ -133,34 +148,18 @@ export default function StepSix({ infos }) {
             Toast.show('Talimat başarılı bir şekilde eklendi.', {
                 duration: 2000,
             });
+        } else {
+            Toast.show('Talimat eklerken bir sorun oluştu.', {
+                duration: 2000,
+            });
         }
+
+
+        setIsLoading(false);
     }
 
 
-    // const handleGetLocation = async () => {
-    //     const hasPermission = await requestLocationPermissions();
-    //     if (!hasPermission) {
-    //         Alert.alert('Konum izni verilmedi.');
-    //     }
-    // };
-
-    // handleGetLocation();
-
-
     async function submitHandler() {
-
-        const hasPermission = await requestLocationPermissions();
-        if (!hasPermission) {
-            return;
-        }
-
-        if (!location) {
-            Toast.show('Konum bilgisi alınamadı. Lütfen tekrar deneyin.', {
-                duration: 2000,
-            });
-            return;
-        }
-
         const data = {
             projectId: projectId,
             customerComment: customerComment,
@@ -168,20 +167,14 @@ export default function StepSix({ infos }) {
             picture: projectPhotoInfos.currentImage,
             pictureComment: projectPhotoInfos.comment,
             auditAnswerList: projectAnswerList,
-            lat: "41.11580403170734",
-            lng: "28.996875144292844"
-
+            lat: getLocation.lat,
+            lng: getLocation.lng
         };
-
-        // lat: location.lat,
-        // lng: location.lng
-
-
-        console.log(data.picture);
-
+        setIsLoading(true);
         try {
             const response = await addAudit(token, data);
-            console.log(response);
+            // console.log(response);
+
             if (response.result == 1) {
                 Toast.show('Denetim kaydı başarıyla eklendi.', { duration: 2000, });
             }
@@ -189,12 +182,13 @@ export default function StepSix({ infos }) {
                 Toast.show('Alan dışındasınız. Lütfen proje alanına giriniz.', { duration: 2000, });
             }
 
+            setIsLoading(false);
+
         } catch (error) {
             console.log(error);
-
         }
 
-        // onSubmit(data);
+        setIsLoading(false);
     }
 
     return (
@@ -241,6 +235,13 @@ export default function StepSix({ infos }) {
                     </View>
                 </View>
             </Box>
+            {
+                isLoading == true &&
+                <View style={style.full}>
+                    <LoadingItems />
+                </View>
+            }
+
 
             {/* <View style={[globalS.mAuto, globalS.mt16]}>
                 <Button onPress={submitHandler}>Kayıt</Button>
@@ -250,6 +251,15 @@ export default function StepSix({ infos }) {
 }
 
 const style = StyleSheet.create({
+    full: {
+        position: "absolute",
+        width: "100%",
+        height: "100%",
+        zIndex: 5,
+        top: 0,
+        left: 0,
+        backgroundColor: Colors.whiteOp
+    },
     picker: {
         width: 150,
         backgroundColor: Colors.gray400,

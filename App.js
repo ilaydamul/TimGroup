@@ -19,6 +19,7 @@ import Documents from './screens/Documents';
 import PDFViewer from './screens/PDFViewer';
 import InstructionDetail from './screens/InstructionDetail';
 import { DocumentProvider } from './store/document-context';
+import { LocationProvider } from './store/location-context';
 
 
 const Stack = createNativeStackNavigator();
@@ -39,11 +40,13 @@ function SupervizorAuth() {
   return (
     <>
       <StatusBar style="auto" />
-      <Stack.Navigator screenOptions={{ headerShown: false }}>
-        <Stack.Screen name='Home' component={Home} />
-        <Stack.Screen name='Audit' component={Audit} />
-        <Stack.Screen name='InstructionDetail' component={InstructionDetail} />
-      </Stack.Navigator>
+      <LocationProvider>
+        <Stack.Navigator screenOptions={{ headerShown: false }}>
+          <Stack.Screen name='Home' component={Home} />
+          <Stack.Screen name='Audit' component={Audit} />
+          <Stack.Screen name='InstructionDetail' component={InstructionDetail} />
+        </Stack.Navigator>
+      </LocationProvider>
     </>
   )
 }
