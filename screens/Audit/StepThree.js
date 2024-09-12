@@ -37,6 +37,7 @@ export default function StepThree({ project, onNext, onPrev }) {
         };
 
         locationHandler();
+
     }, [])
 
     async function onPressHandler() {

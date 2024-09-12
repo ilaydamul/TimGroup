@@ -242,7 +242,6 @@ export default function StepSix({ infos }) {
                 </View>
             }
 
-
             {/* <View style={[globalS.mAuto, globalS.mt16]}>
                 <Button onPress={submitHandler}>Kayıt</Button>
             </View> */}
