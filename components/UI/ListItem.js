@@ -1,20 +1,17 @@
-
 import { View, Text, StyleSheet, Switch } from 'react-native';
 import { Colors } from '../../constants/colors';
 import { useState } from 'react';
 
 export default function ListItem({ title, content, noBorder, listContentBg, style, contentStyle, isRadio, onToggle, radioValue, column }) {
     const [isEnabled, setIsEnabled] = useState(false);
-    // const toggleSwitch = () => {
-    //     setIsEnabled(previousState => !previousState)
-    //     radioValue = isEnabled;
-    //     console.log(!isEnabled);
-    // };
+    
+    // content'in array olup olmadığını kontrol et
+    const isArrayContent = Array.isArray(content);
 
     return (
-        <View style={[styles.listItem, noBorder && styles.noBorder, column && styles.column, style,]}>
+        <View style={[styles.listItem, noBorder && styles.noBorder, column && styles.column, style]}>
             <Text style={[styles.listTitle, { fontSize: isRadio ? 14 : 16 }]}>{title}</Text>
-            {isRadio ?
+            {isRadio ? (
                 <Switch
                     trackColor={{ false: '#FBE6E7', true: "#DCF9DC" }}
                     thumbColor={radioValue ? '#17D817' : '#D92126'}
@@ -22,13 +19,26 @@ export default function ListItem({ title, content, noBorder, listContentBg, styl
                     onValueChange={onToggle}
                     value={radioValue}
                 />
-                :
-                <Text style={[styles.listContent, listContentBg && styles.listContentBg, column && styles.columnText, contentStyle]}>{content}</Text>
-            }
-
+            ) : (
+                // content bir array ise her bir elemanı listele
+                isArrayContent ? (
+                    <View style={[listContentBg && styles.listContentBg]}>
+                        {content.map((item, index) => (
+                            <Text key={index} style={[styles.listContent, column && styles.columnText, contentStyle]}>
+                                {item}
+                            </Text>
+                        ))}
+                    </View>
+                ) : (
+                    // content array değilse, normal text olarak göster
+                    <Text style={[styles.listContent, listContentBg && styles.listContentBg, column && styles.columnText, contentStyle]}>
+                        {content}
+                    </Text>
+                )
+            )}
         </View>
     );
-};
+}
 
 const styles = StyleSheet.create({
     listItem: {
@@ -58,13 +68,12 @@ const styles = StyleSheet.create({
         textAlign: "right"
     },
     listContentBg: {
-        backgroundColor: Colors.gray400,
-        borderRadius: 6,
-        overflow: "hidden"
+        // backgroundColor: Colors.gray400,
+        // borderRadius: 6,
+        // overflow: "hidden"
     },
     columnText: {
         textAlign: "left",
         paddingHorizontal: 0
     }
 });
-

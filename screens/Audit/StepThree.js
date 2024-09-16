@@ -20,8 +20,6 @@ export default function StepThree({ project, onNext, onPrev }) {
     const token = authCtx.token;
 
     const { getLocation, setGetLocation } = useContext(LocationContext);
-    console.log(project);
-    console.log(project.phoneList);
     
 
     useEffect(() => {
@@ -94,8 +92,8 @@ export default function StepThree({ project, onNext, onPrev }) {
             <ListItem title="Müşteri" content={project.customerName} />
             <ListItem title="Proje" content={project.projectName} />
             <ListItem title="Müşteri Temsilcisi" content={project.operationManagerName} contentStyle={{ maxWidth: 200 }} />
-            <ListItem title="Telefon" content={project.customerPhone} />
-            <ListItem title="E-Posta" content={project.customerEmail} contentStyle={{ maxWidth: 250 }} />
+            <ListItem title="Telefon" content={project.phoneList} />
+            <ListItem title="E-Posta" content={project.emailList} contentStyle={{ maxWidth: 250 }} />
             <ListItem title="Adres" content={project.address} noBorder contentStyle={{ maxWidth: 200 }} />
             {
                 checkLocation == true ?

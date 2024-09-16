@@ -96,8 +96,8 @@ export default function StepSix({ infos }) {
         try {
             const addAuditWarning2 = await addAuditWarningOrDirective(token, data, "Warn");
             setCheckStatus(addAuditWarning2.result);
-            console.log(addAuditWarning2);
-            console.log(checkStatus);
+            // console.log(addAuditWarning2);
+            // console.log(checkStatus);
 
 
         } catch (error) {
