@@ -20,6 +20,9 @@ export default function StepThree({ project, onNext, onPrev }) {
     const token = authCtx.token;
 
     const { getLocation, setGetLocation } = useContext(LocationContext);
+    console.log(project);
+    console.log(project.phoneList);
+    
 
     useEffect(() => {
         const locationHandler = async () => {

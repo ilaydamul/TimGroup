@@ -11,31 +11,20 @@
   "dependencies": {
     "@expo/vector-icons": "^14.0.0",
     "@react-native-async-storage/async-storage": "1.23.1",
-    "@react-navigation/drawer": "^6.6.15",
     "@react-navigation/native": "^6.1.17",
     "@react-navigation/native-stack": "^6.9.26",
-    "@turf/turf": "^7.0.0",
     "axios": "^1.7.2",
     "expo": "^51.0.18",
-    "expo-app-loading": "^2.1.1",
-    "expo-barcode-scanner": "^13.0.1",
     "expo-camera": "~15.0.13",
     "expo-checkbox": "^3.0.0",
-    "expo-file-system": "~17.0.1",
-    "expo-image-manipulator": "^12.0.5",
     "expo-image-picker": "^15.0.7",
     "expo-linear-gradient": "~13.0.2",
     "expo-location": "~17.0.1",
-    "expo-media-library": "~16.0.4",
-    "expo-modules-core": "^1.12.14",
     "expo-network": "^6.0.1",
-    "expo-splash-screen": "~0.27.5",
     "expo-status-bar": "~1.12.1",
     "npm": "^10.8.1",
     "react": "18.2.0",
     "react-native": "0.74.3",
-    "react-native-dropdown-select-list": "^2.0.5",
-    "react-native-file-viewer": "^2.1.5",
     "react-native-gesture-handler": "~2.16.1",
     "react-native-keyboard-aware-scroll-view": "^0.9.5",
     "react-native-picker-select": "^9.1.3",
@@ -47,7 +36,8 @@
     "react-native-webview": "13.8.6"
   },
   "devDependencies": {
-    "@babel/core": "^7.20.0"
+    "@babel/core": "^7.20.0",
+    "react-native-flipper": "^0.266.0"
   },
   "private": true
 }
