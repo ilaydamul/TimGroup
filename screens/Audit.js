@@ -13,7 +13,7 @@ import StepSix from './Audit/StepSix';
 
 
 export default function Audit() {
-    const [step, setStep] = useState(6);
+    const [step, setStep] = useState(1);
     const [infos, setInfos] = useState([]);
 
     const [projects, setProjects] = useState([]);

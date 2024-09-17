@@ -5,12 +5,13 @@ import Input from '../../components/UI/Input';
 import { useContext, useEffect, useState } from 'react';
 import { globalS } from '../../constants/styles';
 import { Colors } from '../../constants/colors';
-import ComboBox from '../../components/UI/ComboBox';
+// import ComboBox from '../../components/UI/ComboBox';
 import Toast from 'react-native-root-toast';
 import { AuthContext } from '../../store/auth-context';
 import { addAudit, addAuditWarningOrDirective, getPersonelList } from '../../utils/auth';
 import { LocationContext } from '../../store/location-context';
 import LoadingItems from '../../components/UI/LoadingItems';
+import ComboBox2 from '../../components/UI/ComboBox2';
 
 const transationType = [{ label: "Sözlü Uyarı", value: "Sözlü Uyarı" }, { label: "Yazılı Uyarı", value: "Yazılı Uyarı" }];
 
@@ -204,12 +205,12 @@ export default function StepSix({ infos }) {
                 <View>
                     <View style={[globalS.dFlexCenterBetween, globalS.mb12]}>
                         <Text style={style.selectText}>Görevli Personel</Text>
-                        {/* {personels && <ComboBox data={personels} setValue={setWarnedStaff} placeholder={"Personel Seçin.."} />} */}
+                        {personels && <ComboBox2 data={personels} setValue={setWarnedStaff} placeholder={"Personel Seçin.."} />}
 
                     </View>
                     <View style={[globalS.dFlexCenterBetween, globalS.mb12]}>
                         <Text style={globalS.selectText}>İşlem</Text>
-                        <ComboBox data={transationType} setValue={setTransitionVal} placeholder={"Uyarı Seçin.."} />
+                        <ComboBox2 data={transationType} setValue={setTransitionVal} placeholder={"Uyarı Seçin.."} />
                     </View>
                     <Text style={[globalS.selectText, globalS.mb12]} >Açıklama</Text>
                     <Input textarea mb={12} onUpdateValue={updateInputValue.bind(this, "warningDesc")} />
@@ -222,7 +223,7 @@ export default function StepSix({ infos }) {
                 <View>
                     <View style={[globalS.dFlexCenterBetween, globalS.mb12]}>
                         <Text style={style.selectText}>Görevli Personel</Text>
-                        {/* {personels && <ComboBox data={personels} setValue={setDirectivedStaff} placeholder={"Personel Seçin.."} />} */}
+                        {personels && <ComboBox2 data={personels} setValue={setDirectivedStaff} placeholder={"Personel Seçin.."} />}
 
                     </View>
                     <Text style={[globalS.selectText, globalS.mb12]}>Başlık</Text>
