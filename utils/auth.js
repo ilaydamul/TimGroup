@@ -17,7 +17,13 @@ export async function login(email, password, role) {
     formData.append('password', password);
 
 
-    const response = await axios.post((api + apiDr), formData);
+    const response = await axios.post((api + apiDr), formData, {
+        headers: {
+            'Content-Type': 'multipart/form-data',
+            accept: 'application/json',
+        },
+    });
+    
     var result = response;
 
     return result;
