@@ -11,7 +11,6 @@ import { AuthContext } from '../../store/auth-context';
 import { addAudit, addAuditWarningOrDirective, getPersonelList } from '../../utils/auth';
 import { LocationContext } from '../../store/location-context';
 import LoadingItems from '../../components/UI/LoadingItems';
-// import useLocationPermissionsHandler from '../../hooks/useLocationPermissions';
 
 const transationType = [{ label: "Sözlü Uyarı", value: "Sözlü Uyarı" }, { label: "Yazılı Uyarı", value: "Yazılı Uyarı" }];
 
@@ -205,7 +204,7 @@ export default function StepSix({ infos }) {
                 <View>
                     <View style={[globalS.dFlexCenterBetween, globalS.mb12]}>
                         <Text style={style.selectText}>Görevli Personel</Text>
-                        {personels && <ComboBox data={personels} setValue={setWarnedStaff} placeholder={"Personel Seçin.."} />}
+                        {/* {personels && <ComboBox data={personels} setValue={setWarnedStaff} placeholder={"Personel Seçin.."} />} */}
 
                     </View>
                     <View style={[globalS.dFlexCenterBetween, globalS.mb12]}>
@@ -223,7 +222,7 @@ export default function StepSix({ infos }) {
                 <View>
                     <View style={[globalS.dFlexCenterBetween, globalS.mb12]}>
                         <Text style={style.selectText}>Görevli Personel</Text>
-                        {personels && <ComboBox data={personels} setValue={setDirectivedStaff} placeholder={"Personel Seçin.."} />}
+                        {/* {personels && <ComboBox data={personels} setValue={setDirectivedStaff} placeholder={"Personel Seçin.."} />} */}
 
                     </View>
                     <Text style={[globalS.selectText, globalS.mb12]}>Başlık</Text>

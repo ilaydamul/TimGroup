@@ -11,6 +11,8 @@ export default function ComboBox({ data, placeholder, setValue }) {
             items={data.map(item => ({ ...item, key: item.value }))}
             placeholder={{ label: placeholder, value: null }}
             style={pickerSelectStyles}
+            fixAndroidTouchableBug={true}
+            useNativeAndroidPickerStyle={false}
             Icon={() => {
                 return <MaterialIcons name="arrow-drop-down" size={28} color="gray" />;
             }}
@@ -30,7 +32,7 @@ const pickerSelectStyles = StyleSheet.create({
         color: 'black',
         paddingRight: 30,
         maxWidth: 150,
-        width: 150
+        width: 150,
     },
     inputAndroid: {
         fontSize: 16,
@@ -42,6 +44,6 @@ const pickerSelectStyles = StyleSheet.create({
         color: 'black',
         paddingRight: 30,
         maxWidth: 150,
-        width: 150
+        width: 150,
     },
 });
