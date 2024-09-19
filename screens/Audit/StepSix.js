@@ -21,8 +21,6 @@ export default function StepSix({ infos }) {
     const token = authCtx.token;
 
     const [personels, setPersonels] = useState([]);
-    // const [location, requestLocationPermissions] = useLocationPermissionsHandler();
-    // console.log(getLocation);
 
     const [customerComment, setCustomerComment] = useState("");
     const [note, setNote] = useState("");
@@ -35,7 +33,6 @@ export default function StepSix({ infos }) {
     const [warnedStaff, setWarnedStaff] = useState('');
     const [transitionVal, setTransitionVal] = useState('');
 
-    const [checkStatus, setCheckStatus] = useState(0);
 
     const projectId = infos.find(info => info.step === 2)?.item.id;
     const projectPhotoInfos = infos.find(info => info.step === 4)?.item;
@@ -78,7 +75,6 @@ export default function StepSix({ infos }) {
     }, [])
 
     async function saveWarning() {
-        setCheckStatus(0);
         if (!warnedStaff || !transitionVal || !warningDesc) {
             Toast.show('Uyarı girdilerini doldurunuz!', {
                 duration: 2000,
@@ -95,32 +91,30 @@ export default function StepSix({ infos }) {
         setIsLoading(true);
         try {
             const addAuditWarning2 = await addAuditWarningOrDirective(token, data, "Warn");
-            setCheckStatus(addAuditWarning2.result);
-            // console.log(addAuditWarning2);
-            // console.log(checkStatus);
-
+            if (addAuditWarning2.result == 1) {
+                Toast.show('Uyarı başarılı bir şekilde eklendi.', {
+                    duration: 2000,
+                });
+            } else {
+                Toast.show('Uyarı eklerken bir sorun oluştu.', {
+                    duration: 2000,
+                });
+            }
 
         } catch (error) {
             console.log(error);
+            Toast.show('Hata: ' + error, {
+                duration: 2000,
+            });
             return;
         }
 
-        if (checkStatus == 1) {
-            Toast.show('Uyarı başarılı bir şekilde eklendi.', {
-                duration: 2000,
-            });
-        } else {
-            Toast.show('Uyarı eklerken bir sorun oluştu.', {
-                duration: 2000,
-            });
-        }
-
+       
 
         setIsLoading(false);
     }
 
     async function saveDirective() {
-        setCheckStatus(0);
         if (!directivedStaff || !directiveDesc || !directiveTitle) {
             Toast.show('Talimat girdilerini doldurunuz!', {
                 duration: 2000,
@@ -137,22 +131,25 @@ export default function StepSix({ infos }) {
         setIsLoading(true);
         try {
             const addAuditDirective2 = await addAuditWarningOrDirective(token, data, "Directive");
-            setCheckStatus(addAuditDirective2.result);
+            if (addAuditDirective2.result === 1) {
+                Toast.show('Talimat başarılı bir şekilde eklendi.', {
+                    duration: 2000,
+                });
+            } else {
+                Toast.show('Talimat eklerken bir sorun oluştu.', {
+                    duration: 2000,
+                });
+            }
+
         } catch (error) {
             console.log(error);
+            Toast.show('Hata: ' + error, {
+                duration: 2000,
+            });
             return;
         }
 
-        if (checkStatus === 1) {
-            //Başarılı bildirimi
-            Toast.show('Talimat başarılı bir şekilde eklendi.', {
-                duration: 2000,
-            });
-        } else {
-            Toast.show('Talimat eklerken bir sorun oluştu.', {
-                duration: 2000,
-            });
-        }
+
 
 
         setIsLoading(false);
@@ -173,7 +170,6 @@ export default function StepSix({ infos }) {
         setIsLoading(true);
         try {
             const response = await addAudit(token, data);
-            // console.log(response);
 
             if (response.result == 1) {
                 Toast.show('Denetim kaydı başarıyla eklendi.', { duration: 2000, });

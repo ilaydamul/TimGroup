@@ -11,7 +11,6 @@ import StepFour from './Audit/StepFour';
 import StepFive from './Audit/StepFive';
 import StepSix from './Audit/StepSix';
 
-
 export default function Audit() {
     const [step, setStep] = useState(1);
     const [infos, setInfos] = useState([]);
@@ -45,7 +44,7 @@ export default function Audit() {
     };
 
     const handlePrevStep = () => {
-        if (step==3) {
+        if (step==2) {
             
         }
 

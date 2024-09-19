@@ -15,6 +15,7 @@ import { qrReadWrite } from "../utils/auth";
 import { AuthContext } from "../store/auth-context";
 import useLocationPermissionsHandler from "../hooks/useLocationPermissions";
 import LoadingItems from "../components/UI/LoadingItems"
+import ToastMessage from "../components/UI/ToastMessage";
 
 
 export default function QR({ route }) {
@@ -23,6 +24,7 @@ export default function QR({ route }) {
   const [isConnected, setIsConnected] = useState(false);
   const [data2, setData2] = useState(null);
   const [readData, setReadData] = useState(null);
+  const [showToast, setShowToast] = useState();
 
   const authCtx = useContext(AuthContext);
   const token = authCtx.token;
@@ -44,44 +46,55 @@ export default function QR({ route }) {
       }
 
       setCheckLocation(true);
-
-      const networkStatus = await Network.getNetworkStateAsync();
-      setIsConnected(networkStatus.isConnected);
-
-      if (isConnected) {
-        const storedData = await AsyncStorage.getItem("data");
-        if (storedData) {
-          qrFunc();
-
-          setData2(storedData);
-          await AsyncStorage.removeItem("data");
-          setStatus(3);
-        }
-      }
-
     }
 
     permFunc().catch((error) => {
       console.error("Permission Error:", error);
     });
 
+
+
+    const checkNetwork = async () => {
+      const networkStatus = await Network.getNetworkStateAsync();
+      setIsConnected(networkStatus.isConnected);
+
+      // const storedData = await AsyncStorage.getItem("data");
+      // if (storedData && networkStatus.isConnected) {
+      //   setReadData(storedData);
+      //   qrApiRequest(true);
+      // }
+    }
+
+    checkNetwork();
+
   }, []);
 
-  const a = async () => {
-    const storedData = await AsyncStorage.getItem("data");
-    setStatus(storedData);
-  }
 
-  a();
+  useEffect(() => {
+    const checkData = async () => {
+      // const networkStatus = await Network.getNetworkStateAsync();
+      // setIsConnected(networkStatus.isConnected);
+
+      const storedData = await AsyncStorage.getItem("data");
+      if (storedData && networkStatus.isConnected) {
+        setReadData(storedData);
+        qrApiRequest(true);
+      }
+    };
+
+    checkData();
+  }, [isConnected]);
+
+  useEffect(() => {
+    if (readData) {
+      qrFunc();
+    }
+  }, [readData]);
+
 
   const handleBarCodeScanned = async ({ type, data }) => {
     if (!scanned) {
-
-      if (!data) {
-        Toast.show('Tekrar deneyin.', {
-          duration: 1000,
-        });
-      }
+      // setScanned(true);
 
       const rr = {
         "code": data,
@@ -90,58 +103,64 @@ export default function QR({ route }) {
       };
 
       setReadData(rr);
-      // console.log(readData);
 
-      const networkStatus = await Network.getNetworkStateAsync();
-      setIsConnected(networkStatus.isConnected);
-
-      qrFunc();
-
-      setScanned(true);
+      // qrFunc();
     }
   };
 
+
+
   const qrFunc = async () => {
     // API ISTEKLERI
+    if (isConnected) {
+      qrApiRequest();
+    }
+    else {
+      await AsyncStorage.setItem("data", JSON.stringify(readData));
+
+      setShowToast({ type: "warning", text: "Verileriniz kaydedildi, bağlandıktan sonra işlenecektir." });
+
+      setTimeout(() => {
+        setShowToast();
+      }, 1000);
+      // setStatus(2);
+    }
+
+
+  }
+
+  const qrApiRequest = async (isReconnect) => {
     try {
       const response = await qrReadWrite(token, readData);
-      console.log(response);
 
       if (response.result == 1) {
-
-        if (isConnected) {
-
-          Toast.show('Kod okuma başarılı!', {
-            duration: 1000,
-          });
-          setStatus(1);
-
-        } else {
-          Toast.show('Verileriniz kaydedildi, bağlandıktan sonra işlenecektir.', {
-            duration: 1000,
-          });
-
-          await AsyncStorage.setItem("data", JSON.stringify(readData));
-          setStatus(2);
+        if (isReconnect) {
+          setShowToast({ type: "success", text: "Kaydedilen qr kod verisi eklendi!" });
+          await AsyncStorage.removeItem("data");
+        }
+        else {
+          setShowToast({ type: "success", text: "Kod okuma başarılı!" });
         }
 
+        setTimeout(() => {
+          setShowToast();
+        }, 1000);
 
       }
-
     } catch (error) {
       console.log(error);
-      Toast.show('Tekrar deneyiniz.', {
+      Toast.show('Hata: ' + error, {
         duration: 1000,
       });
     }
+
+    setScanned(true);
   }
 
 
+
   const refreshScan = () => {
-    // setTimeout(() => {
-    // console.log("refresh");
     setScanned(false);
-    // }, 500);
   }
 
   return (
@@ -162,6 +181,9 @@ export default function QR({ route }) {
           }
 
         </View>
+        {
+          showToast && <ToastMessage type={showToast.type} text={showToast.text} />
+        }
 
         {scanned && (
           <>
