@@ -52,8 +52,6 @@ export default function QR({ route }) {
       console.error("Permission Error:", error);
     });
 
-
-
     const checkNetwork = async () => {
       const networkStatus = await Network.getNetworkStateAsync();
       setIsConnected(networkStatus.isConnected);
@@ -74,9 +72,9 @@ export default function QR({ route }) {
     const checkData = async () => {
       // const networkStatus = await Network.getNetworkStateAsync();
       // setIsConnected(networkStatus.isConnected);
-
       const storedData = await AsyncStorage.getItem("data");
-      if (storedData && networkStatus.isConnected) {
+      
+      if (storedData && isConnected) {
         setReadData(storedData);
         qrApiRequest(true);
       }
@@ -156,9 +154,7 @@ export default function QR({ route }) {
 
     setScanned(true);
   }
-
-
-
+  
   const refreshScan = () => {
     setScanned(false);
   }
