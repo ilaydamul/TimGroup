@@ -44,11 +44,9 @@ export default function SecurityHome() {
         setLoading(true);
         try {
             const response = await getDocuments(authCtx.token);
-            // console.log(response);
-
+            
             if (response.result === 1) {
                 setDocuments(response.files);
-                console.log(response);
             }
         } catch (error) {
             console.error("Belgeler Çekim Hatası: ", error);

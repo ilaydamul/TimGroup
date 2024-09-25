@@ -20,11 +20,9 @@ import ToastMessage from "../components/UI/ToastMessage";
 
 export default function QR({ route }) {
   const [scanned, setScanned] = useState(false);
-  const [status, setStatus] = useState(0);
   const [isConnected, setIsConnected] = useState(false);
-  const [data2, setData2] = useState(null);
   const [readData, setReadData] = useState(null);
-  const [showToast, setShowToast] = useState();
+  const [showToast, setShowToast] = useState(false);
 
   const authCtx = useContext(AuthContext);
   const token = authCtx.token;
@@ -37,7 +35,6 @@ export default function QR({ route }) {
   const [checkLocation, setCheckLocation] = useState(false);
 
   useEffect(() => {
-
     const permFunc = async () => {
       const hasPermission = await verifyPermissions();
       const hasLocPermission = await requestLocationPermissions();
@@ -55,12 +52,6 @@ export default function QR({ route }) {
     const checkNetwork = async () => {
       const networkStatus = await Network.getNetworkStateAsync();
       setIsConnected(networkStatus.isConnected);
-
-      // const storedData = await AsyncStorage.getItem("data");
-      // if (storedData && networkStatus.isConnected) {
-      //   setReadData(storedData);
-      //   qrApiRequest(true);
-      // }
     }
 
     checkNetwork();
@@ -70,8 +61,6 @@ export default function QR({ route }) {
 
   useEffect(() => {
     const checkData = async () => {
-      // const networkStatus = await Network.getNetworkStateAsync();
-      // setIsConnected(networkStatus.isConnected);
       const storedData = await AsyncStorage.getItem("data");
       
       if (storedData && isConnected) {
@@ -108,20 +97,27 @@ export default function QR({ route }) {
 
 
 
+
+
+
   const qrFunc = async () => {
     // API ISTEKLERI
     if (isConnected) {
       qrApiRequest();
     }
     else {
+    
+
       await AsyncStorage.setItem("data", JSON.stringify(readData));
 
       setShowToast({ type: "warning", text: "Verileriniz kaydedildi, bağlandıktan sonra işlenecektir." });
 
       setTimeout(() => {
         setShowToast();
-      }, 1000);
+      }, 2000);
       // setStatus(2);
+
+      setScanned(true);
     }
 
 
@@ -129,7 +125,7 @@ export default function QR({ route }) {
 
   const qrApiRequest = async (isReconnect) => {
     try {
-      const response = await qrReadWrite(token, readData);
+      const response = await qrReadWrite(token, readData || "");
 
       if (response.result == 1) {
         if (isReconnect) {
@@ -146,7 +142,7 @@ export default function QR({ route }) {
 
       }
     } catch (error) {
-      console.log(error);
+      // console.log(error);
       Toast.show('Hata: ' + error, {
         duration: 1000,
       });

@@ -12,6 +12,7 @@ import { addAudit, addAuditWarningOrDirective, getPersonelList } from '../../uti
 import { LocationContext } from '../../store/location-context';
 import LoadingItems from '../../components/UI/LoadingItems';
 import ComboBox2 from '../../components/UI/ComboBox2';
+import ToastMessage from '../../components/UI/ToastMessage';
 
 const transationType = [{ label: "Sözlü Uyarı", value: "Sözlü Uyarı" }, { label: "Yazılı Uyarı", value: "Yazılı Uyarı" }];
 
@@ -25,6 +26,7 @@ export default function StepSix({ infos }) {
     const [customerComment, setCustomerComment] = useState("");
     const [note, setNote] = useState("");
     const [isLoading, setIsLoading] = useState(false);
+    const [showToast, setShowToast] = useState(false);
 
     const [warningDesc, setWarningDesc] = useState("");
     const [directiveTitle, setDirectiveTitle] = useState("");
@@ -109,7 +111,7 @@ export default function StepSix({ infos }) {
             return;
         }
 
-       
+
 
         setIsLoading(false);
     }
@@ -172,10 +174,22 @@ export default function StepSix({ infos }) {
             const response = await addAudit(token, data);
 
             if (response.result == 1) {
-                Toast.show('Denetim kaydı başarıyla eklendi.', { duration: 2000, });
+                setShowToast({ type: "success", text: "Denetim kaydı başarıyla eklendi." });
+
+                setTimeout(() => {
+                    setShowToast();
+                }, 1000);
+
+
+                // Toast.show('Denetim kaydı başarıyla eklendi.', { duration: 2000, });
+
             }
             else if (response.result == 2) {
-                Toast.show('Alan dışındasınız. Lütfen proje alanına giriniz.', { duration: 2000, });
+                setShowToast({ type: "warning", text: "Alan dışındasınız. Lütfen proje alanına giriniz." });
+
+                setTimeout(() => {
+                    setShowToast();
+                }, 1000);
             }
 
             setIsLoading(false);
@@ -194,9 +208,9 @@ export default function StepSix({ infos }) {
                 <Input textarea mb={12} onUpdateValue={updateInputValue.bind(this, "customerComment")} />
                 <Text style={globalS.leftTitle}>Notlarınız</Text>
                 <Input textarea mb={12} onUpdateValue={updateInputValue.bind(this, "note")} />
-                <View style={[style.flexRight, globalS.mb12]}>
+                {/* <View style={[style.flexRight, globalS.mb12]}>
                     <Button style={style.smallBtn} onPress={submitHandler}>Kaydet</Button>
-                </View>
+                </View> */}
                 <Text style={globalS.leftTitle}>Uyarılar</Text>
                 <View>
                     <View style={[globalS.dFlexCenterBetween, globalS.mb12]}>
@@ -237,10 +251,12 @@ export default function StepSix({ infos }) {
                     <LoadingItems />
                 </View>
             }
-
-            {/* <View style={[globalS.mAuto, globalS.mt16]}>
-                <Button onPress={submitHandler}>Kayıt</Button>
-            </View> */}
+            {
+                showToast && <ToastMessage type={showToast.type} text={showToast.text} />
+            }
+            <View style={[globalS.mAuto, globalS.mt16]}>
+                <Button onPress={submitHandler}>Denetimi Bitir</Button>
+            </View>
         </>
     );
 }

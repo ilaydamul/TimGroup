@@ -19,13 +19,13 @@ export default function Login({ route }) {
 
         try {
             const response = await login(username, password, role);
-            // console.log(response.data.user);
+            // console.log(response.data);
 
             if (response.data.result == 1) {
                 authCtx.authenticate(response.headers['set-cookie'][0].split(";")[0], role, response.data.user.name);
 
             } else {
-
+                console.log(response.data)
                 Toast.show('Kullanıcı adı ya da şifre yanlış..', {
                     duration: 2000,
                 });
