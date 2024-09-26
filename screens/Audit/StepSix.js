@@ -191,6 +191,13 @@ export default function StepSix({ infos }) {
                     setShowToast();
                 }, 1000);
             }
+            else {
+                setShowToast({ type: "warning", text: response.msg });
+
+                setTimeout(() => {
+                    setShowToast();
+                }, 1000);
+            }
 
             setIsLoading(false);
 
