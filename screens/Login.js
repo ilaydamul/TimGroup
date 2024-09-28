@@ -19,13 +19,12 @@ export default function Login({ route }) {
 
         try {
             const response = await login(username, password, role);
-            // console.log(response.data);
 
             if (response.data.result == 1) {
                 authCtx.authenticate(response.headers['set-cookie'][0].split(";")[0], role, response.data.user.name);
 
             } else {
-                console.log(response.data)
+                // console.log(response.data);
                 Toast.show('Kullanıcı adı ya da şifre yanlış..', {
                     duration: 2000,
                 });
@@ -33,17 +32,14 @@ export default function Login({ route }) {
             }
 
         } catch (error) {
-            // console.log(error);
             if (error.response && error.response.status === 503) {
                 Toast.show('Sunucularımız bakımda, bir süre sonra tekrar deneyin.', {
                     duration: 2000,
                 });
-                // authCtx.loginControl(true, "Sunucularımız bakımda, bir süre sonra tekrar deneyin.");
             } else {
                 Toast.show(('Hata: ' + error), {
                     duration: 2000,
                 });
-                // authCtx.loginControl(true, "Hatalı e-mail ya da şifre!");
             }
 
             setIsAuthenticating(false);

@@ -3,8 +3,12 @@ import { LinearGradient } from "expo-linear-gradient";
 import Header from "./Header";
 import { KeyboardAwareScrollView } from "react-native-keyboard-aware-scroll-view";
 import { Colors } from "../../constants/colors";
+import ToastMessage from "../UI/ToastMessage";
+import { useContext } from "react";
+import { AuthContext } from "../../store/auth-context";
 
 export default function Layout({ children, isBack, bgDark, doc }) {
+    const { toastMessage } = useContext(AuthContext);
 
     return (
         <LinearGradient colors={["#DCDCDC", "#FFFFFF", "#DCDCDC"]} style={style.safeArea}>
@@ -18,6 +22,10 @@ export default function Layout({ children, isBack, bgDark, doc }) {
                     {children}
                     <Image source={require("../../assets/images/stars.png")} style={style.bgStar} />
                 </ScrollView>
+                {
+                    toastMessage.isShow && <ToastMessage type={toastMessage.type} text={toastMessage.text} />
+                }
+
             </KeyboardAwareScrollView>
             {/* </SafeAreaView> */}
         </LinearGradient >

@@ -21,12 +21,13 @@ export default function StepSix({ infos }) {
     const { getLocation } = useContext(LocationContext);
     const token = authCtx.token;
 
+    const { setToastMessage } = useContext(AuthContext);
+
     const [personels, setPersonels] = useState([]);
 
     const [customerComment, setCustomerComment] = useState("");
     const [note, setNote] = useState("");
     const [isLoading, setIsLoading] = useState(false);
-    const [showToast, setShowToast] = useState(false);
 
     const [warningDesc, setWarningDesc] = useState("");
     const [directiveTitle, setDirectiveTitle] = useState("");
@@ -74,13 +75,17 @@ export default function StepSix({ infos }) {
             }
         }
         personelList();
+
+
     }, [])
 
     async function saveWarning() {
         if (!warnedStaff || !transitionVal || !warningDesc) {
-            Toast.show('Uyarı girdilerini doldurunuz!', {
-                duration: 2000,
-            });
+            setToastMessage({ isShow: true, type: "warning", text: "Uyarı girdilerini doldurunuz!" });
+            setTimeout(() => {
+                setToastMessage({ isShow: false });
+            }, 2000);
+
             return;
         }
 
@@ -94,33 +99,33 @@ export default function StepSix({ infos }) {
         try {
             const addAuditWarning2 = await addAuditWarningOrDirective(token, data, "Warn");
             if (addAuditWarning2.result == 1) {
-                Toast.show('Uyarı başarılı bir şekilde eklendi.', {
-                    duration: 2000,
-                });
+                setToastMessage({ isShow: true, type: "success", text: "Uyarı başarılı bir şekilde eklendi." });
+                setTimeout(() => {
+                    setToastMessage({ isShow: false });
+                }, 2000);
             } else {
-                Toast.show('Uyarı eklerken bir sorun oluştu.', {
-                    duration: 2000,
-                });
+                setToastMessage({ isShow: true, type: "warning", text: "Uyarı eklerken bir sorun oluştu." });
+                setTimeout(() => {
+                    setToastMessage({ isShow: false });
+                }, 2000);
             }
 
         } catch (error) {
-            console.log(error);
             Toast.show('Hata: ' + error, {
                 duration: 2000,
             });
-            return;
         }
-
-
 
         setIsLoading(false);
     }
 
     async function saveDirective() {
         if (!directivedStaff || !directiveDesc || !directiveTitle) {
-            Toast.show('Talimat girdilerini doldurunuz!', {
-                duration: 2000,
-            });
+            setToastMessage({ isShow: true, type: "warning", text: "Talimat girdilerini doldurunuz!" });
+            setTimeout(() => {
+                setToastMessage({ isShow: false });
+            }, 2000);
+
             return;
         }
 
@@ -134,24 +139,22 @@ export default function StepSix({ infos }) {
         try {
             const addAuditDirective2 = await addAuditWarningOrDirective(token, data, "Directive");
             if (addAuditDirective2.result === 1) {
-                Toast.show('Talimat başarılı bir şekilde eklendi.', {
-                    duration: 2000,
-                });
+                setToastMessage({ isShow: true, type: "success", text: "Talimat başarılı bir şekilde eklendi." });
+                setTimeout(() => {
+                    setToastMessage({ isShow: false });
+                }, 2000);
             } else {
-                Toast.show('Talimat eklerken bir sorun oluştu.', {
-                    duration: 2000,
-                });
+                setToastMessage({ isShow: true, type: "warning", text: "Talimat eklerken bir sorun oluştu." });
+                setTimeout(() => {
+                    setToastMessage({ isShow: false });
+                }, 2000);
             }
 
         } catch (error) {
-            console.log(error);
             Toast.show('Hata: ' + error, {
                 duration: 2000,
             });
-            return;
         }
-
-
 
 
         setIsLoading(false);
@@ -169,40 +172,38 @@ export default function StepSix({ infos }) {
             lat: getLocation.lat,
             lng: getLocation.lng
         };
+        
         setIsLoading(true);
+
         try {
             const response = await addAudit(token, data);
 
             if (response.result == 1) {
-                setShowToast({ type: "success", text: "Denetim kaydı başarıyla eklendi." });
-
+                setToastMessage({ isShow: true, type: "success", text: "Denetim kaydı başarıyla eklendi." });
                 setTimeout(() => {
-                    setShowToast();
-                }, 1000);
-
-
-                // Toast.show('Denetim kaydı başarıyla eklendi.', { duration: 2000, });
-
+                    setToastMessage({ isShow: false });
+                }, 2000);
             }
             else if (response.result == 2) {
-                setShowToast({ type: "warning", text: "Alan dışındasınız. Lütfen proje alanına giriniz." });
-
+                setToastMessage({ isShow: true, type: "warning", text: "Alan dışındasınız. Lütfen proje alanına giriniz." });
                 setTimeout(() => {
-                    setShowToast();
-                }, 1000);
+                    setToastMessage({ isShow: false });
+                }, 2000);
             }
             else {
-                setShowToast({ type: "warning", text: response.msg });
-
+                setToastMessage({ isShow: true, type: "warning", text: response.msg });
                 setTimeout(() => {
-                    setShowToast();
-                }, 1000);
+                    setToastMessage({ isShow: false });
+                }, 2000);
             }
 
             setIsLoading(false);
 
         } catch (error) {
-            console.log(error);
+            Toast.show('Hata: ' + error, {
+                duration: 2000,
+            });
+
         }
 
         setIsLoading(false);
@@ -258,9 +259,7 @@ export default function StepSix({ infos }) {
                     <LoadingItems />
                 </View>
             }
-            {
-                showToast && <ToastMessage type={showToast.type} text={showToast.text} />
-            }
+
             <View style={[globalS.mAuto, globalS.mt16]}>
                 <Button onPress={submitHandler}>Denetimi Bitir</Button>
             </View>

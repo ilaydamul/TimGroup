@@ -12,10 +12,8 @@ export async function login(email, password, role) {
     }
 
     var formData = new FormData();
-    // test 123
     formData.append('username', email);
     formData.append('password', password);
-
 
     const response = await axios.post((api + apiDr), formData, {
         headers: {
@@ -23,10 +21,8 @@ export async function login(email, password, role) {
             accept: 'application/json',
         },
     });
-    
-    var result = response;
 
-    return result;
+    return response;
 }
 
 
@@ -186,7 +182,7 @@ export async function locationCheck(token, datas) {
     const header = {
         "Cookie": token
     };
-
+    
     const response = await axios.post(api + "/api/check-location", datas, {
         headers: header
     });

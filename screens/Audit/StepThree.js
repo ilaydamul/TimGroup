@@ -20,7 +20,7 @@ export default function StepThree({ project, onNext, onPrev }) {
     const token = authCtx.token;
 
     const { getLocation, setGetLocation } = useContext(LocationContext);
-    
+
 
     useEffect(() => {
         const locationHandler = async () => {
@@ -44,10 +44,7 @@ export default function StepThree({ project, onNext, onPrev }) {
     async function onPressHandler() {
         //LOCATION KONTROLLERİ 
         if (checkLocation) {
-            // const loc = {
-            //     lat: location.lat,
-            //     lng: location.lng
-            // }
+            onNext();
 
             const data = {
                 projectId: project.id,
@@ -62,21 +59,22 @@ export default function StepThree({ project, onNext, onPrev }) {
 
             try {
                 const response = await locationCheck(token, data);
-                // console.log(response);
+
                 if (response.result == 1) {
                     onNext();
                 }
                 else {
+                    
                     Toast.show('Alan dışındasınız.', {
                         duration: 2000,
                     });
                 }
+               
 
             } catch (error) {
-                Toast.show(("" + error), {
+                Toast.show(("Beklenmedik bir hata oluştu: " + error), {
                     duration: 2000,
                 });
-                // console.log("Lokasyon Kontrol Hatası: " + error);
             }
 
         }

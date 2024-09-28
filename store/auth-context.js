@@ -10,6 +10,7 @@ export const AuthContext = createContext({
     authenticate: (token, role, name) => { },
     logout: () => { },
     loginControl: () => { },
+    toastMessage: {}
 });
 
 export default function AuthContextProvider({ children }) {
@@ -17,8 +18,7 @@ export default function AuthContextProvider({ children }) {
     const [isSecurity, setIsSecurity] = useState();
     const [error, setError] = useState(false);
     const [errorText, setErrorText] = useState("");
-
-
+    const [toastMessage, setToastMessage] = useState({});
 
     async function authenticate(token, role, name) {
         setAuthToken(token);
@@ -55,6 +55,8 @@ export default function AuthContextProvider({ children }) {
         loginControl: loginControl,
         error: error,
         errorText: errorText,
+        toastMessage: toastMessage,
+        setToastMessage: setToastMessage,
     };
 
     return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

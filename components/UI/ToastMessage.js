@@ -4,22 +4,27 @@ import { FontAwesome5 } from '@expo/vector-icons'
 
 export default function ToastMessage({ type, text, desc }) {
     return (
-        <View style={[
-            style.toast,
-            { backgroundColor: type === "success" ? Colors.green : type === "warning" ? Colors.orange : Colors.red }
-        ]}>
-            <FontAwesome5
-                name={type === "success" ? "check-circle" : "exclamation"}
-                size={60}
-                color="#FFF"
-                style={style.icon}
-            />
-            <View style={style.group}>
-                <Text style={style.text}>{text}</Text>
-                {desc && <Text style={style.desc}>{desc}</Text>}
+        <View style={style.toastContainer} >
+            <View style={[
+                style.toast,
+                // { backgroundColor: type === "success" ? Colors.green : type === "warning" ? Colors.orange : Colors.red }
+            ]}>
+                <View style={[style.iconGroup, { backgroundColor: type === "success" ? Colors.green : type === "warning" ? Colors.orange : Colors.red }]}>
+                    <FontAwesome5
+                        name={type === "success" ? "check-circle" : "exclamation"}
+                        size={60}
+                        color={Colors.white}
+                        style={style.icon}
+                    />
+                </View>
 
+                <View style={style.group}>
+                    <Text style={style.text}>{text}</Text>
+                    {desc && <Text style={style.desc}>{desc}</Text>}
+
+                </View>
             </View>
-        </View>
+        </ View>
     )
 }
 
@@ -28,10 +33,11 @@ const style = StyleSheet.create({
         position: "absolute",
         top: "50%",
         left: "50%",
-        transform: [{ translateX: -100 }, { translateY: -100 }],
-        width: 200,
+        transform: [{ translateX: -150 }, { translateY: -100 }],
+        width: 300,
         height: 200,
-        borderRadius: 200,
+        backgroundColor: Colors.white,
+        borderRadius: 10,
         padding: 20,
         zIndex: 12,
         justifyContent: "center",
@@ -48,7 +54,7 @@ const style = StyleSheet.create({
     text: {
         fontSize: 18,
         fontWeight: "600",
-        color: Colors.white,
+        // color: Colors.white,
         marginBottom: 6,
         textAlign: "center"
     },
@@ -60,5 +66,20 @@ const style = StyleSheet.create({
     },
     group: {
         marginTop: 12
+    },
+    iconGroup: {
+        width: 100,
+        height: 100,
+        alignItems: "center",
+        justifyContent: "center",
+        borderRadius: 50
+    },
+    toastContainer: {
+        width: "100%",
+        height: "100%",
+        position: "absolute",
+        left: 0,
+        top: 0,
+        // backgroundColor: Colors.red
     }
 })

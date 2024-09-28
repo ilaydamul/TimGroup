@@ -7,12 +7,15 @@ import { Colors } from '../../constants/colors';
 import * as ImagePicker from 'expo-image-picker';
 import { useState } from 'react';
 import useCameraPermissionsHandler from '../../hooks/useCameraPermissionsHandler';
+import ToastMessage from '../../components/UI/ToastMessage';
 
 export default function StepFour({ onNext, onPrev }) {
     const verifyPermissions = useCameraPermissionsHandler();
     const [comment, setComment] = useState();
     const [image, setImage] = useState();
     const [currentImage, setCurrentImage] = useState();
+    const [showToast, setShowToast] = useState(false);
+
 
 
     function updateInputValue(enteredValue) {
@@ -59,7 +62,16 @@ export default function StepFour({ onNext, onPrev }) {
     }
 
     function onPressHandler() {
-        onNext({ comment, currentImage });
+        if (!currentImage) {
+            setShowToast({ type: "warning", text: "Fotoğraf çekiniz." });
+
+            setTimeout(() => {
+                setShowToast();
+            }, 1000);
+        }
+        else {
+            onNext({ comment, currentImage });
+        }
     }
 
     return (
@@ -72,6 +84,9 @@ export default function StepFour({ onNext, onPrev }) {
                 <Button style={[globalS.btnGray, globalS.btnHalf]} textColor={Colors.black} solidBg onPress={onPrev}>Geri</Button>
                 <Button style={globalS.btnHalf} onPress={onPressHandler}>Devam</Button>
             </View>
+            {
+                showToast && <ToastMessage type={showToast.type} text={showToast.text} />
+            }
         </Box>
     );
 }

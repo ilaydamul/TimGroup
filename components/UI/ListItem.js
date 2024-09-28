@@ -60,6 +60,7 @@ const styles = StyleSheet.create({
     listTitle: {
         fontSize: 18,
         maxWidth: 200,
+        fontWeight:"600"
     },
     listContent: {
         fontSize: 16,
