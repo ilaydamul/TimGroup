@@ -33,6 +33,7 @@ const style = StyleSheet.create({
         position: "absolute",
         top: "50%",
         left: "50%",
+        // transform: [{ translateX: -133 }, { translateY: -100 }],
         transform: [{ translateX: -150 }, { translateY: -100 }],
         width: 300,
         height: 200,
@@ -65,7 +66,7 @@ const style = StyleSheet.create({
         textAlign: "center"
     },
     group: {
-        marginTop: 12
+        marginTop: 12,
     },
     iconGroup: {
         width: 100,
@@ -80,6 +81,7 @@ const style = StyleSheet.create({
         position: "absolute",
         left: 0,
         top: 0,
-        // backgroundColor: Colors.red
+        right:0,
+        bottom:0,
     }
 })

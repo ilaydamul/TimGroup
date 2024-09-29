@@ -84,7 +84,7 @@ export default function StepSix({ infos }) {
             setToastMessage({ isShow: true, type: "warning", text: "Uyarı girdilerini doldurunuz!" });
             setTimeout(() => {
                 setToastMessage({ isShow: false });
-            }, 2000);
+            }, 1500);
 
             return;
         }
@@ -95,24 +95,26 @@ export default function StepSix({ infos }) {
             comment: warningDesc,
             status: transitionVal,
         }
+
         setIsLoading(true);
+
         try {
             const addAuditWarning2 = await addAuditWarningOrDirective(token, data, "Warn");
             if (addAuditWarning2.result == 1) {
                 setToastMessage({ isShow: true, type: "success", text: "Uyarı başarılı bir şekilde eklendi." });
                 setTimeout(() => {
                     setToastMessage({ isShow: false });
-                }, 2000);
+                }, 1500);
             } else {
                 setToastMessage({ isShow: true, type: "warning", text: "Uyarı eklerken bir sorun oluştu." });
                 setTimeout(() => {
                     setToastMessage({ isShow: false });
-                }, 2000);
+                }, 1500);
             }
 
         } catch (error) {
             Toast.show('Hata: ' + error, {
-                duration: 2000,
+                duration: 1500,
             });
         }
 
@@ -124,7 +126,7 @@ export default function StepSix({ infos }) {
             setToastMessage({ isShow: true, type: "warning", text: "Talimat girdilerini doldurunuz!" });
             setTimeout(() => {
                 setToastMessage({ isShow: false });
-            }, 2000);
+            }, 1500);
 
             return;
         }
@@ -142,17 +144,17 @@ export default function StepSix({ infos }) {
                 setToastMessage({ isShow: true, type: "success", text: "Talimat başarılı bir şekilde eklendi." });
                 setTimeout(() => {
                     setToastMessage({ isShow: false });
-                }, 2000);
+                }, 1500);
             } else {
                 setToastMessage({ isShow: true, type: "warning", text: "Talimat eklerken bir sorun oluştu." });
                 setTimeout(() => {
                     setToastMessage({ isShow: false });
-                }, 2000);
+                }, 1500);
             }
 
         } catch (error) {
             Toast.show('Hata: ' + error, {
-                duration: 2000,
+                duration: 1500,
             });
         }
 
@@ -162,6 +164,14 @@ export default function StepSix({ infos }) {
 
 
     async function submitHandler() {
+        if (!customerComment) {
+            setToastMessage({ isShow: true, type: "warning", text: "Müşteri görüşü boş geçilemez!" });
+            setTimeout(() => {
+                setToastMessage({ isShow: false });
+            }, 1500);
+            return;
+        }
+
         const data = {
             projectId: projectId,
             customerComment: customerComment,
@@ -182,26 +192,26 @@ export default function StepSix({ infos }) {
                 setToastMessage({ isShow: true, type: "success", text: "Denetim kaydı başarıyla eklendi." });
                 setTimeout(() => {
                     setToastMessage({ isShow: false });
-                }, 2000);
+                }, 1500);
             }
             else if (response.result == 2) {
                 setToastMessage({ isShow: true, type: "warning", text: "Alan dışındasınız. Lütfen proje alanına giriniz." });
                 setTimeout(() => {
                     setToastMessage({ isShow: false });
-                }, 2000);
+                }, 1500);
             }
             else {
                 setToastMessage({ isShow: true, type: "warning", text: response.msg });
                 setTimeout(() => {
                     setToastMessage({ isShow: false });
-                }, 2000);
+                }, 1500);
             }
 
             setIsLoading(false);
 
         } catch (error) {
             Toast.show('Hata: ' + error, {
-                duration: 2000,
+                duration: 1500,
             });
 
         }

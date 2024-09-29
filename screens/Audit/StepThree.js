@@ -43,9 +43,9 @@ export default function StepThree({ project, onNext, onPrev }) {
 
     async function onPressHandler() {
         //LOCATION KONTROLLERİ 
+        onNext();
+        
         if (checkLocation) {
-            onNext();
-
             const data = {
                 projectId: project.id,
                 lat: location.lat,
@@ -64,12 +64,12 @@ export default function StepThree({ project, onNext, onPrev }) {
                     onNext();
                 }
                 else {
-                    
+
                     Toast.show('Alan dışındasınız.', {
                         duration: 2000,
                     });
                 }
-               
+
 
             } catch (error) {
                 Toast.show(("Beklenmedik bir hata oluştu: " + error), {

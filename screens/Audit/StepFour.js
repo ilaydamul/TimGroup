@@ -5,15 +5,17 @@ import Input from '../../components/UI/Input';
 import { globalS } from '../../constants/styles';
 import { Colors } from '../../constants/colors';
 import * as ImagePicker from 'expo-image-picker';
-import { useState } from 'react';
+import { useContext, useState } from 'react';
 import useCameraPermissionsHandler from '../../hooks/useCameraPermissionsHandler';
 import ToastMessage from '../../components/UI/ToastMessage';
+import { AuthContext } from '../../store/auth-context';
 
 export default function StepFour({ onNext, onPrev }) {
     const verifyPermissions = useCameraPermissionsHandler();
     const [comment, setComment] = useState();
     const [image, setImage] = useState();
     const [currentImage, setCurrentImage] = useState();
+    const { setToastMessage } = useContext(AuthContext);
     const [showToast, setShowToast] = useState(false);
 
 
@@ -63,11 +65,11 @@ export default function StepFour({ onNext, onPrev }) {
 
     function onPressHandler() {
         if (!currentImage) {
-            setShowToast({ type: "warning", text: "Fotoğraf çekiniz." });
+            setToastMessage({ isShow: true, type: "warning", text: "Fotoğraf çekiniz." });
 
             setTimeout(() => {
-                setShowToast();
-            }, 1000);
+                setToastMessage({ isShow: false });
+            }, 2000);
         }
         else {
             onNext({ comment, currentImage });
@@ -84,9 +86,6 @@ export default function StepFour({ onNext, onPrev }) {
                 <Button style={[globalS.btnGray, globalS.btnHalf]} textColor={Colors.black} solidBg onPress={onPrev}>Geri</Button>
                 <Button style={globalS.btnHalf} onPress={onPressHandler}>Devam</Button>
             </View>
-            {
-                showToast && <ToastMessage type={showToast.type} text={showToast.text} />
-            }
         </Box>
     );
 }
