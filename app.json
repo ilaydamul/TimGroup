@@ -27,7 +27,8 @@
         "android.permission.ACCESS_FINE_LOCATION",
         "android.permission.ACCESS_NETWORK_STATE"
       ],
-      "package": "tr.com.timgroup"
+      "package": "tr.com.timgroup",
+      "allowBackup": false
     },
     "web": {
       "favicon": "./assets/favicon.png"

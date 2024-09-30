@@ -16,6 +16,7 @@ import LoadingItems from "../components/UI/LoadingItems"
 export default function QR({ route }) {
   const [scanned, setScanned] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
+  const [isReconnect, setIsReconnect] = useState(false);
   const [readData, setReadData] = useState(null);
 
   const authCtx = useContext(AuthContext);
@@ -58,8 +59,14 @@ export default function QR({ route }) {
       const storedData = await AsyncStorage.getItem("data");
 
       if (storedData && isConnected) {
-        setReadData(storedData);
-        qrApiRequest(true);
+        setToastMessage({ isShow: true, type: "warning", text: "Kayıtlı veri bulundu!" });
+        setTimeout(() => {
+          setToastMessage({ isShow: false });
+        }, 1000);
+
+        setReadData(JSON.parse(storedData));
+        setIsReconnect(true);
+        // qrApiRequest(true);
       }
     };
 
@@ -105,25 +112,26 @@ export default function QR({ route }) {
 
   }
 
-  const qrApiRequest = async (isReconnect) => {
+  const qrApiRequest = async () => {
     if (readData) {
       setScanned(true);
 
       try {
         const response = await qrReadWrite(token, readData || "");
-        if (response.result == 1) {
-          if (isReconnect) {
-            setToastMessage({ isShow: true, type: "success", text: "Kaydedilen qr kod verisi eklendi!" });
 
-            await AsyncStorage.removeItem("data");
-          }
-          else {
-            setToastMessage({ isShow: true, type: "success", text: "Kod okuma başarılı!" });
-          }
+        if (response.result == 1) {
+          setToastMessage({ isShow: true, type: "success", text: "Kod okuma başarılı!" });
 
           setTimeout(() => {
             setToastMessage({ isShow: false });
           }, 2000);
+
+          const storedData = await AsyncStorage.getItem("data");
+
+          if (storedData) {
+            await AsyncStorage.removeItem("data");
+          }
+
         }
         else if (response.result == 2) {
           setToastMessage({ isShow: true, type: "warning", text: "Proje alanı dışındasınız!" });
@@ -133,15 +141,32 @@ export default function QR({ route }) {
           }, 2000);
         }
         else {
-          Toast.show('Hata: ' + response.msg, {
+          setToastMessage({ isShow: true, type: "warning", text: "Projeye ait QR kodu okutunuz!" });
+
+          setTimeout(() => {
+            setToastMessage({ isShow: false });
+          }, 1500);
+        }
+
+        setReadData(null);
+
+      } catch (error) {
+        if (error.message && error.message.includes("400")) {
+          setToastMessage({ isShow: true, type: "warning", text: "Doğru QR kodunu okutunuz!" });
+
+          setTimeout(() => {
+            setToastMessage({ isShow: false });
+          }, 1500);
+
+        } else if (error.message && error.message.includes("Network")) {
+          isConnected(false);
+          qrFunc();
+
+        } else {
+          Toast.show('Hata: ' + error, {
             duration: 1000,
           });
         }
-
-      } catch (error) {
-        Toast.show('Hata: ' + error, {
-          duration: 1000,
-        });
       }
 
 

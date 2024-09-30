@@ -13,6 +13,7 @@ import { LocationContext } from '../../store/location-context';
 import LoadingItems from '../../components/UI/LoadingItems';
 import ComboBox2 from '../../components/UI/ComboBox2';
 import ToastMessage from '../../components/UI/ToastMessage';
+import { useNavigation } from '@react-navigation/native';
 
 const transationType = [{ label: "Sözlü Uyarı", value: "Sözlü Uyarı" }, { label: "Yazılı Uyarı", value: "Yazılı Uyarı" }];
 
@@ -20,6 +21,7 @@ export default function StepSix({ infos }) {
     const authCtx = useContext(AuthContext);
     const { getLocation } = useContext(LocationContext);
     const token = authCtx.token;
+    const navigation = useNavigation();
 
     const { setToastMessage } = useContext(AuthContext);
 
@@ -104,6 +106,7 @@ export default function StepSix({ infos }) {
                 setToastMessage({ isShow: true, type: "success", text: "Uyarı başarılı bir şekilde eklendi." });
                 setTimeout(() => {
                     setToastMessage({ isShow: false });
+                    
                 }, 1500);
             } else {
                 setToastMessage({ isShow: true, type: "warning", text: "Uyarı eklerken bir sorun oluştu." });
@@ -182,17 +185,19 @@ export default function StepSix({ infos }) {
             lat: getLocation.lat,
             lng: getLocation.lng
         };
-        
+
         setIsLoading(true);
 
         try {
             const response = await addAudit(token, data);
 
             if (response.result == 1) {
-                setToastMessage({ isShow: true, type: "success", text: "Denetim kaydı başarıyla eklendi." });
+                setToastMessage({ isShow: true, type: "success", text: "Denetim kaydı başarıyla eklendi. Anasayfaya yönlendiriliyorsunuz." });
                 setTimeout(() => {
                     setToastMessage({ isShow: false });
+                    navigation.navigate("Home");
                 }, 1500);
+
             }
             else if (response.result == 2) {
                 setToastMessage({ isShow: true, type: "warning", text: "Alan dışındasınız. Lütfen proje alanına giriniz." });
