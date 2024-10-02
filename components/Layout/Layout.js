@@ -6,6 +6,7 @@ import { Colors } from "../../constants/colors";
 import ToastMessage from "../UI/ToastMessage";
 import { useContext } from "react";
 import { AuthContext } from "../../store/auth-context";
+import NetDot from "../UI/NetDot";
 
 export default function Layout({ children, isBack, bgDark, doc }) {
     const { toastMessage } = useContext(AuthContext);
@@ -25,7 +26,7 @@ export default function Layout({ children, isBack, bgDark, doc }) {
                 {
                     toastMessage.isShow && <ToastMessage type={toastMessage.type} text={toastMessage.text} />
                 }
-
+               
             </KeyboardAwareScrollView>
             {/* </SafeAreaView> */}
         </LinearGradient >

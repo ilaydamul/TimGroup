@@ -10,14 +10,15 @@ import useCameraPermissionsHandler from "../hooks/useCameraPermissionsHandler";
 import Toast from "react-native-root-toast";
 import { qrReadWrite } from "../utils/auth";
 import { AuthContext } from "../store/auth-context";
+import { DocumentContext } from "../store/document-context";
 import useLocationPermissionsHandler from "../hooks/useLocationPermissions";
 import LoadingItems from "../components/UI/LoadingItems"
 
 export default function QR({ route }) {
   const [scanned, setScanned] = useState(false);
   const [isConnected, setIsConnected] = useState(false);
-  const [isReconnect, setIsReconnect] = useState(false);
   const [readData, setReadData] = useState(null);
+  const { qrApiRequest, netCon } = useContext(DocumentContext);
 
   const authCtx = useContext(AuthContext);
   const { setToastMessage } = useContext(AuthContext);
@@ -45,33 +46,8 @@ export default function QR({ route }) {
       console.error("Permission Error:", error);
     });
 
-    const checkNetwork = async () => {
-      const networkStatus = await Network.getNetworkStateAsync();
-      setIsConnected(networkStatus.isConnected);
-    }
-
-    checkNetwork();
-
   }, []);
 
-  useEffect(() => {
-    const checkData = async () => {
-      const storedData = await AsyncStorage.getItem("data");
-
-      if (storedData && isConnected) {
-        setToastMessage({ isShow: true, type: "warning", text: "Kayıtlı veri bulundu!" });
-        setTimeout(() => {
-          setToastMessage({ isShow: false });
-        }, 1000);
-
-        setReadData(JSON.parse(storedData));
-        setIsReconnect(true);
-        // qrApiRequest(true);
-      }
-    };
-
-    checkData();
-  }, [isConnected]);
 
   useEffect(() => {
     if (readData) {
@@ -95,83 +71,21 @@ export default function QR({ route }) {
 
   const qrFunc = async () => {
     // API ISTEKLERI
-    if (isConnected) {
+    if (netCon) {
       qrApiRequest();
     }
     else {
       await AsyncStorage.setItem("data", JSON.stringify(readData));
 
-      setToastMessage({ isShow: true, type: "warning", text: "Verileriniz kaydedildi, internete bağlandıktan sonra bu sayfaya tekrar giriniz." });
+      setToastMessage({ isShow: true, type: "warning", text: "Verileriniz kaydedildi! İnternete bağlanınca tekrar denenecek." });
       setTimeout(() => {
         setToastMessage({ isShow: false });
       }, 2000);
 
       setScanned(true);
     }
-
-
   }
 
-  const qrApiRequest = async () => {
-    if (readData) {
-      setScanned(true);
-
-      try {
-        const response = await qrReadWrite(token, readData || "");
-
-        if (response.result == 1) {
-          setToastMessage({ isShow: true, type: "success", text: "Kod okuma başarılı!" });
-
-          setTimeout(() => {
-            setToastMessage({ isShow: false });
-          }, 2000);
-
-          const storedData = await AsyncStorage.getItem("data");
-
-          if (storedData) {
-            await AsyncStorage.removeItem("data");
-          }
-
-        }
-        else if (response.result == 2) {
-          setToastMessage({ isShow: true, type: "warning", text: "Proje alanı dışındasınız!" });
-
-          setTimeout(() => {
-            setToastMessage({ isShow: false });
-          }, 2000);
-        }
-        else {
-          setToastMessage({ isShow: true, type: "warning", text: "Projeye ait QR kodu okutunuz!" });
-
-          setTimeout(() => {
-            setToastMessage({ isShow: false });
-          }, 1500);
-        }
-
-        setReadData(null);
-
-      } catch (error) {
-        if (error.message && error.message.includes("400")) {
-          setToastMessage({ isShow: true, type: "warning", text: "Doğru QR kodunu okutunuz!" });
-
-          setTimeout(() => {
-            setToastMessage({ isShow: false });
-          }, 1500);
-
-        } else if (error.message && error.message.includes("Network")) {
-          isConnected(false);
-          qrFunc();
-
-        } else {
-          Toast.show('Hata: ' + error, {
-            duration: 1000,
-          });
-        }
-      }
-
-
-    }
-  }
 
   const refreshScan = () => {
     setScanned(false);
