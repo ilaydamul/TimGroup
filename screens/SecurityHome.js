@@ -19,10 +19,8 @@ export default function SecurityHome() {
     const [name, setName] = useState("");
     const [loading, setLoading] = useState(false);
     const [hasWarning, setHasWarning] = useState(false);
-    const { documents, setDocuments, controlNetwork, checkQR, netCon } = useContext(DocumentContext);
+    const { documents, setDocuments, netCon, syncStoredData } = useContext(DocumentContext);
     const authCtx = useContext(AuthContext);
-
-
 
 
     useEffect(() => {
@@ -36,17 +34,13 @@ export default function SecurityHome() {
         initialize();
 
         // var network = controlNetwork();
-        controlNetwork()
+        // controlNetwork()
         // checkQR();
 
 
-
+        
 
     }, []);
-
-    // useEffect(() => {
-
-    // }, [netCon])
 
     useEffect(() => {
         if (documents.length > 0) {

@@ -1,99 +1,81 @@
-import { createContext, useEffect, useState } from "react";
+import { createContext, useContext, useEffect, useState } from "react";
 import * as Network from "expo-network";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import NetInfo from '@react-native-community/netinfo';
 import axios from 'axios';
 import { qrReadWrite } from "../utils/auth";
+import { AuthContext } from "./auth-context";
 
 export const DocumentContext = createContext();
 
 export const DocumentProvider = ({ children }) => {
     const [documents, setDocuments] = useState([]);
     const [netCon, setNetCon] = useState(true);
-    const [readData, setReadData] = useState(null);
+    const authCtx = useContext(AuthContext);
+    const { setToastMessage } = useContext(AuthContext);
+    const token = authCtx.token;
 
     useEffect(() => {
-        const subscription = Network.addNetworkStateListener((state) => {
+        const unsubscribe = NetInfo.addEventListener((state) => {
             setNetCon(state.isConnected);
         });
 
         return () => {
-            subscription && subscription.remove();
+            unsubscribe();
         };
+
+        // const subscription = Network.addNetworkStateListener((state) => {
+        //     setNetCon(state.isConnected);
+        // });
+
+        // return () => {
+        //     subscription && subscription.remove();
+        // };
     }, []);
 
     const syncStoredData = async () => {
-        try {
-            const storedData = await AsyncStorage.getItem('data');
-            const resp = qrApiRequest(storedData);
-            if (resp) {
-                console.log(resp);
-
-                // await AsyncStorage.removeItem('data');
-            }
-        } catch (error) {
-            console.error("API veya senkronizasyon hatası:", error);
+        const storedData = await AsyncStorage.getItem('data');
+        if (storedData && netCon) {
+            setToastMessage({ isShow: true, type: "warning", text: "Kaydedilen veri bulundu." });
+            qrApiRequest(storedData);
         }
     };
 
     const qrApiRequest = async (readData) => {
         if (readData) {
-            // setScanned(true);
-
             try {
                 const response = await qrReadWrite(token, readData || "");
-                return response;
-                // if (response.result == 1) {
-                //     setToastMessage({ isShow: true, type: "success", text: "Kod okuma başarılı!" });
 
-                //     setTimeout(() => {
-                //         setToastMessage({ isShow: false });
-                //     }, 2000);
+                if (response.result == 1) {
+                    setToastMessage({ isShow: true, type: "success", text: "Kod okuma başarılı!" });
+                    const storedData = await AsyncStorage.getItem('data');
+                    if (storedData) {
+                        await AsyncStorage.removeItem('data');
+                    }
+                }
+                else if (response.result == 2) {
+                    setToastMessage({ isShow: true, type: "warning", text: "Proje alanı dışındasınız!" });
+                }
+                else {
+                    setToastMessage({ isShow: true, type: "warning", text: "Projeye ait QR kodu okutunuz!" });
+                }
 
-                //     const storedData = await AsyncStorage.getItem("data");
 
-                //     if (storedData) {
-                //         await AsyncStorage.removeItem("data");
-                //     }
-
-                // }
-                // else if (response.result == 2) {
-                //     setToastMessage({ isShow: true, type: "warning", text: "Proje alanı dışındasınız!" });
-
-                //     setTimeout(() => {
-                //         setToastMessage({ isShow: false });
-                //     }, 2000);
-                // }
-                // else {
-                //     setToastMessage({ isShow: true, type: "warning", text: "Projeye ait QR kodu okutunuz!" });
-
-                //     setTimeout(() => {
-                //         setToastMessage({ isShow: false });
-                //     }, 1500);
-                // }
-
-                // setReadData(null);
 
             } catch (error) {
-                return error;
-                // if (error.message && error.message.includes("400")) {
-                //     setToastMessage({ isShow: true, type: "warning", text: "Doğru QR kodunu okutunuz!" });
-
-                //     setTimeout(() => {
-                //         setToastMessage({ isShow: false });
-                //     }, 1500);
-
-                // } else if (error.message && error.message.includes("Network")) {
-                //     isConnected(false);
-                //     qrFunc();
-
-                // } else {
-                //     Toast.show('Hata: ' + error, {
-                //         duration: 1000,
-                //     });
-                // }
+                if (error.message && error.message.includes("400")) {
+                    setToastMessage({ isShow: true, type: "warning", text: "Doğru QR kodunu okutunuz!" });
+                }
+                else {
+                    setToastMessage({ isShow: true, type: "warning", text: error });
+                }
             }
 
-
+            setTimeout(() => {
+                setToastMessage({ isShow: false });
+            }, 1500);
+        } else {
+            return "Okunan veri bulunamadı";
         }
     }
 
@@ -105,7 +87,7 @@ export const DocumentProvider = ({ children }) => {
     }, [netCon]);
 
     return (
-        <DocumentContext.Provider value={{ documents, setDocuments, qrApiRequest, netCon }}>
+        <DocumentContext.Provider value={{ documents, setDocuments, qrApiRequest, netCon, syncStoredData }}>
             {children}
         </DocumentContext.Provider>
     );

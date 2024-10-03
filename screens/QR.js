@@ -13,22 +13,23 @@ import { AuthContext } from "../store/auth-context";
 import { DocumentContext } from "../store/document-context";
 import useLocationPermissionsHandler from "../hooks/useLocationPermissions";
 import LoadingItems from "../components/UI/LoadingItems"
+import NetDot from "../components/UI/NetDot";
 
 export default function QR({ route }) {
   const [scanned, setScanned] = useState(false);
-  const [isConnected, setIsConnected] = useState(false);
+  // const [isConnected, setIsConnected] = useState(false);
   const [readData, setReadData] = useState(null);
-  const { qrApiRequest, netCon } = useContext(DocumentContext);
 
-  const authCtx = useContext(AuthContext);
+
+  // const authCtx = useContext(AuthContext);
   const { setToastMessage } = useContext(AuthContext);
-  const token = authCtx.token;
+  const { qrApiRequest, netCon } = useContext(DocumentContext);
+  // const token = authCtx.token;
 
   const { params } = route.params;
 
   const [location, requestLocationPermissions] = useLocationPermissionsHandler();
   const verifyPermissions = useCameraPermissionsHandler();
-
   const [checkLocation, setCheckLocation] = useState(false);
 
   useEffect(() => {
@@ -43,7 +44,10 @@ export default function QR({ route }) {
     }
 
     permFunc().catch((error) => {
-      console.error("Permission Error:", error);
+      setToastMessage({ isShow: true, type: "warning", text: "Konum paylaşımını açın!" });
+      setTimeout(() => {
+        setToastMessage({ isShow: false });
+      }, 1500);
     });
 
   }, []);
@@ -58,6 +62,8 @@ export default function QR({ route }) {
 
   const handleBarCodeScanned = async ({ type, data }) => {
     if (!scanned) {
+      setScanned(true);
+
       const rr = {
         "code": data,
         "lat": location.lat,
@@ -72,20 +78,19 @@ export default function QR({ route }) {
   const qrFunc = async () => {
     // API ISTEKLERI
     if (netCon) {
-      qrApiRequest();
+      await qrApiRequest(readData);
+      setReadData(null);
     }
     else {
       await AsyncStorage.setItem("data", JSON.stringify(readData));
-
       setToastMessage({ isShow: true, type: "warning", text: "Verileriniz kaydedildi! İnternete bağlanınca tekrar denenecek." });
       setTimeout(() => {
         setToastMessage({ isShow: false });
-      }, 2000);
+      }, 1500);
 
-      setScanned(true);
+      setReadData(null);
     }
   }
-
 
   const refreshScan = () => {
     setScanned(false);
@@ -120,6 +125,7 @@ export default function QR({ route }) {
         )}
 
       </View>
+      <NetDot status={netCon} />
     </Layout>
   );
 
