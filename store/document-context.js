@@ -38,7 +38,7 @@ export const DocumentProvider = ({ children }) => {
     const syncStoredData = async () => {
         const storedData = await AsyncStorage.getItem('data');
         if (storedData && netCon) {
-            setToastMessage({ isShow: true, type: "warning", text: "Kaydedilen veri bulundu." + storedData + " Token: " + token });
+            setToastMessage({ isShow: true, type: "warning", text: "Kaydedilen veri bulundu." });
             setTimeout(() => {
                 setToastMessage({ isShow: false });
                 qrApiRequest(storedData);
@@ -50,7 +50,6 @@ export const DocumentProvider = ({ children }) => {
         if (readData) {
             try {
                 const response = await qrReadWrite(token, readData || "");
-
                 if (response.result == 1) {
                     setToastMessage({ isShow: true, type: "success", text: "Kod okuma başarılı!" });
                     const storedData = await AsyncStorage.getItem('data');
@@ -64,8 +63,6 @@ export const DocumentProvider = ({ children }) => {
                 else {
                     setToastMessage({ isShow: true, type: "warning", text: "Projeye ait QR kodu okutunuz!" });
                 }
-
-
 
             } catch (error) {
                 if (error.message && error.message.includes("400")) {
