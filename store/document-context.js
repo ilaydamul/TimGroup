@@ -13,7 +13,9 @@ export const DocumentProvider = ({ children }) => {
     const [netCon, setNetCon] = useState(true);
     const authCtx = useContext(AuthContext);
     const { setToastMessage } = useContext(AuthContext);
+
     const token = authCtx.token;
+
 
     useEffect(() => {
         const unsubscribe = NetInfo.addEventListener((state) => {
@@ -36,8 +38,11 @@ export const DocumentProvider = ({ children }) => {
     const syncStoredData = async () => {
         const storedData = await AsyncStorage.getItem('data');
         if (storedData && netCon) {
-            setToastMessage({ isShow: true, type: "warning", text: "Kaydedilen veri bulundu." });
-            qrApiRequest(storedData);
+            setToastMessage({ isShow: true, type: "warning", text: "Kaydedilen veri bulundu." + storedData + " Token: " + token });
+            setTimeout(() => {
+                setToastMessage({ isShow: false });
+                qrApiRequest(storedData);
+            }, 1500);
         }
     };
 
