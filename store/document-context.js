@@ -72,13 +72,13 @@ export const DocumentProvider = ({ children }) => {
                     setToastMessage({ isShow: true, type: "warning", text: error });
                 }
             }
-
-            setTimeout(() => {
-                setToastMessage({ isShow: false });
-            }, 1500);
         } else {
-            return "Okunan veri bulunamadı";
+            setToastMessage({ isShow: true, type: "warning", text: "Okunan veri bulunamadı" });
         }
+
+        setTimeout(() => {
+            setToastMessage({ isShow: false });
+        }, 1500);
     }
 
 
