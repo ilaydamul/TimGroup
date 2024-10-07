@@ -25,21 +25,13 @@ export default function SecurityHome() {
 
     useEffect(() => {
         const initialize = async () => {
+            await fetchDocuments();
+
             const storedName = await AsyncStorage.getItem("name");
             setName(storedName);
-
-            await fetchDocuments();
         };
 
         initialize();
-
-        // var network = controlNetwork();
-        // controlNetwork()
-        // checkQR();
-
-
-        
-
     }, []);
 
     useEffect(() => {

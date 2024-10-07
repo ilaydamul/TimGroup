@@ -61,12 +61,13 @@ export const DocumentProvider = ({ children }) => {
                     setToastMessage({ isShow: true, type: "warning", text: "Proje alanı dışındasınız!" });
                 }
                 else {
-                    setToastMessage({ isShow: true, type: "warning", text: "Projeye ait QR kodu okutunuz!" });
+                    setToastMessage({ isShow: true, type: "warning", text: "Kod okuma başarısız, tekrar deneyin." });
                 }
 
             } catch (error) {
                 if (error.message && error.message.includes("400")) {
                     setToastMessage({ isShow: true, type: "warning", text: "Doğru QR kodunu okutunuz!" });
+                    await AsyncStorage.removeItem('data');
                 }
                 else {
                     setToastMessage({ isShow: true, type: "warning", text: error });

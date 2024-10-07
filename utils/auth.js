@@ -25,29 +25,6 @@ export async function login(email, password, role) {
     return response;
 }
 
-
-// function JSONtoFormData(datas) {
-//     var formData = new FormData();
-//     for (let i = 0; i < datas.length; i++) {
-//         formData.append(datas[i])
-//     }
-
-//     return formData;
-// }
-
-function JSONtoFormData(json) {
-    const formData = new FormData();
-    for (const key in json) {
-        if (json[key] instanceof Array || json[key] instanceof Object) {
-            formData.append(key, JSON.stringify(json[key]));
-        } else {
-            formData.append(key, json[key]);
-        }
-    }
-    return formData;
-}
-
-
 // DENETMEN TALİMATLARINI ÇEKME
 export async function getAuditDirective(token) {
     const header = {
@@ -65,9 +42,6 @@ export async function addAuditWarningOrDirective(token, datas, type) {
     const header = {
         "Cookie": token
     };
-
-    // const data = JSONtoFormData(datas);
-    // var apiType;
 
     if (type == "Warn") {
         apiType = "/api/add-audit-warning";
