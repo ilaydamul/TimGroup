@@ -26,7 +26,7 @@ export default function Layout({ children, isBack, bgDark, doc }) {
                 {
                     toastMessage.isShow && <ToastMessage type={toastMessage.type} text={toastMessage.text} />
                 }
-               
+
             </KeyboardAwareScrollView>
             {/* </SafeAreaView> */}
         </LinearGradient >

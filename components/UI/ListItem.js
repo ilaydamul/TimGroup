@@ -1,12 +1,19 @@
-import { View, Text, StyleSheet, Switch } from 'react-native';
+import { View, Text, StyleSheet, Switch, TouchableOpacity, Linking } from 'react-native';
 import { Colors } from '../../constants/colors';
 import { useState } from 'react';
 
 export default function ListItem({ title, content, noBorder, listContentBg, style, contentStyle, isRadio, onToggle, radioValue, column }) {
     const [isEnabled, setIsEnabled] = useState(false);
-    
-    // content'in array olup olmadığını kontrol et
+
     const isArrayContent = Array.isArray(content);
+
+    const handlePhonePress = (phoneNumber) => {
+        Linking.openURL(`tel:${phoneNumber}`);
+    };
+
+    const handleEmailPress = (email) => {
+        Linking.openURL(`mailto:${email}`);
+    };
 
     return (
         <View style={[styles.listItem, noBorder && styles.noBorder, column && styles.column, style]}>
@@ -20,17 +27,25 @@ export default function ListItem({ title, content, noBorder, listContentBg, styl
                     value={radioValue}
                 />
             ) : (
-                // content bir array ise her bir elemanı listele
                 isArrayContent ? (
                     <View style={[listContentBg && styles.listContentBg]}>
                         {content.map((item, index) => (
-                            <Text key={index} style={[styles.listContent, column && styles.columnText, contentStyle]}>
-                                {item}
-                            </Text>
+                            <TouchableOpacity 
+                                key={index} 
+                                onPress={() => {
+                                    if (item.includes('@')) {
+                                        handleEmailPress(item);
+                                    } else {
+                                        handlePhonePress(item);
+                                    }
+                                }}>
+                                <Text style={[styles.listContent, styles.listContent2, column && styles.columnText, contentStyle]}>
+                                    {item}
+                                </Text>
+                            </TouchableOpacity>
                         ))}
                     </View>
                 ) : (
-                    // content array değilse, normal text olarak göster
                     <Text style={[styles.listContent, listContentBg && styles.listContentBg, column && styles.columnText, contentStyle]}>
                         {content}
                     </Text>
@@ -60,13 +75,17 @@ const styles = StyleSheet.create({
     listTitle: {
         fontSize: 18,
         maxWidth: 200,
-        fontWeight:"600"
+        fontWeight: "600"
     },
     listContent: {
         fontSize: 16,
         paddingHorizontal: 8,
         paddingVertical: 8,
         textAlign: "right"
+    },
+    listContent2: {
+        paddingHorizontal: 2,
+        paddingVertical: 2,
     },
     listContentBg: {
         // backgroundColor: Colors.gray400,

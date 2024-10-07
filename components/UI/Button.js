@@ -23,8 +23,8 @@ export default function Button({ children, onPress, style, solidBg = false, text
 
 const styles = StyleSheet.create({
   button: {
-    paddingHorizontal: 24,
-    paddingVertical: 12,
+    paddingHorizontal: 16,
+    paddingVertical: 10,
     shadowRadius: 2,
     borderRadius: 4,
   },

@@ -36,7 +36,9 @@ export const DocumentProvider = ({ children }) => {
     }, []);
 
     const syncStoredData = async () => {
-        const storedData = await AsyncStorage.getItem('data');
+        var storedData = await AsyncStorage.getItem('data');
+        storedData = JSON.parse(storedData);
+
         if (storedData && netCon) {
             setToastMessage({ isShow: true, type: "warning", text: "Kaydedilen veri bulundu." });
             setTimeout(() => {
