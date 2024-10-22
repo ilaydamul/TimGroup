@@ -17,6 +17,12 @@
     }
   },
   "submit": {
-    "production": {}
+    "production": {
+      "ios":{
+        "appleId":"timgroupbrl@gmail.com",
+        "ascAppId":"6737224703",
+        "appleTeamId":"FRVJ6FLPR6"
+      }
+    }
   }
 }
