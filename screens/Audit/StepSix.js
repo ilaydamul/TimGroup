@@ -5,14 +5,13 @@ import Input from '../../components/UI/Input';
 import { useContext, useEffect, useState } from 'react';
 import { globalS } from '../../constants/styles';
 import { Colors } from '../../constants/colors';
-// import ComboBox from '../../components/UI/ComboBox';
 import Toast from 'react-native-root-toast';
 import { AuthContext } from '../../store/auth-context';
 import { addAudit, addAuditWarningOrDirective, getPersonelList } from '../../utils/auth';
 import { LocationContext } from '../../store/location-context';
 import LoadingItems from '../../components/UI/LoadingItems';
-import ComboBox2 from '../../components/UI/ComboBox2';
-import ToastMessage from '../../components/UI/ToastMessage';
+import { useNavigation } from '@react-navigation/native';
+import ComboBox from '../../components/UI/ComboBox';
 
 const transationType = [{ label: "Sözlü Uyarı", value: "Sözlü Uyarı" }, { label: "Yazılı Uyarı", value: "Yazılı Uyarı" }];
 
@@ -20,6 +19,7 @@ export default function StepSix({ infos }) {
     const authCtx = useContext(AuthContext);
     const { getLocation } = useContext(LocationContext);
     const token = authCtx.token;
+    const navigation = useNavigation();
 
     const { setToastMessage } = useContext(AuthContext);
 
@@ -104,6 +104,7 @@ export default function StepSix({ infos }) {
                 setToastMessage({ isShow: true, type: "success", text: "Uyarı başarılı bir şekilde eklendi." });
                 setTimeout(() => {
                     setToastMessage({ isShow: false });
+
                 }, 1500);
             } else {
                 setToastMessage({ isShow: true, type: "warning", text: "Uyarı eklerken bir sorun oluştu." });
@@ -182,16 +183,17 @@ export default function StepSix({ infos }) {
             lat: getLocation.lat,
             lng: getLocation.lng
         };
-        
+
         setIsLoading(true);
 
         try {
             const response = await addAudit(token, data);
 
             if (response.result == 1) {
-                setToastMessage({ isShow: true, type: "success", text: "Denetim kaydı başarıyla eklendi." });
+                setToastMessage({ isShow: true, type: "success", text: "Denetim kaydı başarıyla eklendi. Anasayfaya yönlendiriliyorsunuz." });
                 setTimeout(() => {
                     setToastMessage({ isShow: false });
+                    navigation.navigate("Home");
                 }, 1500);
             }
             else if (response.result == 2) {
@@ -213,7 +215,6 @@ export default function StepSix({ infos }) {
             Toast.show('Hata: ' + error, {
                 duration: 1500,
             });
-
         }
 
         setIsLoading(false);
@@ -226,19 +227,15 @@ export default function StepSix({ infos }) {
                 <Input textarea mb={12} onUpdateValue={updateInputValue.bind(this, "customerComment")} />
                 <Text style={globalS.leftTitle}>Notlarınız</Text>
                 <Input textarea mb={12} onUpdateValue={updateInputValue.bind(this, "note")} />
-                {/* <View style={[style.flexRight, globalS.mb12]}>
-                    <Button style={style.smallBtn} onPress={submitHandler}>Kaydet</Button>
-                </View> */}
                 <Text style={globalS.leftTitle}>Uyarılar</Text>
                 <View>
                     <View style={[globalS.dFlexCenterBetween, globalS.mb12]}>
                         <Text style={style.selectText}>Görevli Personel</Text>
-                        {personels && <ComboBox2 data={personels} setValue={setWarnedStaff} placeholder={"Personel Seçin.."} />}
-
+                        {personels && <ComboBox data={personels} setValue={setWarnedStaff} placeholder={"Personel Seçin.."} />}
                     </View>
                     <View style={[globalS.dFlexCenterBetween, globalS.mb12]}>
                         <Text style={globalS.selectText}>İşlem</Text>
-                        <ComboBox2 data={transationType} setValue={setTransitionVal} placeholder={"Uyarı Seçin.."} />
+                        <ComboBox data={transationType} setValue={setTransitionVal} placeholder={"Uyarı Seçin.."} />
                     </View>
                     <Text style={[globalS.selectText, globalS.mb12]} >Açıklama</Text>
                     <Input textarea mb={12} onUpdateValue={updateInputValue.bind(this, "warningDesc")} />
@@ -251,8 +248,7 @@ export default function StepSix({ infos }) {
                 <View>
                     <View style={[globalS.dFlexCenterBetween, globalS.mb12]}>
                         <Text style={style.selectText}>Görevli Personel</Text>
-                        {personels && <ComboBox2 data={personels} setValue={setDirectivedStaff} placeholder={"Personel Seçin.."} />}
-
+                        {personels && <ComboBox data={personels} setValue={setDirectivedStaff} placeholder={"Personel Seçin.."} />}
                     </View>
                     <Text style={[globalS.selectText, globalS.mb12]}>Başlık</Text>
                     <Input mb={12} grayBg onUpdateValue={updateInputValue.bind(this, "directiveTitle")} />

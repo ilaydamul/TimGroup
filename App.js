@@ -78,10 +78,9 @@ function Root() {
         const token = await AsyncStorage.getItem('token');
         const role = await AsyncStorage.getItem('role');
         const name = await AsyncStorage.getItem('name');
-        // console.log(token);
-        // console.log(role);
+
         if (token) {
-          authCtx.authenticate(token, role, name);
+          await authCtx.authenticate(token, role, name);
         }
 
       } catch (error) {
@@ -92,7 +91,10 @@ function Root() {
     }
 
     fetchToken();
+    
+
   }, []);
+
 
   if (loading) {
     return <LoadingOverlay message={"Yükleniyor..."} />;

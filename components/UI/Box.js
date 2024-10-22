@@ -27,11 +27,11 @@ const styles = StyleSheet.create({
     },
     boxTitleGroup: {
         backgroundColor: Colors.softBlack,
-        padding: 20,
+        padding: 16,
     },
     boxTitle: {
         color: "white",
-        fontSize: 22,
+        fontSize: 20,
         textAlign: "center"
     },
 })

@@ -8,6 +8,7 @@ import { updateFileStatus } from "../utils/auth";
 import Toast from "react-native-root-toast";
 import { useNavigation } from "@react-navigation/native";
 import { DocumentContext } from "../store/document-context";
+import NetDot from "../components/UI/NetDot";
 
 export default function PDFViewer({ route }) {
     const navigation = useNavigation();
@@ -16,7 +17,7 @@ export default function PDFViewer({ route }) {
     const token = route.params.token;
     // const documents = route.params.documents;
     // const setDocuments = route.params.setDocuments;
-    const { documents, setDocuments } = useContext(DocumentContext);
+    const { documents, setDocuments, netCon } = useContext(DocumentContext);
 
 
     const url = "https://timgroup.net.tr" + item.fileLink;
@@ -34,7 +35,7 @@ export default function PDFViewer({ route }) {
             const response = await updateFileStatus(token, data);
 
             if (response.result == 1) {
-                const updatedDocuments = documents.map(doc => 
+                const updatedDocuments = documents.map(doc =>
                     doc.id === id ? { ...doc, status: true } : doc
                 );
 
@@ -62,6 +63,7 @@ export default function PDFViewer({ route }) {
                     !itemStatus && <Button style={globalS.mt16} onPress={onPressHandler}>Okudum, Onaylıyorum</Button>
                 }
             </View>
+            <NetDot status={netCon} />
         </Layout>
     );
 }

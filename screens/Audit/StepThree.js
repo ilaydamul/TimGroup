@@ -28,7 +28,7 @@ export default function StepThree({ project, onNext, onPrev }) {
 
             setCheckLocation(hasLocPermission);
             // console.log("Has Loc Permission:", checkLocation);
-
+            
 
             if (!hasLocPermission) {
                 return;
@@ -39,12 +39,13 @@ export default function StepThree({ project, onNext, onPrev }) {
 
         locationHandler();
 
+
+        console.log(project);
+        
     }, [])
 
     async function onPressHandler() {
         //LOCATION KONTROLLERİ 
-        onNext();
-        
         if (checkLocation) {
             const data = {
                 projectId: project.id,

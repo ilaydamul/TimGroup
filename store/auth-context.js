@@ -39,6 +39,7 @@ export default function AuthContextProvider({ children }) {
         setIsSecurity(true);
         await AsyncStorage.removeItem("token");
         await AsyncStorage.removeItem("role");
+        await AsyncStorage.removeItem("name");
     }
 
     function loginControl(isError, errorTxt) {

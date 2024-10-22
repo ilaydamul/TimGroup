@@ -4,11 +4,13 @@ import { AuthContext } from '../store/auth-context';
 import { login } from "../utils/auth";
 import LoadingOverlay from '../components/UI/LoadingOverlay';
 import Toast from 'react-native-root-toast';
+import ToastMessage from '../components/UI/ToastMessage';
 
 export default function Login({ route }) {
     const [isAuthenticating, setIsAuthenticating] = useState(false);
     const authCtx = useContext(AuthContext);
     const { role } = route.params;
+    const { toastMessage, setToastMessage } = useContext(AuthContext);
 
     useEffect(() => {
         authCtx.loginControl(false, "");
@@ -21,13 +23,18 @@ export default function Login({ route }) {
             const response = await login(username, password, role);
 
             if (response.data.result == 1) {
-                authCtx.authenticate(response.headers['set-cookie'][0].split(";")[0], role, response.data.user.name);
-
+                await authCtx.authenticate(response.headers['set-cookie'][0].split(";")[0], role, response.data.user.name);
             } else {
                 // console.log(response.data);
-                Toast.show('Kullanıcı adı ya da şifre yanlış..', {
-                    duration: 2000,
-                });
+                setToastMessage({ isShow: true, type: "warning", text: "Kullanıcı adı ya da şifre yanlış.." });
+                setTimeout(() => {
+                    setToastMessage({ isShow: false });
+                }, 1500);
+                // Toast.show('Kullanıcı adı ya da şifre yanlış..', {
+                //     duration: 2000,
+                // });
+                // console.log("asd");
+
                 setIsAuthenticating(false);
             }
 
@@ -51,6 +58,12 @@ export default function Login({ route }) {
     }
 
     return (
-        <AuthContent onAuthenticate={loginHandler} />
+        <>
+            <AuthContent onAuthenticate={loginHandler} />
+            {
+                toastMessage.isShow && <ToastMessage type={toastMessage.type} text={toastMessage.text} />
+            }
+        </>
+
     )
 }

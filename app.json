@@ -2,20 +2,31 @@
   "expo": {
     "name": "TimGroup",
     "slug": "TimGroup",
+<<<<<<< HEAD
     "version": "1.0.7",
+=======
+    "version": "1.0.8",
+>>>>>>> 7b82c4d4c1363578ae2b3e60d55801cf23daf4ed
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
     "splash": {
       "image": "./assets/splash.png",
-      "resizeMode": "contain",
+      "resizeMode": "cover",
       "backgroundColor": "#ffffff"
     },
     "ios": {
+<<<<<<< HEAD
       "supportsTablet": false,
       "bundleIdentifier": "tr.com.timgroup"
+=======
+      "buildNumber": "4",
+      "supportsTablet": true,
+      "bundleIdentifier": "y"
+>>>>>>> 7b82c4d4c1363578ae2b3e60d55801cf23daf4ed
     },
     "android": {
+      "versionCode": 4,
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"
@@ -27,7 +38,8 @@
         "android.permission.ACCESS_FINE_LOCATION",
         "android.permission.ACCESS_NETWORK_STATE"
       ],
-      "package": "tr.com.timgroup"
+      "package": "tr.com.timgroup",
+      "allowBackup": false
     },
     "web": {
       "favicon": "./assets/favicon.png"
@@ -36,8 +48,8 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "The app accesses your photos to let you share them with your friends.",
-          "cameraPermission": "The app needs access to your camera in order to take photos of your favorite places"
+          "photosPermission": "Uygulamanın fotoğraflarınıza erişmesi gerekiyor.",
+          "cameraPermission": "Uygulamanın kameranıza erişmesi gerekiyor."
         }
       ],
       [

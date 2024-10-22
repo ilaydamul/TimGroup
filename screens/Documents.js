@@ -8,6 +8,7 @@ import { useNavigation } from "@react-navigation/native";
 import { AuthContext } from "../store/auth-context";
 import LoadingItems from "../components/UI/LoadingItems";
 import { DocumentContext } from "../store/document-context";
+import NetDot from "../components/UI/NetDot";
 
 
 export default Documents = ({ route }) => {
@@ -16,7 +17,7 @@ export default Documents = ({ route }) => {
     const [loading, setLoading] = useState(true);
     const authCtx = useContext(AuthContext);
     // const { documents, setDocuments } = route.params || {};
-    const { documents, setDocuments } = useContext(DocumentContext);
+    const { documents, setDocuments, netCon } = useContext(DocumentContext);
 
     // const routeItems = route.params;
 
@@ -44,7 +45,7 @@ export default Documents = ({ route }) => {
 
 
     const handleNextStep = (selectedItem) => {
-        navigation.navigate("PDFViewer", { item: selectedItem, token: authCtx.token});
+        navigation.navigate("PDFViewer", { item: selectedItem, token: authCtx.token });
     }
 
     return (
@@ -60,7 +61,9 @@ export default Documents = ({ route }) => {
                     </ScrollView> :
                         <Text>Size ait özlük evrakları bulunmamaktadır.</Text>)}
                 </Box>
+
             </View>
+            <NetDot status={netCon} />
         </Layout>
     )
 }

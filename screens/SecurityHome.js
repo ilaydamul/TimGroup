@@ -5,6 +5,7 @@ import { globalS } from "../constants/styles";
 import { FontAwesome6, MaterialCommunityIcons } from "@expo/vector-icons";
 import { Colors } from "../constants/colors";
 import Button from "../components/UI/Button";
+import NetDot from "../components/UI/NetDot";
 import { AuthContext } from "../store/auth-context";
 import { useNavigation } from "@react-navigation/native";
 import AsyncStorage from "@react-native-async-storage/async-storage";
@@ -18,16 +19,16 @@ export default function SecurityHome() {
     const [name, setName] = useState("");
     const [loading, setLoading] = useState(false);
     const [hasWarning, setHasWarning] = useState(false);
-    const { documents, setDocuments } = useContext(DocumentContext);
+    const { documents, setDocuments, netCon, syncStoredData } = useContext(DocumentContext);
     const authCtx = useContext(AuthContext);
 
 
     useEffect(() => {
         const initialize = async () => {
+            await fetchDocuments();
+
             const storedName = await AsyncStorage.getItem("name");
             setName(storedName);
-
-            await fetchDocuments();
         };
 
         initialize();
@@ -44,7 +45,7 @@ export default function SecurityHome() {
         setLoading(true);
         try {
             const response = await getDocuments(authCtx.token);
-            
+
             if (response.result === 1) {
                 setDocuments(response.files);
             }
@@ -128,6 +129,7 @@ export default function SecurityHome() {
                     </View>
                 )}
             </View>
+            <NetDot status={netCon} />
         </Layout>
     );
 }
