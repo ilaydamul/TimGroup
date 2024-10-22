@@ -2,11 +2,7 @@
   "expo": {
     "name": "TimGroup",
     "slug": "TimGroup",
-<<<<<<< HEAD
-    "version": "1.0.7",
-=======
     "version": "1.0.8",
->>>>>>> 7b82c4d4c1363578ae2b3e60d55801cf23daf4ed
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -16,17 +12,12 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-<<<<<<< HEAD
+      "buildNumber": "5",
       "supportsTablet": false,
       "bundleIdentifier": "tr.com.timgroup"
-=======
-      "buildNumber": "4",
-      "supportsTablet": true,
-      "bundleIdentifier": "y"
->>>>>>> 7b82c4d4c1363578ae2b3e60d55801cf23daf4ed
     },
     "android": {
-      "versionCode": 4,
+      "versionCode": 5,
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"

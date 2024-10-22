@@ -1,9 +1,6 @@
 {
   "name": "timgroup",
-<<<<<<< HEAD
-=======
   "version": "1.0.8",
->>>>>>> 7b82c4d4c1363578ae2b3e60d55801cf23daf4ed
   "main": "expo/AppEntry.js",
   "scripts": {
     "start": "expo start",
