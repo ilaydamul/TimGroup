@@ -39,22 +39,21 @@
       [
         "expo-image-picker",
         {
-          "photosPermission": "Uygulamanın fotoğraflarınıza erişmesi gerekiyor.",
-          "cameraPermission": "Uygulamanın kameranıza erişmesi gerekiyor."
+          "photosPermission": "Uygulama, denetim fotoğrafı seçebilmeniz amacıyla galerinize erişim istiyor",
+          "cameraPermission": "Uygulama, denetim fotoğrafı kaydedebilmeniz amacıyla kameranıza erişim istiyor."
         }
       ],
       [
         "expo-camera",
         {
-          "cameraPermission": "Allow $(PRODUCT_NAME) to access your camera",
-          "microphonePermission": "Allow $(PRODUCT_NAME) to access your microphone",
-          "recordAudioAndroid": true
+          "cameraPermission": "Uygulama, denetim fotoğrafı kaydedebilmeniz amacıyla kameranıza erişim istiyor",
+          "recordAudioAndroid": false
         }
       ],
       [
         "expo-location",
         {
-          "locationAlwaysAndWhenInUsePermission": "Allow $(PRODUCT_NAME) to use your location."
+          "locationAlwaysAndWhenInUsePermission": "Uygulama, denetim sahanızı denetlemek için konum bilgilerinize erişim istiyor."
         }
       ]
     ],
