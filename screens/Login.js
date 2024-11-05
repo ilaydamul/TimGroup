@@ -25,15 +25,10 @@ export default function Login({ route }) {
             if (response.data.result == 1) {
                 await authCtx.authenticate(response.headers['set-cookie'][0].split(";")[0], role, response.data.user.name);
             } else {
-                // console.log(response.data);
                 setToastMessage({ isShow: true, type: "warning", text: "Kullanıcı adı ya da şifre yanlış.." });
                 setTimeout(() => {
                     setToastMessage({ isShow: false });
                 }, 1500);
-                // Toast.show('Kullanıcı adı ya da şifre yanlış..', {
-                //     duration: 2000,
-                // });
-                // console.log("asd");
 
                 setIsAuthenticating(false);
             }

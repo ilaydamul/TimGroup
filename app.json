@@ -2,7 +2,7 @@
   "expo": {
     "name": "TimGroup",
     "slug": "TimGroup",
-    "version": "1.0.9",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "userInterfaceStyle": "light",
@@ -12,12 +12,12 @@
       "backgroundColor": "#ffffff"
     },
     "ios": {
-      "buildNumber": "9",
+      "buildNumber": "10",
       "supportsTablet": false,
       "bundleIdentifier": "tr.com.timgroup"
     },
     "android": {
-      "versionCode": 9,
+      "versionCode": 10,
       "adaptiveIcon": {
         "foregroundImage": "./assets/icon.png",
         "backgroundColor": "#ffffff"

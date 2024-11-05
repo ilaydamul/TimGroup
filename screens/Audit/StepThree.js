@@ -25,23 +25,14 @@ export default function StepThree({ project, onNext, onPrev }) {
     useEffect(() => {
         const locationHandler = async () => {
             const hasLocPermission = await requestLocationPermissions();
-
             setCheckLocation(hasLocPermission);
-            // console.log("Has Loc Permission:", checkLocation);
-            
 
             if (!hasLocPermission) {
                 return;
             }
-
-
         };
 
         locationHandler();
-
-
-        console.log(project);
-        
     }, [])
 
     async function onPressHandler() {
@@ -65,19 +56,15 @@ export default function StepThree({ project, onNext, onPrev }) {
                     onNext();
                 }
                 else {
-
-                    Toast.show('Alan dışındasınız.', {
+                    Toast.show(response.msg, {
                         duration: 2000,
                     });
                 }
-
-
             } catch (error) {
                 Toast.show(("Beklenmedik bir hata oluştu: " + error), {
                     duration: 2000,
                 });
             }
-
         }
         else {
             Toast.show('Konum bilgileri gerekli! ', {
